@@ -1,123 +1,156 @@
 var webtoon;
-
+var wlength=30;
 var imglog = {};
-chrome.storage.sync.get(["webtoon", "imglog"], (data) => {
-    if (!data) {
-
-    } else {
-        webtoon = data.webtoon;
-        if (data.imglog)
-            imglog = data.imglog
-        getWebtoons()
-        sortTime()
-        console.log("sort success")
-           setRecent()
-        console.log("recent success")
-    }
-})
-var wtime = [];
-
-function getWebtoons() {
-    var wkey = Object.keys(webtoon)
-    var wdata = Object.values(webtoon)
-
-    for (var i = 0; i < wdata.length; i++) {
-        for (var data of wdata[i].no) {
-            wtime.push({
-                id: wkey[i],
-                name: wdata[i].name,
-                lastVisit: data.lastVisit,
-                no: data.no,
-                type: wdata[i].type
-            })
+document.addEventListener("DOMContentLoaded", function(){
+    document.getElementById("getNext").onclick=getnextRecent
+    chrome.storage.sync.get(["webtoon", "imglog"], (data) => {
+        if (!data) {
+    
+        } else {
+            webtoon = data.webtoon;
+            if (data.imglog)
+                imglog = data.imglog
+            getWebtoons()
+            sortTime(wlength)
+            console.log("sort success")
+            setRecent(0)
+            console.log("recent success")
         }
-    }
-}
-
-function sortTime() {
-    wtime.sort((a, b) => {
-        if (a.lastVisit < b.lastVisit)
-            return 1
-        else
-            return -1
-        return 0
     })
-    wtime.length = 20;
-
-}
-
-function parseHtml(str) {
-    var parser = new DOMParser()
-    var htmlDoc = parser.parseFromString(str, "text/html")
-    return {
-        image: htmlDoc.querySelector("meta[property='og:image']").content,
-        name: htmlDoc.querySelector("meta[property='og:description']").content
-    }
-}
-
-function getOpenGraph(id, no, url, imgElement, nameElement) {
-    if (imglog['' + id + no]) {
-        console.log("get log", imglog['' + id + no])
-        imgElement.src = "https://shared-comic.pstatic.net/thumb/" + imglog['' + id + no].image
-        imgElement.title = imgElement.alt = imglog['' + id + no].name
-        nameElement.innerText = imglog['' + id + no].name
-        return;
-    }
-    var xhttp = new XMLHttpRequest();
-
-    xhttp.open("GET", url, true)
-    xhttp.onreadystatechange = function () {
-        if (xhttp.readyState === 4 && xhttp.status === 200) {
-            if (xhttp.responseText) {
-                var result = parseHtml(xhttp.responseText)
-                imgElement.src = result.image
-                imgElement.title = imgElement.alt = result.name
-                nameElement.innerText = result.name
-                imglog['' + id + no] = {
-                    image: result.image.split("thumb/")[1],
-                    name: result.name
-                }
+    var wtime = [];
+    
+    function getWebtoons() {
+        wtime = [];
+        var wkey = Object.keys(webtoon)
+        var wdata = Object.values(webtoon)
+    
+        for (var i = 0; i < wdata.length; i++) {
+            for (var data of wdata[i].no) {
+                wtime.push({
+                    id: wkey[i],
+                    name: wdata[i].name,
+                    lastVisit: data.lastVisit,
+                    no: data.no,
+                    type: wdata[i].type
+                })
             }
         }
     }
-    xhttp.send();
-}
-
-function setRecent() {
-    wtime.forEach(web => {
-        var link = `https://comic.naver.com${web.type}/detail.nhn?titleId=${web.id}&no=${web.no}`
-        link;
-        var wtr = document.createElement("tr")
-        var img = document.createElement("td")
-        var title = document.createElement("td")
-        var time = document.createElement("td")
-        var timespan = document.createElement("span")
-        timespan.innerText = new Date(web.lastVisit).toLocaleString()
-        time.appendChild(timespan)
-        var name = document.createElement("a")
-        name.href = link
-        name.className = "webToonName"
-        var imgEle = document.createElement("img")
-        imgEle.src = "img/picture.svg"
-        title.appendChild(imgEle)
-        title.appendChild(name)
-
-
-        wtr.appendChild(img)
-        wtr.appendChild(title)
-        wtr.appendChild(time)
-        document.getElementsByClassName("recent")[0].appendChild(wtr)
-        getOpenGraph(web.id, web.no, link, imgEle, name)
-    })
-    setTimeout(() => {
-        chrome.storage.sync.set({
-            imglog: imglog
-        }, () => {
-            console.log("log refresh")
+    
+    function addWebtoonTab() {
+        var link = this.getAttribute("wlink")
+        chrome.tabs.create({
+            url: link
         })
-    }, 2000)
+    
+    }
+    function getnextRecent(){
+        wlength+=20
+        getWebtoons()
+        if (wtime.length+20<wlength){
+            wlength = wtime.length
+            document.getElementById("WebToonCount").innerText="최근 웹툰 (" + wlength + "개)"
+            return;
+        }
+        document.getElementById("WebToonCount").innerText="최근 웹툰 (" + wlength + "개)" 
+        sortTime(wlength)
 
-}
+        setRecent(wlength-20)
+    }
+    function sortTime(length) {
+        wtime.sort((a, b) => {
+            if (a.lastVisit < b.lastVisit)
+                return 1
+            else
+                return -1
+            return 0
+        })
+        wtime.length = length;
+    
+    }
+    
+    function parseHtml(str) {
+        var parser = new DOMParser()
+        var htmlDoc = parser.parseFromString(str, "text/html")
+        return {
+            image: htmlDoc.querySelector("meta[property='og:image']").content,
+            name: htmlDoc.querySelector("meta[property='og:description']").content
+        }
+    }
+    
+    function getOpenGraph(id, no, url, imgElement, nameElement) {
+        if (imglog['' + id + no]) {
+            console.log("get log", imglog['' + id + no])
+            imgElement.src = "https://shared-comic.pstatic.net/thumb/" + imglog['' + id + no].image
+            imgElement.title = imgElement.alt = imglog['' + id + no].name
+            nameElement.innerText = imglog['' + id + no].name
+            return;
+        }
+        var xhttp = new XMLHttpRequest();
+    
+        xhttp.open("GET", url, true)
+        xhttp.onreadystatechange = function () {
+            if (xhttp.readyState === 4 && xhttp.status === 200) {
+                if (xhttp.responseText) {
+                    var result = parseHtml(xhttp.responseText)
+                    imgElement.src = result.image
+                    imgElement.title = imgElement.alt = result.name
+                    nameElement.innerText = result.name
+                    imglog['' + id + no] = {
+                        image: result.image.split("thumb/")[1],
+                        name: result.name
+                    }
+                }
+            }
+        }
+        xhttp.send();
+    }
+    
+    function setRecent(startidx) {
+        if (!startidx) startidx=0
+        wtime.slice(startidx).forEach(web => {
+            var link = `https://comic.naver.com${web.type}/detail.nhn?titleId=${web.id}&no=${web.no}`
+            link;
+            var wtr = document.createElement("tr")
+           
+            var img = document.createElement("td")
+            img.setAttribute("wlink", `https://comic.naver.com${web.type}/list.nhn?titleId=${web.id}`)
+    
+            img.onclick = addWebtoonTab;
+            var title = document.createElement("td")
+            title.setAttribute("wlink", link)
+            title.onclick = addWebtoonTab;
+            var time = document.createElement("td")
+            var timespan = document.createElement("span")
+            timespan.innerText = new Date(web.lastVisit).toLocaleString()
+            time.appendChild(timespan)
+            var name = document.createElement("a")
+            name.href = link
+            name.className = "webToonName"
+            var imgEle = document.createElement("img")
+            imgEle.src = "img/picture.svg"
+            title.appendChild(imgEle)
+            title.appendChild(name)
+            img.innerText = web.name
+            img.className = "webToonTitle"
+            wtr.appendChild(img)
+            wtr.appendChild(title)
+            wtr.appendChild(time)
+            document.getElementsByClassName("recent")[0].appendChild(wtr)
+            getOpenGraph(web.id, web.no, link, imgEle, name)
+        })
+        setTimeout(() => {
+            if (wlength===30)
+                chrome.storage.sync.set({
+                    imglog: imglog
+                }, () => {
+                    console.log("log refresh")
+                })
+        }, 2000)
+    
+    }
+})
+
 
 /*
 <tr>

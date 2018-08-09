@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="uikit/css/uikit.min.css">
     <style>
         .body-title {
             width: 100%;
@@ -12,19 +13,34 @@
             font-weight: 700;
             text-align: center;
         }
-        .viewList{
-            width:100%;
-        }
-        .viewList img{
-            margin-right:20px;
-            width: 71px;
-            height:41px;
-            overflow: hidden;
+
+        .viewList {
+            width: 100%;
         }
 
-        .webToonName{
-            width:200px;
-            position:absolute;
+        .viewList img {
+            margin-right: 10px;
+            width: 71px;
+            height: 41px;
+            overflow: hidden;
+        }
+        th, td {
+            padding:4px 7px !important;
+        }
+        .recent>tr>td:hover {
+            background: rgb(230, 230, 230);
+            cursor: pointer;
+        }
+
+        .webToonName {
+            width: 200px;
+            position: absolute;
+            text-decoration: none;
+            color: black
+        }
+
+        .webToonTitle, th {
+            text-align: center !important;
         }
     </style>
 </head>
@@ -34,12 +50,12 @@
         <span>Naver Webtoon</span>
     </div>
     <div>
-        <table cellpadding="1" cellspacing="0" class="viewList">
-            <caption>
-                <span>최근 웹툰</span>
+        <table class="viewList uk-table uk-table-small uk-table-divider">
+            <caption class="uk-text-center">
+                <span id="WebToonCount">최근 웹툰 (30개)</span>
             </caption>
             <colgroup>
-                <col width="99">
+                <col width="105">
                 <col width="*">
                 <col width="90">
             </colgroup>
@@ -51,10 +67,15 @@
                 </tr>
             </thead>
             <tbody class="recent">
-    
+
             </tbody>
         </table>
+        <div class="uk-nav-center uk-margin-bottom"><button class="uk-icon-button" id="getNext" uk-icon="icon: chevron-down"></button></div>
     </div>
+
+    
+    <script src="uikit/js/uikit.min.js"></script>
+    <script src="uikit/js/uikit-icons.min.js"></script>
     <script src="scripts.js"></script>
 </body>
 
