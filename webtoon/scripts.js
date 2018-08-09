@@ -11,7 +11,7 @@ chrome.storage.sync.get(["webtoon", "imglog"], (data) => {
         getWebtoons()
         sortTime()
         console.log("sort success")
-        //   setRecent()
+           setRecent()
         console.log("recent success")
     }
 })
@@ -42,6 +42,8 @@ function sortTime() {
             return -1
         return 0
     })
+    wtime.length = 20;
+
 }
 
 function parseHtml(str) {
@@ -53,12 +55,12 @@ function parseHtml(str) {
     }
 }
 
-function getOpenGraph(id,no, url, imgElement, nameElement) {
-    if (imglog[''+id+no]) {
-        console.log("get log", imglog[id])
-        imgElement.src = "https://shared-comic.pstatic.net/thumb/" + imglog[id].image
-        imgElement.title = imgElement.alt = imglog[id].name
-        nameElement.innerText = imglog[id].name
+function getOpenGraph(id, no, url, imgElement, nameElement) {
+    if (imglog['' + id + no]) {
+        console.log("get log", imglog['' + id + no])
+        imgElement.src = "https://shared-comic.pstatic.net/thumb/" + imglog['' + id + no].image
+        imgElement.title = imgElement.alt = imglog['' + id + no].name
+        nameElement.innerText = imglog['' + id + no].name
         return;
     }
     var xhttp = new XMLHttpRequest();
@@ -71,7 +73,10 @@ function getOpenGraph(id,no, url, imgElement, nameElement) {
                 imgElement.src = result.image
                 imgElement.title = imgElement.alt = result.name
                 nameElement.innerText = result.name
-                imglog[''+id+no] = {image : result.image.split("thumb/")[1], name:result.name}
+                imglog['' + id + no] = {
+                    image: result.image.split("thumb/")[1],
+                    name: result.name
+                }
             }
         }
     }
@@ -102,13 +107,16 @@ function setRecent() {
         wtr.appendChild(title)
         wtr.appendChild(time)
         document.getElementsByClassName("recent")[0].appendChild(wtr)
-        getOpenGraph(web.id,web.no, link, imgEle, name)
+        getOpenGraph(web.id, web.no, link, imgEle, name)
     })
-    chrome.storage.sync.set({
-     imglog: imglog
-    }, () => {
-        console.log("log refresh")
-    })
+    setTimeout(() => {
+        chrome.storage.sync.set({
+            imglog: imglog
+        }, () => {
+            console.log("log refresh")
+        })
+    }, 2000)
+
 }
 
 /*
