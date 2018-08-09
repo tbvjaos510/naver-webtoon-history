@@ -17,7 +17,8 @@ function initWebLog() {
         webtoon = {}
         data.forEach(d => {
             if (!d.title) return;
-            var params = new URL(d.url).searchParams
+            var url = new URL(d.url)
+            var params = url.searchParams
             let wid = params.get("titleId")
             let wno = params.get("no")
             if (!webtoon[wid]) {
@@ -28,6 +29,7 @@ function initWebLog() {
                     no: wno,
                     lastVisit: d.lastVisitTime
                 }]
+                webtoon[wid].type=url.pathname.split("/detail.nhn")[0]
 
             } else {
                 webtoon[wid].count++;
@@ -78,6 +80,7 @@ chrome.tabs.onUpdated.addListener((tid, ci, tab) => {
                     webtoon[wid].name = tab.title.split("::")[0]
                     webtoon[wid].count = 0;
                     webtoon[wid].no = [];
+                    webtoon[wid].type=url.pathname.split("/detail.nhn")[0]
                 }
                 webtoon[wid].count++;
                 webtoon[wid].no.unshift({
