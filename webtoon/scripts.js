@@ -16,6 +16,8 @@ var imglog = {};
 var twebtoon
 
 
+
+
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("getNext").onclick = getnextRecent
     chrome.storage.sync.get(["webtoon", "imglog"], (data) => {
@@ -52,15 +54,16 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
     }
-
+    function addTab(link){
+        chrome.tabs.create({
+            url:link
+        })
+    }
     function addWebtoonTab() {
         var link = this.getAttribute("wlink")
-        chrome.tabs.create({
-            url: link
-        })
+       addTab(link)
 
     }
-
     function getnextRecent() {
         wlength += 20
         getWebtoons()
@@ -166,13 +169,46 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 2000)
 
     }
-
     function getWebtoonContent(str) {
         var parser = new DOMParser()
         var htmlDoc = parser.parseFromString(str, "text/html")
         return htmlDoc.querySelector("div[class*=col_selected]")
     }
 
+    function getWebtoonContext() {
+        var webtoons = twebtoon.map(e => {
+            return {
+                title: e.childNodes[3].title,
+                href: e.childNodes[1].childNodes[1].getAttribute('href'),
+                src: e.childNodes[1].childNodes[1].childNodes[1].src,
+                isup : e.childNodes[1].childNodes[1].childNodes[4].tagName === 'EM',
+                iscut : e.childNodes[1].childNodes[1].childNodes[6] !== undefined && e.childNodes[1].childNodes[1].childNodes[6].className === 'ico_cut',
+                isnew : e.childNodes[1].childNodes[1].childNodes[6] !== undefined && e.childNodes[1].childNodes[1].childNodes[6].className === 'new'
+            }
+        })
+        
+        var el = document.getElementById('today-webtoon');
+        for(var i of webtoons){
+            el.innerHTML+=`<li>
+            <div class="uk-card uk-card-small uk-card-default">
+                <div class="uk-card-media-top">
+                    <img src="${i.src}" alt="${i.title}">
+                    ${i.isup ? '<em class="ico-updt"></em>':""}
+                </div>
+                <div class="uk-card-body">
+                <a class="uk-link-muted webtoon-link" wlink="${'https://comic.naver.com'+i.href}" >${i.title}</a>
+                </div><br>
+            </div>
+        </li>`
+
+        //onclick="addTab('${'https://comic.naver.com'+i.href}')"
+        }
+        for (var v of document.getElementsByClassName('webtoon-link'))
+            v.onclick = addWebtoonTab
+        return webtoons
+    
+    }
+    
     function getWebtoon() {
         var xhttp = new XMLHttpRequest();
 
@@ -182,6 +218,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 var WebToon = getWebtoonContent(xhttp.responseText)
                 console.log(WebToon)
                 twebtoon = WebToon.childNodes[1].childNodes[3].childNodes.toOddArray()
+                getWebtoonContext();
            //     document.getElementById("Today").appendChild(WebToon)
             }
         }
@@ -190,22 +227,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     getWebtoon();
 })
-
-function getContext() {
-    var webtoons = twebtoon.map(e => {
-        return {
-            title: e.childNodes[3].title,
-            href: e.childNodes[1].childNodes[1].getAttribute('href'),
-            src: e.childNodes[1].childNodes[1].childNodes[1].src,
-            isup : e.childNodes[1].childNodes[1].childNodes[4].tagName === 'EM',
-            iscut : e.childNodes[1].childNodes[1].childNodes[6] !== undefined && e.childNodes[1].childNodes[1].childNodes[6].className === 'ico_cut',
-            isnew : e.childNodes[1].childNodes[1].childNodes[6] !== undefined && e.childNodes[1].childNodes[1].childNodes[6].className === 'new'
-        }
-    })
-    
-    return webtoons
-
-}
 
 /*
 <tr>
