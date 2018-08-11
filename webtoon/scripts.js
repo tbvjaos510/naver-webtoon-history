@@ -1,11 +1,26 @@
+// Array Even, Odd 
+NodeList.prototype.toEvenArray = function () {
+    return Array.prototype.slice.call(this).filter(function (e, i, a) {
+        return (i % 2 === 0);
+    });
+}
+NodeList.prototype.toOddArray = function () {
+    return Array.prototype.slice.call(this).filter(function (e, i, a) {
+        return (i % 2 === 1);
+    });
+}
+
 var webtoon;
-var wlength=30;
+var wlength = 30;
 var imglog = {};
-document.addEventListener("DOMContentLoaded", function(){
-    document.getElementById("getNext").onclick=getnextRecent
+var twebtoon
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("getNext").onclick = getnextRecent
     chrome.storage.sync.get(["webtoon", "imglog"], (data) => {
         if (!data) {
-    
+
         } else {
             webtoon = data.webtoon;
             if (data.imglog)
@@ -15,15 +30,16 @@ document.addEventListener("DOMContentLoaded", function(){
             console.log("sort success")
             setRecent(0)
             console.log("recent success")
+
         }
     })
     var wtime = [];
-    
+
     function getWebtoons() {
         wtime = [];
         var wkey = Object.keys(webtoon)
         var wdata = Object.values(webtoon)
-    
+
         for (var i = 0; i < wdata.length; i++) {
             for (var data of wdata[i].no) {
                 wtime.push({
@@ -36,27 +52,29 @@ document.addEventListener("DOMContentLoaded", function(){
             }
         }
     }
-    
+
     function addWebtoonTab() {
         var link = this.getAttribute("wlink")
         chrome.tabs.create({
             url: link
         })
-    
+
     }
-    function getnextRecent(){
-        wlength+=20
+
+    function getnextRecent() {
+        wlength += 20
         getWebtoons()
-        if (wtime.length+20<wlength){
+        if (wtime.length + 20 < wlength) {
             wlength = wtime.length
-            document.getElementById("WebToonCount").innerText="최근 웹툰 (" + wlength + "개)"
+            document.getElementById("WebToonCount").innerText = "최근 웹툰 (" + wlength + "개)"
             return;
         }
-        document.getElementById("WebToonCount").innerText="최근 웹툰 (" + wlength + "개)" 
+        document.getElementById("WebToonCount").innerText = "최근 웹툰 (" + wlength + "개)"
         sortTime(wlength)
 
-        setRecent(wlength-20)
+        setRecent(wlength - 20)
     }
+
     function sortTime(length) {
         wtime.sort((a, b) => {
             if (a.lastVisit < b.lastVisit)
@@ -66,9 +84,9 @@ document.addEventListener("DOMContentLoaded", function(){
             return 0
         })
         wtime.length = length;
-    
+
     }
-    
+
     function parseHtml(str) {
         var parser = new DOMParser()
         var htmlDoc = parser.parseFromString(str, "text/html")
@@ -77,17 +95,16 @@ document.addEventListener("DOMContentLoaded", function(){
             name: htmlDoc.querySelector("meta[property='og:description']").content
         }
     }
-    
+
     function getOpenGraph(id, no, url, imgElement, nameElement) {
         if (imglog['' + id + no]) {
-            console.log("get log", imglog['' + id + no])
             imgElement.src = "https://shared-comic.pstatic.net/thumb/" + imglog['' + id + no].image
             imgElement.title = imgElement.alt = imglog['' + id + no].name
             nameElement.innerText = imglog['' + id + no].name
             return;
         }
         var xhttp = new XMLHttpRequest();
-    
+
         xhttp.open("GET", url, true)
         xhttp.onreadystatechange = function () {
             if (xhttp.readyState === 4 && xhttp.status === 200) {
@@ -105,17 +122,17 @@ document.addEventListener("DOMContentLoaded", function(){
         }
         xhttp.send();
     }
-    
+
     function setRecent(startidx) {
-        if (!startidx) startidx=0
+        if (!startidx) startidx = 0
         wtime.slice(startidx).forEach(web => {
             var link = `https://comic.naver.com${web.type}/detail.nhn?titleId=${web.id}&no=${web.no}`
             link;
             var wtr = document.createElement("tr")
-           
+
             var img = document.createElement("td")
             img.setAttribute("wlink", `https://comic.naver.com${web.type}/list.nhn?titleId=${web.id}`)
-    
+
             img.onclick = addWebtoonTab;
             var title = document.createElement("td")
             title.setAttribute("wlink", link)
@@ -140,17 +157,55 @@ document.addEventListener("DOMContentLoaded", function(){
             getOpenGraph(web.id, web.no, link, imgEle, name)
         })
         setTimeout(() => {
-            if (wlength===30)
+            if (wlength === 30)
                 chrome.storage.sync.set({
                     imglog: imglog
                 }, () => {
                     console.log("log refresh")
                 })
         }, 2000)
-    
+
     }
+
+    function getWebtoonContent(str) {
+        var parser = new DOMParser()
+        var htmlDoc = parser.parseFromString(str, "text/html")
+        return htmlDoc.querySelector("div[class*=col_selected]")
+    }
+
+    function getWebtoon() {
+        var xhttp = new XMLHttpRequest();
+
+        xhttp.open('GET', 'https://comic.naver.com/webtoon/weekday.nhn')
+        xhttp.onreadystatechange = () => {
+            if (xhttp.status === 200 && xhttp.readyState === 4) {
+                var WebToon = getWebtoonContent(xhttp.responseText)
+                console.log(WebToon)
+                twebtoon = WebToon.childNodes[1].childNodes[3].childNodes.toOddArray()
+           //     document.getElementById("Today").appendChild(WebToon)
+            }
+        }
+        xhttp.send()
+    }
+
+    getWebtoon();
 })
 
+function getContext() {
+    var webtoons = twebtoon.map(e => {
+        return {
+            title: e.childNodes[3].title,
+            href: e.childNodes[1].childNodes[1].getAttribute('href'),
+            src: e.childNodes[1].childNodes[1].childNodes[1].src,
+            isup : e.childNodes[1].childNodes[1].childNodes[4].tagName === 'EM',
+            iscut : e.childNodes[1].childNodes[1].childNodes[6] !== undefined && e.childNodes[1].childNodes[1].childNodes[6].className === 'ico_cut',
+            isnew : e.childNodes[1].childNodes[1].childNodes[6] !== undefined && e.childNodes[1].childNodes[1].childNodes[6].className === 'new'
+        }
+    })
+    
+    return webtoons
+
+}
 
 /*
 <tr>
