@@ -54,16 +54,19 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
     }
-    function addTab(link){
+
+    function addTab(link) {
         chrome.tabs.create({
-            url:link
+            url: link
         })
     }
+
     function addWebtoonTab() {
         var link = this.getAttribute("wlink")
-       addTab(link)
+        addTab(link)
 
     }
+
     function getnextRecent() {
         wlength += 20
         getWebtoons()
@@ -169,31 +172,38 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 2000)
 
     }
-    function getWebtoonContent(str) {
+
+
+    function getWebtoonContent(str, week) {
         var parser = new DOMParser()
         var htmlDoc = parser.parseFromString(str, "text/html")
-        return htmlDoc.querySelector("div[class*=col_selected]")
+        if (week === 8)
+            return htmlDoc.querySelector("div[class*=col_selected]")
+        else
+            return htmlDoc.getElementsByClassName("daily_all")[0].childNodes.toOddArray()[week]
     }
 
     function getWebtoonContext() {
+        console.log(twebtoon)
         var webtoons = twebtoon.map(e => {
             return {
                 title: e.childNodes[3].title,
                 href: e.childNodes[1].childNodes[1].getAttribute('href'),
                 src: e.childNodes[1].childNodes[1].childNodes[1].src,
-                isup : e.childNodes[1].childNodes[1].childNodes[4].tagName === 'EM',
-                iscut : e.childNodes[1].childNodes[1].childNodes[6] !== undefined && e.childNodes[1].childNodes[1].childNodes[6].className === 'ico_cut',
-                isnew : e.childNodes[1].childNodes[1].childNodes[6] !== undefined && e.childNodes[1].childNodes[1].childNodes[6].className === 'new'
+                isup: e.childNodes[1].childNodes[1].childNodes[4] && e.childNodes[1].childNodes[1].childNodes[4].className === 'ico_updt',
+                isbreak : e.childNodes[1].childNodes[1].childNodes[4] && e.childNodes[1].childNodes[1].childNodes[4].className === 'ico_break'
             }
         })
-        
+
         var el = document.getElementById('today-webtoon');
-        for(var i of webtoons){
-            el.innerHTML+=`<li>
+        el.innerHTML=""
+        for (var i of webtoons) {
+            el.innerHTML += `<li>
             <div class="uk-card uk-card-small uk-card-default">
                 <div class="uk-card-media-top">
                     <img src="${i.src}" alt="${i.title}">
                     ${i.isup ? '<em class="ico-updt"></em>':""}
+                    ${i.isbreak ? '<em class="ico-break"></em>':""}
                 </div>
                 <div class="uk-card-body">
                 <a class="uk-link-muted webtoon-link" wlink="${'https://comic.naver.com'+i.href}" >${i.title}</a>
@@ -201,31 +211,30 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
         </li>`
 
-        //onclick="addTab('${'https://comic.naver.com'+i.href}')"
+            //onclick="addTab('${'https://comic.naver.com'+i.href}')"
         }
         for (var v of document.getElementsByClassName('webtoon-link'))
             v.onclick = addWebtoonTab
         return webtoons
-    
+
     }
-    
-    function getWebtoon() {
+    function getWebtoon(week) {
         var xhttp = new XMLHttpRequest();
 
         xhttp.open('GET', 'https://comic.naver.com/webtoon/weekday.nhn')
         xhttp.onreadystatechange = () => {
             if (xhttp.status === 200 && xhttp.readyState === 4) {
-                var WebToon = getWebtoonContent(xhttp.responseText)
-                console.log(WebToon)
+                var WebToon = getWebtoonContent(xhttp.responseText, week)
                 twebtoon = WebToon.childNodes[1].childNodes[3].childNodes.toOddArray()
                 getWebtoonContext();
-           //     document.getElementById("Today").appendChild(WebToon)
+                //     document.getElementById("Today").appendChild(WebToon)
             }
         }
         xhttp.send()
     }
-
-    getWebtoon();
+    
+    // 0 ~ 7 월-일,  8 오늘
+    getWebtoon(0);
 })
 
 /*
