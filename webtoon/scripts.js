@@ -56,10 +56,10 @@ document.addEventListener("DOMContentLoaded", function () {
             for (var data of wdata[i].no) {
                 wtime.push({
                     id: wkey[i],
-                    name: wdata[i].name,
-                    lastVisit: data.lastVisit,
+                    name: wdata[i].na,
+                    lastVisit: data.lvt,
                     no: data.no,
-                    type: wdata[i].type
+                    type: wdata[i].t
                 })
             }
         }
@@ -304,19 +304,3 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 })
-
-/*
-<tr>
-                    <td>
-                        <a href="/webtoon/detail.nhn?titleId=570503&amp;no=231&amp;weekday=thu" onclick="clickcr(this,'lst.img','570503','231',event)">
-                            <img src="https://shared-comic.pstatic.net/thumb/webtoon/570503/231/thumbnail_202x120_dd942324-8698-4387-b304-2f98bcbf1293.jpg"
-                                title="228. 바다에서 생긴일 (8)" alt="228. 바다에서 생긴일 (8)" width="71" height="41" onerror="this.src='https://static-comic.pstatic.net/staticImages/COMICWEB/NAVER/img/common/non71_41.gif'">
-                            <span class="mask"></span>
-                        </a>
-                    </td>
-                    <td class="title">
-                        <a href="/webtoon/detail.nhn?titleId=570503&amp;no=231&amp;weekday=thu" onclick="clickcr(this,'lst.title','570503','231',event)">228. 바다에서 생긴일 (8)</a>
-                    </td>
-                    
-                </tr>
-                 */

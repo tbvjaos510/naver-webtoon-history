@@ -1,8 +1,9 @@
 var webtoon = {};
-
+var visits = {};
 function updateStorage() {
     chrome.storage.sync.set({
-        'webtoon': webtoon
+        'webtoon': webtoon,
+        'visits': visits
     }, () => {
         console.log("success")
     })
@@ -15,6 +16,7 @@ function initWebLog() {
         maxResults: 5000
     }, (data) => {
         webtoon = {}
+        visits = {}
         data.forEach(d => {
             if (!d.title) return;
             var url = new URL(d.url)
@@ -23,20 +25,13 @@ function initWebLog() {
             let wno = params.get("no")
             if (!webtoon[wid]) {
                 webtoon[wid] = {}
-                webtoon[wid].name = d.title.split("::")[0]
-                webtoon[wid].count = 1
-                webtoon[wid].no = [{
-                    no: wno,
-                    lastVisit: d.lastVisitTime
-                }]
-                webtoon[wid].type=url.pathname.split("/detail.nhn")[0]
+                visits[wid] = {}
+                webtoon[wid].na = d.title.split("::")[0]
+                visits[wid][wno] =  Math.floor(d.lastVisitTime)
+                webtoon[wid].t=url.pathname.split("/detail.nhn")[0]
 
             } else {
-                webtoon[wid].count++;
-                webtoon[wid].no.unshift({
-                    no: wno,
-                    lastVisit: d.lastVisitTime
-                })
+                visits[wid][wno] =  Math.floor(d.lastVisitTime)
             }
         });
         updateStorage();
@@ -77,14 +72,14 @@ chrome.tabs.onUpdated.addListener((tid, ci, tab) => {
                 var wid = url.searchParams.get("titleId");
                 if (!webtoon[wid]) {
                     webtoon[wid] = {}
-                    webtoon[wid].name = tab.title.split("::")[0]
-                    webtoon[wid].count = 0;
+                    webtoon[wid].na = tab.title.split("::")[0]
+                    webtoon[wid].c = 0;
                     webtoon[wid].no = [];
-                    webtoon[wid].type=url.pathname.split("/detail.nhn")[0]
+                    webtoon[wid].t=url.pathname.split("/detail.nhn")[0]
                 }
-                webtoon[wid].count++;
+                webtoon[wid].c++;
                 webtoon[wid].no.unshift({
-                    lastVisit: new Date().getTime(),
+                    lvt: new Date().getTime(),
                     no: url.searchParams.get("no")
                 })
                 updateStorage();
