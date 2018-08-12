@@ -23,13 +23,15 @@ var webtoon;
 var wlength = 30;
 var imglog = {};
 var twebtoon
+var visits = {}
+var wtime = [];
 var today = (new Date().getDay() + 6) % 7 //월~일 까지 0~7로 설정
 
 var wsort = [];
 
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("getNext").onclick = getnextRecent
-    chrome.storage.sync.get(["webtoon", "imglog"], (data) => {
+    chrome.storage.sync.get(["webtoon", "imglog", "visits"], (data) => {
         if (!data) {
 
         } else {
@@ -37,6 +39,8 @@ document.addEventListener("DOMContentLoaded", function () {
             webtoon = data.webtoon;
             if (data.imglog)
                 imglog = data.imglog
+            if (data.visits)
+                visits = data.visits
             getWebtoons()
             sortTime(wlength)
             console.log("sort success")
@@ -45,7 +49,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
     })
-    var wtime = [];
 
     function getWebtoons() {
         wtime = [];
@@ -53,15 +56,15 @@ document.addEventListener("DOMContentLoaded", function () {
         var wdata = Object.values(webtoon)
 
         for (var i = 0; i < wdata.length; i++) {
-            for (var data of wdata[i].no) {
+            var vkey = Object.keys(visits[wkey[i]])
+            for (var j = 0; j < vkey.length; j++)
                 wtime.push({
                     id: wkey[i],
                     name: wdata[i].na,
-                    lastVisit: data.lvt,
-                    no: data.no,
+                    lastVisit: visits[wkey[i]][vkey[j]] * 1000,
+                    no: vkey[j],
                     type: wdata[i].t
                 })
-            }
         }
     }
 
@@ -278,7 +281,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             xhttp.send()
         })
-       
+
     }
     document.getElementById("today-webtoon").addEventListener("moved", function (i) {
         var name = i.detail[1].childNodes[1].childNodes[3].childNodes[1].innerText
@@ -294,9 +297,10 @@ document.addEventListener("DOMContentLoaded", function () {
     })
     document.getElementById('week0').className = ""
     document.getElementById('week' + today).className = "uk-active"
+    document.getElementById('week' + today).childNodes[0].className = "date-today"
     for (var i = 0; i < 7; i++) {
         document.getElementById('week' + i).addEventListener('click', function () {
-            getWebtoon(this.id.substr(4)*1)
+            getWebtoon(this.id.substr(4) * 1)
         })
     }
     // 0 ~ 7 월-일,  8 오늘

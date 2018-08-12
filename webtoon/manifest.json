@@ -16,6 +16,9 @@
         "storage",
         "tabs",
         "activeTab",
-        "*://*/*"
-    ]
+        "https://comic.naver.com/*"
+    ],
+    "externally_connectable": {
+        "matches": ["https://comic.naver.com/*"]
+      }
 }
