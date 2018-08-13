@@ -24,29 +24,41 @@ var wlength = 30;
 var imglog = {};
 var twebtoon
 var visits = {}
+var scrolls = {}
 var wtime = [];
 var today = (new Date().getDay() + 6) % 7 //월~일 까지 0~7로 설정
 var options = {
-    getFrom:1,
-    
+    getFromHistory: true,
+    sort: 0,
+    showHistory: true,
+    historyCount:2000
 }
+var maxCount;
 var wsort = [];
 
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("getNext").onclick = getnextRecent
-    chrome.storage.sync.get(["webtoon", "imglog", "visits", "options"], (data) => {
+    chrome.storage.sync.get(["webtoon", "imglog", "visits", "options", "scroll"], (data) => {
         if (!data) {
 
         } else {
             console.log(data)
-            if (data.options){
+            if (data.options) {
                 options = data.options
+            } else {
+                chrome.storage.sync.set({
+                    options: options
+                })
+            }
+            if (data.scroll){
+                scrolls = data.scroll
             }
             webtoon = data.webtoon;
             if (data.imglog)
                 imglog = data.imglog
             if (data.visits)
                 visits = data.visits
+            setOptionDocument()
             getWebtoons()
             sortTime(wlength)
             console.log("sort success")
@@ -56,11 +68,86 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     })
 
+    function resetWSort() {
+        wsort = [];
+        chrome.storage.sync.remove(["wsort0", "wsort1", "wsort2", "wsort3", "wsort4", "wsort5", "wsort6"], () => {
+            UIkit.notification("사용자 순서 초기화 완료", {
+                status: 'success',
+                timeout: 1500,
+                pos: 'top-right'
+            })
+        })
+    }
+    function saveOption() {
+        chrome.storage.sync.set({
+            options: options
+        })
+    }
+
+    function setOptionDocument() {
+        if (options.getFromHistory == true) {
+            document.getElementById("history").checked = true
+        } else {
+            document.getElementById("local").checked = true
+        }
+        document.getElementById("historyCount").value = options.historyCount
+        document.getElementById("historyCount").onfocusout = (function(){
+            console.log("save")
+            options.historyCount = this.value
+            saveOption()
+        })
+        
+        document.getElementById("showHistory").checked = options.showHistory
+        document.getElementById("showHistory").addEventListener("change", function(event){
+            options.showHistory = event.target.checked
+            saveOption()
+        })
+        document.getElementById("history").onclick = (function () {
+            options.getFromHistory = true
+            saveOption()
+        })
+        document.getElementById("local").onclick = (function () {
+            options.getFromHistory = false
+            saveOption()
+        })
+        document.getElementById("sort-by").childNodes.toOddArray()[options.sort].childNodes[0].checked = true
+
+        document.getElementById("sort-by").childNodes.toOddArray()[0].childNodes[0].onclick=(function (){
+            options.sort = 0;
+            saveOption()
+        })
+        document.getElementById("sort-by").childNodes.toOddArray()[1].childNodes[0].onclick=(function (){
+            options.sort = 1;
+            saveOption()
+        })
+        document.getElementById("sort-by").childNodes.toOddArray()[2].childNodes[0].onclick=(function (){
+            options.sort = 2;
+            saveOption()
+        })
+        document.getElementById("sort-by").childNodes.toOddArray()[3].childNodes[0].onclick=(function (){
+            options.sort = 3;
+            saveOption()
+        })
+        var count = 0
+        for (var i of Object.values(visits)) {
+            count += Object.keys(i).length
+        }
+        document.getElementById("visitcount").innerText = count
+        document.getElementById("resetWsort").onclick = resetWSort
+
+        document.getElementById("removeOption").onclick=(function(){
+             chrome.storage.sync.remove("options", ()=>{
+                 alert("초기화 완료. 재시작합니다.")
+                 location.reload();
+             })
+        })
+    }
+
     function getHistoryWeb() {
         chrome.history.search({
             text: "detail.nhn?titleId=",
             startTime: 0,
-            maxResults: 5000
+            maxResults: options.historyCount
         }, (data) => {
             // 역시간 순을 위해 배열을 뒤집음
             data.reverse()
@@ -78,14 +165,15 @@ document.addEventListener("DOMContentLoaded", function () {
                     webtoon[wid].na = d.title.split("::")[0]
                     visits[wid][wno] = Math.floor(d.lastVisitTime / 1000)
                     webtoon[wid].t = url.pathname.split("/detail.nhn")[0]
-    
+
                 } else {
                     visits[wid][wno] = Math.floor(d.lastVisitTime / 1000)
                 }
             });
-    
+
         })
     }
+
     function getWebtoons() {
         wtime = [];
         var wkey = Object.keys(webtoon)
@@ -99,7 +187,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     name: wdata[i].na,
                     lastVisit: visits[wkey[i]][vkey[j]] * 1000,
                     no: vkey[j],
-                    type: wdata[i].t
+                    type: wdata[i].t,
+                    scroll:scrolls[wkey[i]] ? scrolls[wkey[i]][vkey[j]] : null
                 })
         }
     }
@@ -151,11 +240,11 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    function getOpenGraph(id, no, url, imgElement, nameElement) {
-        if (imglog['' + id + no]) {
-            imgElement.src = "https://shared-comic.pstatic.net/thumb/" + imglog['' + id + no].image
-            imgElement.title = imgElement.alt = imglog['' + id + no].name
-            nameElement.innerText = imglog['' + id + no].name
+    function getOpenGraph(web, url, imgElement, nameElement) {
+        if (imglog['' + web.id + web.no]) {
+            imgElement.src = "https://shared-comic.pstatic.net/thumb/" + imglog['' + web.id + web.no].image
+            imgElement.title = imgElement.alt = imglog['' + web.id + web.no].name
+            nameElement.innerText = imglog['' + web.id + web.no].name + (web.scroll ? " ("+Math.round(web.scroll.now/web.scroll.max*100)+"%)":"")
             return;
         }
         var xhttp = new XMLHttpRequest();
@@ -187,7 +276,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             var img = document.createElement("td")
             img.setAttribute("wlink", `https://comic.naver.com${web.type}/list.nhn?titleId=${web.id}`)
-
+           
             img.onclick = addWebtoonTab;
             var title = document.createElement("td")
             title.setAttribute("wlink", link)
@@ -205,11 +294,15 @@ document.addEventListener("DOMContentLoaded", function () {
             title.appendChild(name)
             img.innerText = web.name
             img.className = "webToonTitle"
+            if (scrolls[web.id] && scrolls[web.id][web.no]){
+                console.log(title)
+                title.className+= " view-webtoon"
+            }
             wtr.appendChild(img)
             wtr.appendChild(title)
             wtr.appendChild(time)
             document.getElementsByClassName("recent")[0].appendChild(wtr)
-            getOpenGraph(web.id, web.no, link, imgEle, name)
+            getOpenGraph(web, link, imgEle, name)
         })
         setTimeout(() => {
             if (wlength === 30)
@@ -235,7 +328,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function getWebtoonContext() {
         var webtoons = twebtoon.map((e, i) => {
             return {
-                no:new URL(e.childNodes[1].childNodes[1].href).searchParams.get("titleId"),
+                no: new URL(e.childNodes[1].childNodes[1].href).searchParams.get("titleId"),
                 title: e.childNodes[3].title,
                 href: e.childNodes[1].childNodes[1].getAttribute('href'),
                 src: e.childNodes[1].childNodes[1].childNodes[1].src,

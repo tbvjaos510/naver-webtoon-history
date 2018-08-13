@@ -1,8 +1,7 @@
 var webtoon = {};
 var visits = {};
 var wtab = 0
-var interval = null
-var lastScroll = 0
+var scrolls = {}
 
 function updateStorage() {
     chrome.storage.sync.set({
@@ -45,6 +44,16 @@ function initWebLog() {
     })
 }
 
+function setScroll(tid, sc) {
+    chrome.tabs.executeScript(tid, {
+        code: `
+    if (confirm("[webtoon extension] 이전에 본 기록이 남아있습니다. (${Math.round(sc.now/sc.max*100)}%) 이어보시겠습니까?"))
+        document.documentElement.scrollTop = ${sc.now}
+    `
+    }, () => {
+        console.log("scroll sended")
+    })
+}
 chrome.storage.sync.get(['webtoon', 'visits'], (result) => {
     if (!result) {
         initWebLog();
@@ -55,23 +64,15 @@ chrome.storage.sync.get(['webtoon', 'visits'], (result) => {
     }
 })
 
-function getScrollTop() {
-    chrome.tabs.executeScript(wtab, {
-        code: 'document.documentElement.scrollTop'
-    }, function (data) {
-        lastScroll = data[0]
+function addScrollEvent(wid) {
+    chrome.tabs.executeScript(wid, {
+        code: `
+    window.onbeforeunload=()=>chrome.runtime.sendMessage("${chrome.runtime.id}", {max:document.documentElement.scrollHeight,now:document.documentElement.scrollTop}, ()=>{console.log("send")})
+  `
     })
 }
 
-function resetInterval() {
-    if (interval)
-        clearInterval(interval)
-    interval = null
-}
 chrome.tabs.onUpdated.addListener((tid, ci, tab) => {
-    if (ci.status && ci.status == "loading") {
-        //    resetInterval()
-    }
     if (ci.status && ci.status == "complete") {
 
         var url = new URL(tab.url)
@@ -94,23 +95,44 @@ chrome.tabs.onUpdated.addListener((tid, ci, tab) => {
             } else if (url.pathname.indexOf("/detail.nhn") > 0) {
                 wtab = tid
                 var wid = url.searchParams.get("titleId");
+                var no = url.searchParams.get("no")
                 if (!webtoon[wid]) {
                     visits[wid] = {}
                     webtoon[wid] = {}
                     webtoon[wid].na = tab.title.split("::")[0]
                     webtoon[wid].t = url.pathname.split("/detail.nhn")[0]
                 }
-                visits[wid][url.searchParams.get("no")] = Math.floor(new Date().getTime() / 1000)
+                visits[wid][no] = Math.floor(new Date().getTime() / 1000)
                 //    interval = setInterval(()=>{getScrollTop()}, 500)   
-
                 addScrollEvent(tid)
+                if (scrolls[wid] && scrolls[wid][no])
+                    setScroll(tid, scrolls[wid][no])
                 updateStorage();
             }
         }
     }
 });
 
-chrome.runtime.onMessageExternal.addListener((a, b, c) => {
-    console.log("onMessageExternal", a)
-    c("aaaa")
+chrome.runtime.onMessage.addListener((a, b, c) => {
+    var param = new URL(b.url).searchParams
+    var wid = param.get("titleId")
+    var no = param.get("no")
+    if (a.max - a.now < 4000 && a.now == 0) {
+        delete scrolls[wid][no]
+        chrome.storage.sync.set({
+            scroll: scrolls
+        })
+        return;
+    }
+
+    if (!scrolls[wid]) {
+        scrolls[wid] = {}
+    }
+    scrolls[wid][no] = {
+        now: a.now,
+        max: a.max
+    }
+    chrome.storage.sync.set({
+        scroll: scrolls
+    })
 })
