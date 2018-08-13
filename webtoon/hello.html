@@ -135,9 +135,12 @@
                     <tbody class="recent">
                     </tbody>
                 </table>
+                <span style="display:table; margin:auto" id="loading" uk-spinner="ratio: 4.5"></span>
+            </div>
                 <div class="uk-nav-center uk-margin-bottom">
                     <button class="uk-icon-button" id="getNext" uk-icon="icon: chevron-down"></button>
                 </div>
+
             </div>
         </li>
         <li>
@@ -179,13 +182,14 @@
                         <span class="uk-text-lead">최근 본 웹툰</span>
                         <p>현재 <span id="visitcount">00</span>개의 기록이 있습니다.</p>
                         <span class="option-title">웹툰 기록을 불러올 곳</span> <br>
-                        <input type="radio" name="wfrom" id="history" class="uk-radio"> 방문 기록 (로딩이 오래 걸릴 수 있습니다.) <br>
-                        <input type="radio" name="wfrom" id="local" class="uk-radio"> 로컬 (기록을 최대 300개만 저장 가능합니다. 계정에 동기화됩니다.) 
+                        <input type="radio" name="wfrom" id="history" class="uk-radio"> 웹 브라우저 방문 기록 (방문 기록 삭제시 초기화됩니다. 느립니다)<br>
+                        <input type="radio" name="wfrom" id="local" class="uk-radio"> 로컬 (기록을 컴퓨터에 저장합니다. 동기화되지 않습니다.)<br>
+                        <input type="radio" name="wfrom" id="sync" class="uk-radio"> 계정 (기록을 최대 300개만 저장 가능합니다. 계정에 동기화됩니다.)
                         <p>
-                            기록을 불러올 개수 : <input type="number" min=0 max=10000 id="historyCount">
+                            최대 기록 개수 (넘으면 예전 기록이 삭제됩니다.): <input class="uk-input uk-width-1-5" style="height:30px" type="number" min=0 max=10000 id="historyCount">
                         </p>
-                        <button class="uk-button uk-button-small uk-button-default" title="방문기록에서 웹툰 기록을 가져옵니다.">웹툰 기록 가져오기</button> &nbsp;
-                        <button class="uk-button uk-button-small uk-button-default" title="웹툰 기록을 삭제합니다. 사이트에서도 표시하지 않습니다.">웹툰 기록 삭제</button>
+                        <button id="getWebtoon" class="uk-button uk-button-small uk-button-default" title="방문기록에서 웹툰 기록을 가져옵니다. 기존 기록은 사라집니다.">방문 기록에서 기록 가져오기</button> &nbsp;
+                        <button id="deleteWebtoon" class="uk-button uk-button-small uk-button-default" title="웹툰 기록을 삭제합니다. 사이트에서도 표시하지 않습니다.">웹툰 기록 삭제</button> <br>
                     </li>
                     <li>
                         <span class="uk-text-lead">웹툰 목록</span> <br><br>
@@ -204,7 +208,8 @@
                         
                     </li>
                     <li>
-                            <button id="removeOption" class="uk-button uk-button-small uk-button-danger uk-float-right">설정 초기화</button></li>
+                        <button id="refresh" class="uk-button uk-button-small uk-button-primary uk-float-left">새로고침</button>
+                        <button id="removeOption" class="uk-button uk-button-small uk-button-danger uk-float-right">설정 초기화</button></li>
                 </ul>
 
 

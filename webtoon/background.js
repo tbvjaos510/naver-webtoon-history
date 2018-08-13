@@ -2,9 +2,20 @@ var webtoon = {};
 var visits = {};
 var wtab = 0
 var scrolls = {}
-
+var options = {
+    getLocation: 0,
+    sort: 0,
+    showHistory: true,
+    historyCount: 2000
+}
+function storage(){
+    if (options.getLocation == 1){
+        return chrome.storage.local
+    } else
+    return chrome.storage.sync
+}
 function updateStorage() {
-    chrome.storage.sync.set({
+    storage().set({
         'webtoon': webtoon,
         'visits': visits
     }, () => {
@@ -39,7 +50,6 @@ function initWebLog() {
                 visits[wid][wno] = Math.floor(d.lastVisitTime / 1000)
             }
         });
-        updateStorage();
 
     })
 }
@@ -47,21 +57,30 @@ function initWebLog() {
 function setScroll(tid, sc) {
     chrome.tabs.executeScript(tid, {
         code: `
-    if (confirm("[webtoon extension] 이전에 본 기록이 남아있습니다. (${Math.round(sc.now/sc.max*100)}%) 이어보시겠습니까?"))
+    if (confirm("[webtoon extension] 이전에 본 기록이 남아있습니다. (${Math.round(sc.now/sc.max*100)}%)\\n이어보시겠습니까?"))
         document.documentElement.scrollTop = ${sc.now}
     `
     }, () => {
         console.log("scroll sended")
     })
 }
-chrome.storage.sync.get(['webtoon', 'visits'], (result) => {
-    if (!result) {
-        initWebLog();
-    } else {
-        console.log("get from chrome storage")
-        webtoon = result.webtoon
-        visits = result.visits
+chrome.storage.sync.get(['options'], (result) => {
+        if (result.options){
+            options = result.options
+        }
+        if (options.getLocation == 0){
+            initWebLog()
+        }else{
+        storage().get(['webtoon', 'visits'], result=>{
+            console.log("get from chrome storage")
+            if (result.webtoon)
+            webtoon = result.webtoon
+            if (result.visits)
+            visits = result.visits
+            chrome.runtime.sendMessage("reload")
+        })
     }
+    
 })
 
 function addScrollEvent(wid) {
@@ -114,25 +133,32 @@ chrome.tabs.onUpdated.addListener((tid, ci, tab) => {
 });
 
 chrome.runtime.onMessage.addListener((a, b, c) => {
+
     var param = new URL(b.url).searchParams
     var wid = param.get("titleId")
     var no = param.get("no")
-    if (a.max - a.now < 4000 && a.now == 0) {
-        delete scrolls[wid][no]
+    if (wid && no) {
+        if (a.max - a.now < 4000 || a.now == 0) {
+            delete scrolls[wid][no]
+            chrome.storage.sync.set({
+                scroll: scrolls
+            })
+            return;
+        }
+
+        if (!scrolls[wid]) {
+            scrolls[wid] = {}
+        }
+        scrolls[wid][no] = {
+            now: a.now,
+            max: a.max
+        }
         chrome.storage.sync.set({
             scroll: scrolls
         })
-        return;
+    } else {
+        if (a.command && a.command == 'reload'){
+            location.reload()
+        }
     }
-
-    if (!scrolls[wid]) {
-        scrolls[wid] = {}
-    }
-    scrolls[wid][no] = {
-        now: a.now,
-        max: a.max
-    }
-    chrome.storage.sync.set({
-        scroll: scrolls
-    })
 })
