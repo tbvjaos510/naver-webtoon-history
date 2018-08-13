@@ -1,7 +1,7 @@
 var webtoon = {};
 var visits = {};
 var wtab = 0
-var interval = 0
+var interval = null
 var lastScroll = 0
 
 function updateStorage() {
@@ -55,23 +55,31 @@ chrome.storage.sync.get(['webtoon', 'visits'], (result) => {
     }
 })
 
-function addScrollEvent() {
+function getScrollTop() {
     chrome.tabs.executeScript(wtab, {
-        file: 'js/scroll.js',
-        runAt: 'document_end',
-        matchAboutBlank: true
+        code: 'document.documentElement.scrollTop'
+    }, function (data) {
+        lastScroll = data[0]
     })
 }
-chrome.tabs.onUpdated.addListener((tid, ci, tab) => {
 
+function resetInterval() {
+    if (interval)
+        clearInterval(interval)
+    interval = null
+}
+chrome.tabs.onUpdated.addListener((tid, ci, tab) => {
+    if (ci.status && ci.status == "loading") {
+        //    resetInterval()
+    }
     if (ci.status && ci.status == "complete") {
 
         var url = new URL(tab.url)
         if (url.host === "comic.naver.com") {
             if (url.pathname.indexOf("/list.nhn") > 0) {
                 var wid = url.searchParams.get("titleId");
-                var vkey = Object.keys(visits[wid])
-                if (vkey) {
+                if (visits[wid]) {
+                    var vkey = Object.keys(visits[wid])
                     for (var i = 0; i < vkey.length; i++) {
                         chrome.tabs.executeScript(tid, {
                             code: `var wlog=document.querySelector("a[href*='detail.nhn?titleId=${wid}&no=${vkey[i]}']");
@@ -87,13 +95,14 @@ chrome.tabs.onUpdated.addListener((tid, ci, tab) => {
                 wtab = tid
                 var wid = url.searchParams.get("titleId");
                 if (!webtoon[wid]) {
+                    visits[wid] = {}
                     webtoon[wid] = {}
                     webtoon[wid].na = tab.title.split("::")[0]
                     webtoon[wid].t = url.pathname.split("/detail.nhn")[0]
                 }
                 visits[wid][url.searchParams.get("no")] = Math.floor(new Date().getTime() / 1000)
+                //    interval = setInterval(()=>{getScrollTop()}, 500)   
 
-                //    setTimeout(()=>addScrollEvent(tid), 5000)
                 addScrollEvent(tid)
                 updateStorage();
             }
@@ -101,9 +110,7 @@ chrome.tabs.onUpdated.addListener((tid, ci, tab) => {
     }
 });
 
-
-chrome.runtime.onMessageExternal.addListener(
-    function (request, sender, cb) {
-        var wid = new URL(sender.url).searchParams.get('titleId');
-        console.log(`${wid} send ${request}`)
-    });
+chrome.runtime.onMessageExternal.addListener((a, b, c) => {
+    console.log("onMessageExternal", a)
+    c("aaaa")
+})

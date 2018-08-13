@@ -5,8 +5,10 @@
     "manifest_version": 2,
     "background": {
         "persistent": false,
-        "scripts": ["background.js"]
-      },
+        "scripts": [
+            "background.js"
+        ]
+    },
     "browser_action": {
         "default_popup": "hello.html",
         "default_icon": "hello_extensions.png"
@@ -19,6 +21,8 @@
         "https://comic.naver.com/*"
     ],
     "externally_connectable": {
-        "matches": ["https://comic.naver.com/*"]
-      }
+        "matches": [
+            "https://comic.naver.com/*"
+        ]
+    }
 }

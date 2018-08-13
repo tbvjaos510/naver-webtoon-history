@@ -26,16 +26,22 @@ var twebtoon
 var visits = {}
 var wtime = [];
 var today = (new Date().getDay() + 6) % 7 //월~일 까지 0~7로 설정
-
+var options = {
+    getFrom:1,
+    
+}
 var wsort = [];
 
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("getNext").onclick = getnextRecent
-    chrome.storage.sync.get(["webtoon", "imglog", "visits"], (data) => {
+    chrome.storage.sync.get(["webtoon", "imglog", "visits", "options"], (data) => {
         if (!data) {
 
         } else {
             console.log(data)
+            if (data.options){
+                options = data.options
+            }
             webtoon = data.webtoon;
             if (data.imglog)
                 imglog = data.imglog
@@ -50,6 +56,36 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     })
 
+    function getHistoryWeb() {
+        chrome.history.search({
+            text: "detail.nhn?titleId=",
+            startTime: 0,
+            maxResults: 5000
+        }, (data) => {
+            // 역시간 순을 위해 배열을 뒤집음
+            data.reverse()
+            webtoon = {}
+            visits = {}
+            data.forEach(d => {
+                if (!d.title) return;
+                var url = new URL(d.url)
+                var params = url.searchParams
+                let wid = params.get("titleId")
+                let wno = params.get("no")
+                if (!webtoon[wid]) {
+                    webtoon[wid] = {}
+                    visits[wid] = {}
+                    webtoon[wid].na = d.title.split("::")[0]
+                    visits[wid][wno] = Math.floor(d.lastVisitTime / 1000)
+                    webtoon[wid].t = url.pathname.split("/detail.nhn")[0]
+    
+                } else {
+                    visits[wid][wno] = Math.floor(d.lastVisitTime / 1000)
+                }
+            });
+    
+        })
+    }
     function getWebtoons() {
         wtime = [];
         var wkey = Object.keys(webtoon)
@@ -197,19 +233,25 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function getWebtoonContext() {
-        var webtoons = twebtoon.map(e => {
+        var webtoons = twebtoon.map((e, i) => {
             return {
+                no:new URL(e.childNodes[1].childNodes[1].href).searchParams.get("titleId"),
                 title: e.childNodes[3].title,
                 href: e.childNodes[1].childNodes[1].getAttribute('href'),
                 src: e.childNodes[1].childNodes[1].childNodes[1].src,
-                isup: e.childNodes[1].childNodes[1].childNodes[4] && e.childNodes[1].childNodes[1].childNodes[4].className === 'ico_updt',
-                isbreak: e.childNodes[1].childNodes[1].childNodes[4] && e.childNodes[1].childNodes[1].childNodes[4].className === 'ico_break',
+                isup: e.childNodes[1].childNodes[1].childNodes[4] ? e.childNodes[1].childNodes[1].childNodes[4].className === 'ico_updt' : false,
+                isbreak: e.childNodes[1].childNodes[1].childNodes[4] ? e.childNodes[1].childNodes[1].childNodes[4].className === 'ico_break' : false,
                 inserted: false
             }
         })
-        if (!wsort.length)
+        if (wsort.length === 0) {
+            console.log("init wsort" + today)
             wsort = webtoons.map(e => e.title)
 
+            var save = {}
+            save['wsort' + today] = wsort
+            chrome.storage.sync.set(save)
+        }
         var el = document.getElementById('today-webtoon');
         el.innerHTML = ""
         for (var f of wsort) {
@@ -225,6 +267,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 </div>
                 <div class="uk-card-body">
                 <a class="uk-link-muted webtoon-link" wlink="${'https://comic.naver.com'+i.href}" >${i.title}</a>
+                <br>
+                ${visits[i.no] ? `<a class="uk-link-muted webtoon-link" wlink="${'https://comic.naver.com/'+i.href.split('/')[1]}/detail.nhn?titleId=${i.no}&no=${Object.keys(visits[i.no])[0]}" >${(Object.keys(visits[i.no])[0])}화</a>`: "기록 없음"}
                 </div><br>
             </div>
         `
@@ -264,6 +308,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log(week)
         today = week
         chrome.storage.sync.get(['wsort' + today], (data) => {
+            console.log(data)
             if (data['wsort' + today]) {
                 wsort = data['wsort' + today]
             } else wsort = []
@@ -292,7 +337,6 @@ document.addEventListener("DOMContentLoaded", function () {
         wsort.splice(endIdx, 0, name)
         var save = {}
         save['wsort' + today] = wsort
-        console.log(save)
         chrome.storage.sync.set(save)
     })
     document.getElementById('week0').className = ""
