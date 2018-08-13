@@ -6,14 +6,18 @@ var options = {
     getLocation: 0,
     sort: 0,
     showHistory: true,
-    historyCount: 2000
+    historyCount: 2000,
+    saveWsort: true,
+    saveScroll: true
 }
-function storage(){
-    if (options.getLocation == 1){
+
+function storage() {
+    if (options.getLocation == 1) {
         return chrome.storage.local
     } else
-    return chrome.storage.sync
+        return chrome.storage.sync
 }
+
 function updateStorage() {
     storage().set({
         'webtoon': webtoon,
@@ -64,23 +68,26 @@ function setScroll(tid, sc) {
         console.log("scroll sended")
     })
 }
-chrome.storage.sync.get(['options'], (result) => {
-        if (result.options){
-            options = result.options
-        }
-        if (options.getLocation == 0){
-            initWebLog()
-        }else{
-        storage().get(['webtoon', 'visits'], result=>{
+chrome.storage.sync.get(['options', 'scroll'], (result) => {
+    if (result.options) {
+        options = result.options
+    }
+    if (result.scroll)
+        scrolls = result.scroll
+    if (options.getLocation == 0) {
+        chrome.runtime.sendMessage("reload")
+        initWebLog()
+    } else {
+        storage().get(['webtoon', 'visits'], result => {
             console.log("get from chrome storage")
             if (result.webtoon)
-            webtoon = result.webtoon
+                webtoon = result.webtoon
             if (result.visits)
-            visits = result.visits
+                visits = result.visits
             chrome.runtime.sendMessage("reload")
         })
     }
-    
+
 })
 
 function addScrollEvent(wid) {
@@ -123,8 +130,9 @@ chrome.tabs.onUpdated.addListener((tid, ci, tab) => {
                 }
                 visits[wid][no] = Math.floor(new Date().getTime() / 1000)
                 //    interval = setInterval(()=>{getScrollTop()}, 500)   
-                addScrollEvent(tid)
-                if (scrolls[wid] && scrolls[wid][no])
+                if (options.saveScroll)
+                    addScrollEvent(tid)
+                if (scrolls[wid] && scrolls[wid][no] && options.saveScroll)
                     setScroll(tid, scrolls[wid][no])
                 updateStorage();
             }
@@ -138,26 +146,28 @@ chrome.runtime.onMessage.addListener((a, b, c) => {
     var wid = param.get("titleId")
     var no = param.get("no")
     if (wid && no) {
-        if (a.max - a.now < 4000 || a.now == 0) {
-            delete scrolls[wid][no]
+        if (options.saveScroll) {
+            if (a.max - a.now < 4000 || a.now == 0) {
+                delete scrolls[wid][no]
+                chrome.storage.sync.set({
+                    scroll: scrolls
+                })
+                return;
+            }
+
+            if (!scrolls[wid]) {
+                scrolls[wid] = {}
+            }
+            scrolls[wid][no] = {
+                now: a.now,
+                max: a.max
+            }
             chrome.storage.sync.set({
                 scroll: scrolls
             })
-            return;
         }
-
-        if (!scrolls[wid]) {
-            scrolls[wid] = {}
-        }
-        scrolls[wid][no] = {
-            now: a.now,
-            max: a.max
-        }
-        chrome.storage.sync.set({
-            scroll: scrolls
-        })
     } else {
-        if (a.command && a.command == 'reload'){
+        if (a.command && a.command == 'reload') {
             location.reload()
         }
     }
