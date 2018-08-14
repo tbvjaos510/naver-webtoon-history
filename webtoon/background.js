@@ -8,7 +8,9 @@ var options = {
     showHistory: true,
     historyCount: 2000,
     saveWsort: true,
-    saveScroll: true
+    saveScroll: true,
+    hiddenCommant: false,
+    autoNext: false
 }
 
 function storage() {
@@ -25,6 +27,32 @@ function updateStorage() {
     }, () => {
         console.log("success")
     })
+}
+
+function setMax() {
+    var vkey = Object.keys(visits)
+    var vdata = Object.values(visits)
+    var wtime = []
+    for (var i = 0; i < vkey.length; i++)
+        for (var v of Object.keys(vdata[i])) {
+            wtime.push({
+                wno : vkey[i],
+                no: v,
+                time: vdata[i][v]
+            })
+        }
+    wtime.sort((a, b) => {
+        if (a.time < b.time)
+            return 1
+        else
+            return -1
+        return 0
+    })
+    
+    while (wtime.length > options.historyCount){     
+        var last= wtime.pop()
+        delete visits[last.wno][last.no]
+    }
 }
 
 function initWebLog() {
@@ -61,13 +89,40 @@ function initWebLog() {
 function setScroll(tid, sc) {
     chrome.tabs.executeScript(tid, {
         code: `
-    if (confirm("[webtoon extension] 이전에 본 기록이 남아있습니다. (${Math.round(sc.now/sc.max*100)}%)\\n이어보시겠습니까?"))
+    if (confirm("[webtoon extension] 이전에 본 기록이 남아있습니다. (${Math.round(sc.now/(sc.max-(options.hiddenCommant?2500:4000))*100)}%)\\n이어보시겠습니까?"))
         document.documentElement.scrollTop = ${sc.now}
     `
     }, () => {
         console.log("scroll sended")
     })
 }
+
+function autoNext(tid, isauto) {
+    if (isauto)
+        chrome.tabs.executeScript(tid, {
+            code: `var wu = new URL(window.location.href);
+        wu.searchParams.set("no", wu.searchParams.get("no")*1+1)
+        var isScrolling;
+        function checkScrolls( event ) {
+            window.clearTimeout( isScrolling );
+            isScrolling = setTimeout(function() {
+                if (document.documentElement.scrollHeight-document.documentElement.scrollTop<1500)
+                     window.location.href = wu.href;
+            }, 500);
+
+        }
+        window.addEventListener('scroll',checkScrolls, false);
+        `
+        })
+    else {
+        chrome.tabs.executeScript(tid, {
+            code: `
+        if (window["checkScrolls"])
+        window.removeEventListener('scroll', checkScrolls)`
+        });
+    }
+}
+
 chrome.storage.sync.get(['options', 'scroll'], (result) => {
     if (result.options) {
         options = result.options
@@ -90,6 +145,12 @@ chrome.storage.sync.get(['options', 'scroll'], (result) => {
 
 })
 
+function setCommant(wid, isshow) {
+    chrome.tabs.executeScript(wid, {
+        code: `document.getElementById("commentIframe").hidden=${isshow}`
+    })
+}
+
 function addScrollEvent(wid) {
     chrome.tabs.executeScript(wid, {
         code: `
@@ -103,9 +164,10 @@ chrome.tabs.onUpdated.addListener((tid, ci, tab) => {
 
         var url = new URL(tab.url)
         if (url.host === "comic.naver.com") {
+            wtab = 0
             if (url.pathname.indexOf("/list.nhn") > 0) {
                 var wid = url.searchParams.get("titleId");
-                if (visits[wid]) {
+                if (visits[wid] && options.showHistory) {
                     var vkey = Object.keys(visits[wid])
                     for (var i = 0; i < vkey.length; i++) {
                         chrome.tabs.executeScript(tid, {
@@ -129,13 +191,21 @@ chrome.tabs.onUpdated.addListener((tid, ci, tab) => {
                     webtoon[wid].t = url.pathname.split("/detail.nhn")[0]
                 }
                 visits[wid][no] = Math.floor(new Date().getTime() / 1000)
+                setMax()
                 //    interval = setInterval(()=>{getScrollTop()}, 500)   
                 if (options.saveScroll)
                     addScrollEvent(tid)
                 if (scrolls[wid] && scrolls[wid][no] && options.saveScroll)
                     setScroll(tid, scrolls[wid][no])
+                autoNext(tid, options.autoNext)
+
+                setCommant(tid, options.hiddenCommant)
                 updateStorage();
+            } else {
+                wtab = 0
             }
+        } else {
+            wtab = 0
         }
     }
 });
@@ -147,7 +217,8 @@ chrome.runtime.onMessage.addListener((a, b, c) => {
     var no = param.get("no")
     if (wid && no) {
         if (options.saveScroll) {
-            if (a.max - a.now < 4000 || a.now == 0) {
+            if (a.max - a.now < (options.hiddenCommant ? 2500 : 4000) || a.now == 0) {
+                if (scrolls[wid] && scrolls[wid][no])
                 delete scrolls[wid][no]
                 chrome.storage.sync.set({
                     scroll: scrolls
@@ -169,6 +240,18 @@ chrome.runtime.onMessage.addListener((a, b, c) => {
     } else {
         if (a.command && a.command == 'reload') {
             location.reload()
+        }
+    }
+})
+
+chrome.storage.onChanged.addListener(function (changes, namespace) {
+    for (key in changes) {
+        if (key == 'options') {
+            options = changes[key].newValue
+            if (wtab != 0) {
+                setCommant(wtab, options.hiddenCommant)
+                autoNext(wtab, options.autoNext)
+            }
         }
     }
 })

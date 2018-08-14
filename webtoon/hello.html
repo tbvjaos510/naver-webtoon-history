@@ -192,8 +192,7 @@
                         <input type="radio" name="wfrom" id="sync" class="uk-radio"> 계정 (기록을 최대 300개만 저장 가능합니다. 계정에 동기화됩니다.)
                         <p>
                             최대 기록 개수 (넘으면 예전 기록이 삭제됩니다.):
-                            <input class="uk-input uk-width-1-5" style="height:30px" type="number"
-                                min=0 max=10000 id="historyCount">
+                            <input class="uk-input uk-width-1-5" style="height:30px" type="number" min=0 max=10000 id="historyCount">
                         </p>
                         <button id="getWebtoon" class="uk-button uk-button-small uk-button-default" title="방문기록에서 웹툰 기록을 가져옵니다.">방문 기록에서 옮기기</button> &nbsp;
                         <button id="deleteWebtoon" class="uk-button uk-button-small uk-button-default" title="웹툰 기록을 삭제합니다. 사이트에서도 표시하지 않습니다.">웹툰 기록 삭제</button>
@@ -216,21 +215,37 @@
                                 <input class="uk-radio" type="radio" name="websort"> 제목순</li>
                         </ul>
                         <br>
-                        <button id="resetWsort" class="uk-button uk-button-small uk-button-default">웹툰 순서 초기화</button>
-                        <p class="option-title">사용자 웹툰 순서 저장
+                        <span class="option-title">만약 정렬이 이상한 경우 아래 버튼을 클릭해 주세요</span>
+                        <br>
+                        <button id="resetWsort" class="uk-button uk-button-small uk-button-default" title="드래그로 설정한 웹툰의 순서를 초기화합니다.">웹툰 순서 초기화</button>
+                        <p class="option-title" title="사용자가 드래그로 순서를 지정할 수 있습니다.">사용자 웹툰 순서 저장
                             <input class="uk-checkbox" type="checkbox" id="saveWsort"> </p>
                     </li>
                     <li>
                         <span class="uk-text-lead">웹툰 페이지</span>
+                        <span class="uk-text-small">(https://comic.naver.com)</span>
                         <br>
                         <br>
-                        <span class="option-title">웹툰 리스트 페이지에 기록 표시</span>
                         <input id="showHistory" class="uk-checkbox" type="checkbox">
-                        <p>
-                            <span class="option-title">웹툰 스크롤 저장 및 알림</span>
+                        <span class="option-title" title="https://comic.naver.com/webtoon/list.nhn에서 웹툰의 기록을 표시합니다.">웹툰 리스트 페이지에 기록 표시</span>
+                        <p title="웹툰의 보는 정도를 저장하고 다음에 접속할 때 알려줍니다.">
                             <input id="saveScroll" class="uk-checkbox" type="checkbox">
+                            <span class="option-title">웹툰 스크롤 저장 및 알림</span>
                         </p>
-                        <button id="removeScroll" class="uk-button uk-button-small uk-button-default">웹툰 스크롤 데이터 삭제</button>
+                        <button id="removeScroll" class="uk-button uk-button-small uk-button-default" title="스크롤 데이터를 삭제합니다.">웹툰 스크롤 데이터 삭제</button>
+                        <br>
+                    </li>
+                    <li>
+                        <span class="uk-text-lead">특수기능</span>
+                        
+                        <p title="스포를 방지하기 위해 댓글을 숨깁니다.">
+                            <input type="checkbox" class="uk-checkbox" id="hiddenCommant">
+                            <span class="option-title">웹툰 댓글 숨기기</span>
+                       </p>
+                        <p title="웹툰을 다보면 자동으로 다음화로 넘어갑니다. (스크롤을 가장 아래로 내려야함)">
+                            <input type="checkbox" id="auto-next" class="uk-checkbox">
+                            <span class="option-title">정주행모드 </span>
+                        </p>
                     </li>
                     <li>
                         <button id="refresh" class="uk-button uk-button-small uk-button-primary uk-float-left">새로고침</button>

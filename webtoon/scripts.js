@@ -33,14 +33,18 @@ var options = {
     showHistory: true,
     historyCount: 2000,
     saveWsort: true,
-    saveScroll : true
+    saveScroll : true,
+    hiddenCommant : false,
+    autoNext : false
+}
+var notifyoption = {
+    timeout:1500
 }
 var maxCount;
 var wsort = [];
 
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("getNext").onclick = getnextRecent
-
     function storage() {
         if (options.getLocation == 1) {
             return chrome.storage.local
@@ -102,6 +106,7 @@ document.addEventListener("DOMContentLoaded", function () {
     })
 
     function resetWSort() {
+        UIkit.notification("웹툰 순서가 초기화되었습니다.", notifyoption)
         wsort = [];
         chrome.storage.sync.remove(["wsort0", "wsort1", "wsort2", "wsort3", "wsort4", "wsort5", "wsort6"], () => {
             getWebtoon(today)
@@ -129,7 +134,7 @@ document.addEventListener("DOMContentLoaded", function () {
         chrome.runtime.sendMessage({
             command: 'reload'
         }, () => {
-            UIkit.notification("백그라운드 새로고침 시작...")
+            UIkit.notification("백그라운드 새로고침 시작...", notifyoption)
             setTimeout(() => {
                 location.reload()
             }, 2000)
@@ -142,7 +147,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (options.getLocation == 2 && this.value > 300) {
                 this.value = 300
             }
-            UIkit.notification("설정 적용 중. 새로고침됩니다.")
+            UIkit.notification("설정 적용 중. 새로고침됩니다.", notifyoption)
             options.historyCount = this.value;
             saveOption()
             historyToStorage()
@@ -163,7 +168,7 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("getWebtoon").innerText = "방문 기록에서 계정으로 옮기기"
         }
         document.getElementById("getWebtoon").onclick = (function () {
-            UIkit.notification("기록 가져오는 중..")
+            UIkit.notification("기록 가져오는 중..", notifyoption)
             historyToStorage()
         })
         document.getElementById("deleteWebtoon").onclick = (function () {
@@ -184,7 +189,7 @@ document.addEventListener("DOMContentLoaded", function () {
             options.showHistory = event.target.checked
             saveOption()
         })
-        document.getElementById("saveScroll").checked = options.showHistory
+        document.getElementById("saveScroll").checked = options.saveScroll
         document.getElementById("saveScroll").addEventListener("change", function (event) {
             options.saveScroll = event.target.checked
             saveOption()
@@ -214,25 +219,25 @@ document.addEventListener("DOMContentLoaded", function () {
             saveOption()
             refreshAll()
         })
-        document.getElementById("sort-by").childNodes.toOddArray()[options.sort].childNodes[0].checked = true
+        var sorts = document.getElementsByName("websort")
+        sorts[options.sort].checked = true
 
-        document.getElementById("sort-by").childNodes.toOddArray()[0].childNodes[0].onclick = (function () {
+        sorts[0].onclick = (function () {
             options.sort = 0;
             saveOption()
             resetWSort()
-
         })
-        document.getElementById("sort-by").childNodes.toOddArray()[1].childNodes[0].onclick = (function () {
+        sorts[1].onclick = (function () {
             options.sort = 1;
             saveOption()
             resetWSort()
         })
-        document.getElementById("sort-by").childNodes.toOddArray()[2].childNodes[0].onclick = (function () {
+        sorts[2].onclick = (function () {
             options.sort = 2;
             saveOption()
             resetWSort()
         })
-        document.getElementById("sort-by").childNodes.toOddArray()[3].childNodes[0].onclick = (function () {
+        sorts[3].onclick = (function () {
             options.sort = 3;
             saveOption()
             resetWSort()
@@ -244,6 +249,18 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("visitcount").innerText = count
         document.getElementById("resetWsort").onclick = resetWSort
 
+        document.getElementById("hiddenCommant").checked = options.hiddenCommant
+        document.getElementById("hiddenCommant").addEventListener("change", function(event){
+            options.hiddenCommant=event.target.checked
+            saveOption()
+            
+        })
+        document.getElementById("auto-next").checked = options.autoNext
+        document.getElementById("auto-next").addEventListener("change", function(event){
+            options.autoNext = event.target.checked
+            saveOption()
+
+        })
         document.getElementById("removeOption").onclick = (function () {
             chrome.storage.sync.remove("options", () => {
                 alert("초기화 완료. 재시작합니다.")
@@ -285,8 +302,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
                 if (!visits[wid][wno]) {
                     index++
+                    visits[wid][wno] = Math.floor(d.lastVisitTime / 1000)
                 }
-                visits[wid][wno] = Math.floor(d.lastVisitTime / 1000)
             });
             cb()
         })
@@ -362,7 +379,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (imglog['' + web.id + web.no]) {
             imgElement.src = "https://shared-comic.pstatic.net/thumb/" + imglog['' + web.id + web.no].image
             imgElement.title = imgElement.alt = imglog['' + web.id + web.no].name
-            nameElement.innerText = imglog['' + web.id + web.no].name + (web.scroll ? " (" + Math.round(web.scroll.now / web.scroll.max * 100) + "%)" : "")
+            nameElement.innerText = imglog['' + web.id + web.no].name + (web.scroll ? " (" + Math.round(web.scroll.now / (web.scroll.max-(options.hiddenCommant?2500:4000)) * 100) + "%)" : "")
             return;
         }
         var xhttp = new XMLHttpRequest();
