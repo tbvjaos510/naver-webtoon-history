@@ -1,6 +1,6 @@
 {
-    "name": "Hello Extensions",
-    "description": "Base Level Extension",
+    "name": "Naver Webtoon Extensions",
+    "description": "네이버 웹툰 Extension입니다.",
     "version": "1.0",
     "manifest_version": 2,
     "background": {
@@ -10,8 +10,11 @@
         ]
     },
     "browser_action": {
-        "default_popup": "hello.html",
-        "default_icon": "hello_extensions.png"
+        "default_popup": "front.html",
+        "default_icon": "webtoons.png"
+    },
+    "icons":{
+        "300" : "extension-icon.png"
     },
     "permissions": [
         "history",

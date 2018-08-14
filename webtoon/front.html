@@ -249,7 +249,7 @@
                             </p>
                             <p title="웹툰을 다보면 자동으로 다음화로 넘어갑니다. (스크롤을 가장 아래로 내려야함)">
                                 <input type="checkbox" id="auto-next" class="uk-checkbox">
-                                <span class="option-title">정주행모드 </span>
+                                <span class="option-title">자동넘김 </span>
                             </p>
                         </div>
 
@@ -258,26 +258,37 @@
                         <a class="uk-accordion-title" href="#">저장 공간</a>
                         <div class="uk-accordion-content">
                             <p class="option-title">
-                                사용하지 않는 저장공간은 삭제해 주세요
+                                사용하지 않는 저장공간은 삭제해 주세요 <br> (웹툰 정보, 웹툰 기록, 이미지 로그)
                                 <ul class="uk-list" style="padding:0">
                                     <li>
                                         <span class="option-title">로컬 :
-                                            <span id="local-kb">00</span>byte 사용중</span>
+                                            <span id="local-kb">00</span>byte 사용중 </span>
                                         <button id="remove-local" class="uk-button uk-button-small uk-button-default">초기화</button>
                                     </li>
                                     <li>
                                         <span class="option-title">계정 :
-                                            <span id="sync-kb">00</span>byte 사용중</span>
+                                            <span id="sync-kb">00</span>byte 사용중 </span>
                                         <button id="remove-sync" class="uk-button uk-button-small uk-button-default">초기화</button>
                                     </li>
                                     <li>
-                                        <input type="checkbox" id="use-imglog" class="uk-checkbox"> <span class="option-title">이미지 로그 사용(로딩이 빨라집니다.)</span>
+                                        <input type="checkbox" id="use-imglog" class="uk-checkbox"> <span class="option-title">이미지 로그 사용(로딩이 빨라집니다)</span>
+                                    </li>
+                                    <li>
+                                        <button id="reset-all" class="uk-button uk-button-small uk-button-danger" title="웹툰 정보, 웹툰 기록, 이미지 로그, 웹툰 순서, 설정, 스크롤 정보를 삭제합니다.">모든 데이터 초기화</button>
                                     </li>
                                 </ul>
 
                             </p>
                         </div>
 
+                    </li>
+                    <li>
+                        <a href="#" class="uk-accordion-title">개발 정보</a>
+                        <div class="uk-accordion-content">
+                            <span class="option-title">GitHub</span> <a wlink="https://github.com/tbvjaos510/naver-webtoon-history" id="togithub" class="uk-icon-button" uk-icon="icon: github"></a>
+                            <br>
+                            <a class="option-title uk-link-muted" id="naverBlog" wlink="https://blog.naver.com/dgsw102">Naver Blog</a>
+                        </div>
                     </li>
                     <li>
                         <button id="refresh" class="uk-button uk-button-small uk-button-primary uk-float-left">새로고침</button>
@@ -290,8 +301,6 @@
             </div>
         </li>
     </ul>
-
-    <script src="bson/BSON.min.js"></script>
     <script src="uikit/js/uikit.min.js"></script>
     <script src="uikit/js/uikit-icons.min.js"></script>
     <script src="scripts.js"></script>

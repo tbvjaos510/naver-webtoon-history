@@ -28,7 +28,7 @@ var scrolls = {}
 var wtime = [];
 var today = (new Date().getDay() + 6) % 7 //월~일 까지 0~7로 설정
 var options = {
-    getLocation: 0,
+    getLocation: 1,
     sort: 0,
     showHistory: true,
     historyCount: 2000,
@@ -200,6 +200,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         document.getElementById("history").onclick = (function () {
             options.getLocation = 0
+            options.useimglog = false
             document.getElementById("historyCount").max = 10000
             saveOption()
             refreshAll()
@@ -222,6 +223,9 @@ document.addEventListener("DOMContentLoaded", function () {
             saveOption()
             refreshAll()
         })
+        document.getElementById("togithub").onclick=addWebtoonTab
+        document.getElementById("naverBlog").onclick=addWebtoonTab
+
         var sorts = document.getElementsByName("websort")
         sorts[options.sort].checked = true
 
@@ -270,13 +274,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 location.reload();
             })
         })
-        chrome.storage.sync.getBytesInUse(["webtoon", "visits", "imglog"], function (data) {
-            document.getElementById("sync-kb").innerText = data
-        })
-
-        chrome.storage.local.getBytesInUse(["webtoon", "visits", "imglog"], function (data) {
-            document.getElementById("local-kb").innerText = data
-        })
+        setInterval(()=>{
+            chrome.storage.sync.getBytesInUse(["webtoon", "visits", "imglog"], function (data) {
+                document.getElementById("sync-kb").innerText = data
+            })
+    
+            chrome.storage.local.getBytesInUse(["webtoon", "visits", "imglog"], function (data) {
+                document.getElementById("local-kb").innerText = data
+            })
+        }, 2000)
+        
         document.getElementById("remove-local").onclick = () => {
             chrome.storage.local.remove(["webtoon", "visits", "imglog"], () => {
                 document.getElementById("local-kb").innerText = 0
@@ -299,7 +306,7 @@ document.addEventListener("DOMContentLoaded", function () {
             options.useimglog = event.target.checked
             saveOption()
             storage().remove(["imglog"], () => {
-
+                refreshAll()
             })
         })
         document.getElementById("removeScroll").onclick = () => {
@@ -510,11 +517,13 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         if (wsort.length === 0) {
             console.log("init wsort" + today)
+            
             wsort = webtoons.map(e => e.title)
-
-            var save = {}
-            save['wsort' + today] = wsort
-            chrome.storage.sync.set(save)
+            if (options.saveWsort) {
+                var save = {}
+                save['wsort' + today] = wsort
+                chrome.storage.sync.set(save)
+            }
         }
         var el = document.getElementById('today-webtoon');
         el.innerHTML = ""

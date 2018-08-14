@@ -3,7 +3,7 @@ var visits = {};
 var wtab = 0
 var scrolls = {}
 var options = {
-    getLocation: 0,
+    getLocation: 1,
     sort: 0,
     showHistory: true,
     historyCount: 2000,
