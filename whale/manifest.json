@@ -1,0 +1,33 @@
+{
+    "name": "Naver Webtoon Extensions",
+    "description": "네이버 웹툰 Extension입니다.",
+    "version": "1.0",
+    "manifest_version": 2,
+    "background": {
+        "persistent": false,
+        "scripts": [
+            "background.js"
+        ]
+    },
+    "sidebar_action": {
+        "default_page": "front.html",
+        "default_icon": "webtoons.png"
+    },
+    "default_title": "네이버 웹툰",     
+    "use_navigation_bar": true,
+    "icons":{
+        "300" : "extension-icon.png"
+    },
+    "permissions": [
+        "history",
+        "storage",
+        "tabs",
+        "activeTab",
+        "https://comic.naver.com/*"
+    ],
+    "externally_connectable": {
+        "matches": [
+            "https://comic.naver.com/*"
+        ]
+    }
+}
