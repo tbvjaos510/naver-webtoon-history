@@ -309,6 +309,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 refreshAll()
             })
         })
+        document.getElementById("reset-all").onclick=()=>{
+            storage().remove(["webtoon", "visits", "imglog"], ()=>{
+                chrome.storage.sync.remove(["scroll", "options"], ()=>{
+                    refreshAll()
+                })
+            })
+        }
         document.getElementById("removeScroll").onclick = () => {
             chrome.storage.sync.remove("scroll")
             refreshAll()
