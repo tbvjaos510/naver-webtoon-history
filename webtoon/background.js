@@ -10,7 +10,8 @@ var options = {
     saveWsort: true,
     saveScroll: true,
     hiddenCommant: false,
-    autoNext: false
+    autoNext: false,
+    useimglog : true
 }
 
 function storage() {

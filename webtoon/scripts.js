@@ -33,25 +33,27 @@ var options = {
     showHistory: true,
     historyCount: 2000,
     saveWsort: true,
-    saveScroll : true,
-    hiddenCommant : false,
-    autoNext : false
+    saveScroll: true,
+    hiddenCommant: false,
+    autoNext: false,
+    useimglog: true
 }
 var notifyoption = {
-    timeout:1500
+    timeout: 1500
 }
 var maxCount;
 var wsort = [];
 
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("getNext").onclick = getnextRecent
+
     function storage() {
         if (options.getLocation == 1) {
             return chrome.storage.local
         } else
             return chrome.storage.sync
     }
-    chrome.storage.sync.get(["options", "scroll", "wsort", "imglog"], (data) => {
+    chrome.storage.sync.get(["options", "scroll", "wsort"], (data) => {
         if (!data) {
 
         } else {
@@ -67,8 +69,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 scrolls = data.scroll
             }
 
-            if (data.imglog)
-                imglog = data.imglog
             if (options.getLocation == 0) {
                 getHistoryWeb(() => {
                     getWebtoons()
@@ -83,11 +83,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     console.log("recent success")
                 })
             } else {
-                storage().get(["webtoon", "visits"], function (data) {
+                storage().get(["webtoon", "visits", "imglog"], function (data) {
                     if (data.webtoon)
                         webtoon = data.webtoon;
                     if (data.visits)
                         visits = data.visits
+
+                    if (data.imglog)
+                        imglog = data.imglog
                     getWebtoons()
 
                     sortTime(wlength)
@@ -250,13 +253,13 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("resetWsort").onclick = resetWSort
 
         document.getElementById("hiddenCommant").checked = options.hiddenCommant
-        document.getElementById("hiddenCommant").addEventListener("change", function(event){
-            options.hiddenCommant=event.target.checked
+        document.getElementById("hiddenCommant").addEventListener("change", function (event) {
+            options.hiddenCommant = event.target.checked
             saveOption()
-            
+
         })
         document.getElementById("auto-next").checked = options.autoNext
-        document.getElementById("auto-next").addEventListener("change", function(event){
+        document.getElementById("auto-next").addEventListener("change", function (event) {
             options.autoNext = event.target.checked
             saveOption()
 
@@ -267,8 +270,39 @@ document.addEventListener("DOMContentLoaded", function () {
                 location.reload();
             })
         })
+        chrome.storage.sync.getBytesInUse(["webtoon", "visits", "imglog"], function (data) {
+            document.getElementById("sync-kb").innerText = data
+        })
 
-        document.getElementById("removeScroll").onclick = ()=>{
+        chrome.storage.local.getBytesInUse(["webtoon", "visits", "imglog"], function (data) {
+            document.getElementById("local-kb").innerText = data
+        })
+        document.getElementById("remove-local").onclick = () => {
+            chrome.storage.local.remove(["webtoon", "visits", "imglog"], () => {
+                document.getElementById("local-kb").innerText = 0
+                if (options.getLocation == 1) {
+                    refreshAll()
+                }
+            })
+        }
+
+        document.getElementById("remove-sync").onclick = () => {
+            chrome.storage.sync.remove(["webtoon", "visits", "imglog"], () => {
+                document.getElementById("sync-kb").innerText = 0
+                if (options.getLocation == 2) {
+                    refreshAll()
+                }
+            })
+        }
+        document.getElementById("use-imglog").checked = options.useimglog
+        document.getElementById("use-imglog").addEventListener("change", function (event) {
+            options.useimglog = event.target.checked
+            saveOption()
+            storage().remove(["imglog"], () => {
+
+            })
+        })
+        document.getElementById("removeScroll").onclick = () => {
             chrome.storage.sync.remove("scroll")
             refreshAll()
         }
@@ -346,6 +380,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (wtime.length + 20 < wlength) {
             wlength = wtime.length
             document.getElementById("WebToonCount").innerText = "최근 웹툰 (" + wlength + "개)"
+            document.getElementById("getNext").hidden = true
             return;
         }
         document.getElementById("WebToonCount").innerText = "최근 웹툰 (" + wlength + "개)"
@@ -376,10 +411,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function getOpenGraph(web, url, imgElement, nameElement) {
-        if (imglog['' + web.id + web.no]) {
-            imgElement.src = "https://shared-comic.pstatic.net/thumb/" + imglog['' + web.id + web.no].image
-            imgElement.title = imgElement.alt = imglog['' + web.id + web.no].name
-            nameElement.innerText = imglog['' + web.id + web.no].name + (web.scroll ? " (" + Math.round(web.scroll.now / (web.scroll.max-(options.hiddenCommant?2500:4000)) * 100) + "%)" : "")
+        if (imglog[web.id + '-' + web.no] && options.useimglog) {
+            imgElement.src = "https://shared-comic.pstatic.net/thumb/" + imglog[web.id + '-' + web.no].image
+            imgElement.title = imgElement.alt = imglog[web.id + '-' + web.no].name
+            nameElement.innerText = imglog[web.id + '-' + web.no].name + (web.scroll ? " (" + Math.round(web.scroll.now / (web.scroll.max - (options.hiddenCommant ? 2500 : 4000)) * 100) + "%)" : "")
             return;
         }
         var xhttp = new XMLHttpRequest();
@@ -391,11 +426,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     var result = parseHtml(xhttp.responseText)
                     imgElement.src = result.image
                     imgElement.title = imgElement.alt = result.name
-                    nameElement.innerText = result.name
-                    imglog['' + web.id + web.no] = {
-                        image: result.image.split("thumb/")[1],
-                        name: result.name
-                    }
+                    nameElement.innerText = result.name + (web.scroll ? " (" + Math.round(web.scroll.now / (web.scroll.max - (options.hiddenCommant ? 2500 : 4000)) * 100) + "%)" : "")
+                    if (options.useimglog)
+                        imglog[web.id + '-' + web.no] = {
+                            image: result.image.split("thumb/")[1],
+                            name: result.name
+                        }
                 }
             }
         }
@@ -406,7 +442,6 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!startidx) startidx = 0
         wtime.slice(startidx).forEach(web => {
             var link = `https://comic.naver.com${web.type}/detail.nhn?titleId=${web.id}&no=${web.no}`
-            link;
             var wtr = document.createElement("tr")
 
             var img = document.createElement("td")
@@ -430,7 +465,7 @@ document.addEventListener("DOMContentLoaded", function () {
             img.innerText = web.name
             img.className = "webToonTitle"
             if (scrolls[web.id] && scrolls[web.id][web.no]) {
-                console.log(title)
+                console.log(web)
                 title.className += " view-webtoon"
             }
             wtr.appendChild(img)
@@ -439,14 +474,15 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementsByClassName("recent")[0].appendChild(wtr)
             getOpenGraph(web, link, imgEle, name)
         })
-        setTimeout(() => {
-            if (wlength === 30)
-                chrome.storage.sync.set({
-                    imglog: imglog
-                }, () => {
-                    console.log("log refresh")
-                })
-        }, 2000)
+        if (options.useimglog)
+            setTimeout(() => {
+                if (wlength === 30)
+                    storage().set({
+                        imglog: imglog
+                    }, () => {
+                        console.log("log refresh")
+                    })
+            }, 2000)
 
     }
 
@@ -581,7 +617,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     chrome.runtime.onMessage.addListener(e => {
         if (e == 'reload')
-        location.reload()
+            location.reload()
     })
 
 })
