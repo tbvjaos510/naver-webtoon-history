@@ -36,7 +36,8 @@ var options = {
     saveScroll: true,
     hiddenCommant: false,
     autoNext: false,
-    useimglog: true
+    useimglog: true,
+    linktab : true
 }
 var notifyoption = {
     timeout: 1500
@@ -253,6 +254,13 @@ document.addEventListener("DOMContentLoaded", function () {
         for (var i of Object.values(visits)) {
             count += Object.keys(i).length
         }
+
+        document.getElementById("linkTab").checked = options.linktab
+        document.getElementById("linkTab").addEventListener("change", function(event){
+            options.linktab = event.target.checked
+            saveOption()
+        })
+
         document.getElementById("visitcount").innerText = count
         document.getElementById("resetWsort").onclick = resetWSort
 
@@ -377,7 +385,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function addTab(link) {
+        if (options.linktab)
         chrome.tabs.create({
+            url: link
+        })
+        else
+        chrome.tabs.update({
             url: link
         })
     }
@@ -541,7 +554,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     li.innerHTML += `
             <div class="uk-card uk-card-small uk-card-default">
                 <div class="uk-card-media-top">
-                    <img src="${i.src}" alt="${i.title}">
+                    <img class="webtoon-link" src="${i.src}" alt="${i.title}" wlink="${'https://comic.naver.com'+i.href}">
                     ${i.isup ? '<em class="ico-updt"></em>':""}
                     ${i.isbreak ? '<em class="ico-break"></em>':""}
                 </div>
