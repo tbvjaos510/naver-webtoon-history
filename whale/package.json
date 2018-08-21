@@ -1,0 +1,27 @@
+{
+  "name": "whalev2",
+  "version": "1.0.0",
+  "description": "Whale Extension Build Environment",
+  "private": true,
+  "scripts": {
+    "cleanup": "rm -rf dist && mkdir dist",
+    "copy": "cp -rip src/* dist/",
+    "build": "./node_modules/.bin/webpack --mode=none",
+    "build:prod": "./node_modules/.bin/webpack",
+    "lint": "./node_modules/.bin/eslint",
+    "build:bundle": "node bundle.js",
+    "build:deploy": "npm run cleanup && npm run copy && npm run build:prod && npm run build:bundle"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tbvjaos510/naver-webtoon-history.git"
+  },
+  "author": "MnM",
+  "license": "ISC",
+  "devDependencies": {
+    "archiver": "^2.1.1",
+    "webpack": "^4.12.2",
+    "webpack-cli": "^3.0.8"
+  },
+  "dependencies": {}
+}

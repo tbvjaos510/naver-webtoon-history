@@ -1,22 +1,22 @@
 {
-    "name": "Whale - Naver Webtoon Extensions",
-    "description": "네이버 웹툰 Extension입니다.",
-    "version": "1.0",
+    "name": "__MSG_APP_NAME__",
+    "description": "__MSG_APP_DESCRIPTION__",
+    "default_locale": "ko",
+    "version": "1.0.5",
     "manifest_version": 2,
     "background": {
         "persistent": false,
         "scripts": [
-            "background.js"
+            "js/background.js"
         ]
     },
     "sidebar_action": {
         "default_page": "front.html",
-        "default_icon": "webtoons.png"
+        "default_icon": "img/webtoons.png",
+        "mobile_user_agent": false
     },
-    "default_title": "네이버 웹툰",     
-    "use_navigation_bar": true,
-    "icons":{
-        "300" : "extension-icon.png"
+    "icons": {
+        "300": "img/extension-icon.png"
     },
     "permissions": [
         "history",
