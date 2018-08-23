@@ -648,5 +648,9 @@ document.addEventListener("DOMContentLoaded", function () {
         if (e == 'reload')
             location.reload()
     })
-
+    whale.sidebarAction.onClicked.addListener(result=>{
+        if (result.opened){
+            refreshAll()
+        }
+    })
 })
