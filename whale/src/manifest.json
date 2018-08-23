@@ -2,7 +2,7 @@
     "name": "__MSG_APP_NAME__",
     "description": "__MSG_APP_DESCRIPTION__",
     "default_locale": "ko",
-    "version": "1.0.5",
+    "version": "2.0",
     "manifest_version": 2,
     "background": {
         "persistent": false,
@@ -13,7 +13,8 @@
     "sidebar_action": {
         "default_page": "front.html",
         "default_icon": "img/webtoons.png",
-        "mobile_user_agent": false
+        "mobile_user_agent": false,
+        "default_title": "__MSG_APP_TITLE__"
     },
     "icons": {
         "300": "img/extension-icon.png"
