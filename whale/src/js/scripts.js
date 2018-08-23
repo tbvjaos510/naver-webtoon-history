@@ -552,17 +552,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (f === i.title) {
                     var li = document.createElement('li')
                     li.innerHTML += `
-            <div class="uk-card uk-card-small uk-card-default">
+            <div class="uk-card uk-card-small uk-card-default ">
                 <div class="uk-card-media-top">
                     <img class="webtoon-link" src="${i.src}" alt="${i.title}" wlink="${'https://comic.naver.com'+i.href}">
                     ${i.isup ? '<em class="ico-updt"></em>':""}
                     ${i.isbreak ? '<em class="ico-break"></em>':""}
                 </div>
-                <div class="uk-card-body">
+                <div class="uk-card-body uk-padding-small uk-padding-remove-right uk-padding-remove-left">
                 <a class="uk-link-muted webtoon-link" wlink="${'https://comic.naver.com'+i.href}" >${i.title}</a>
                 <br>
                 ${visits[i.no] ? `<a class="uk-link-muted webtoon-link" wlink="${'https://comic.naver.com/'+i.href.split('/')[1]}/detail.nhn?titleId=${i.no}&no=${Object.keys(visits[i.no])[0]}" >${(Object.keys(visits[i.no])[0])}화</a>`: "기록 없음"}
-                </div><br>
+                </div>
             </div>
         `
                     el.appendChild(li)
@@ -574,15 +574,15 @@ document.addEventListener("DOMContentLoaded", function () {
             if (!i.inserted) {
                 var li = document.createElement('li')
                 li.innerHTML += `
-        <div class="uk-card uk-card-small uk-card-default">
+        <div class="uk-card uk-card-small uk-card-default ">
             <div class="uk-card-media-top">
                 <img src="${i.src}" alt="${i.title}">
                 ${i.isup ? '<em class="ico-updt"></em>':""}
                 ${i.isbreak ? '<em class="ico-break"></em>':""}
             </div>
-            <div class="uk-card-body">
+            <div class="uk-card-body uk-padding-small uk-padding-remove-right uk-padding-remove-left">
             <a class="uk-link-muted webtoon-link" wlink="${'https://comic.naver.com'+i.href}" >${i.title}</a>
-            </div><br>
+            </div>
         </div>
     `
                 el.appendChild(li)
