@@ -14,7 +14,7 @@ Issues나 Pull requests 환영합니다.
 # [Whale](https://store.whale.naver.com/detail/nmambboikkfejkgloppiejnhhohbaaem)
 <img src="README-image/5.png" style="width:900px"> <br>
 <img src="README-image/6.png" style="width:900px"> <br>
-<img src="README-image/7.png" style="width:900px"><br>
+<img src="README-image/7.PNG" style="width:900px"><br>
 
 # [Chrome](https://chrome.google.com/webstore/detail/naver-webtoon-extensions/pkingjioiemgjlbklighjcicnjgjckok?hl=ko)
 <img src="README-image/4.jpg"><br>
