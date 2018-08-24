@@ -16,11 +16,21 @@ document.body.innerHTML += `
 
 
 document.getElementById("layer-link").addEventListener("click", function (event) {
-    chrome.runtime.sendMessage("epcjdiajnngfngmijnicdbceofdmfopg", {
-        now: document.documentElement.scrollTop,
-        max: document.querySelector("#toonLayer>ul").scrollHeight
-    }, () => {
+    if (location.href.indexOf("detail.nhn?") > -1) {
+        chrome.runtime.sendMessage("epcjdiajnngfngmijnicdbceofdmfopg", {
+            now: document.documentElement.scrollTop,
+            max: document.querySelector("#toonLayer>ul").scrollHeight
+        }, () => {
 
+            chrome.runtime.sendMessage("epcjdiajnngfngmijnicdbceofdmfopg", {
+                openTab: true
+            }, end => {
+
+                whale.sidebarAction.hide()
+
+            })
+        })
+    } else {
         chrome.runtime.sendMessage("epcjdiajnngfngmijnicdbceofdmfopg", {
             openTab: true
         }, end => {
@@ -28,7 +38,7 @@ document.getElementById("layer-link").addEventListener("click", function (event)
             whale.sidebarAction.hide()
 
         })
-    })
+    }
 })
 chrome.runtime.sendMessage("epcjdiajnngfngmijnicdbceofdmfopg", {
     url: location.href
