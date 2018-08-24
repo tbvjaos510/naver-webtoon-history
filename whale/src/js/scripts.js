@@ -38,7 +38,7 @@ var options = {
     autoNext: false,
     useimglog: true,
     linktab: true,
-    linkSide: false,
+    linkSide: true,
 }
 var notifyoption = {
     timeout: 1500
@@ -57,57 +57,56 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     chrome.storage.sync.get(["options", "scroll", "wsort"], (data) => {
         if (!data) {
-
-        } else {
-            console.log(data)
-            if (data.options) {
-                options = data.options
-            } else {
-                chrome.storage.sync.set({
-                    options: options
-                })
-            }
-            if (data.scroll) {
-                scrolls = data.scroll
-            }
-
-            if (options.getLocation == 0) {
-                getHistoryWeb(() => {
-                    getWebtoons()
-
-                    sortTime(wlength)
-                    console.log("sort success")
-                    setRecent(0)
-                    document.getElementById("loading").hidden = true
-                    setOptionDocument()
-
-                    getWebtoon(today);
-                    console.log("recent success")
-                })
-            } else {
-                storage().get(["webtoon", "visits", "imglog"], function (data) {
-                    if (data.webtoon)
-                        webtoon = data.webtoon;
-                    if (data.visits)
-                        visits = data.visits
-
-                    if (data.imglog)
-                        imglog = data.imglog
-                    getWebtoons()
-
-                    sortTime(wlength)
-                    console.log("sort success")
-                    setRecent(0)
-                    console.log("recent success")
-
-                    document.getElementById("loading").hidden = true
-                    getWebtoon(today);
-                    setOptionDocument()
-                })
-            }
-
-
+            data = {}
         }
+        if (data.options) {
+            options = data.options
+        } else {
+            chrome.storage.sync.set({
+                options: options
+            })
+        }
+        if (data.scroll) {
+            scrolls = data.scroll
+        }
+
+        if (options.getLocation == 0) {
+            getHistoryWeb(() => {
+                getWebtoons()
+
+                sortTime(wlength)
+                console.log("sort success")
+                setRecent(0)
+                document.getElementById("loading").hidden = true
+                setOptionDocument()
+
+                getWebtoon(today);
+                console.log("recent success")
+            })
+        } else {
+            storage().get(["webtoon", "visits", "imglog"], function (data) {
+                if (data.webtoon)
+                    webtoon = data.webtoon;
+                if (data.visits)
+                    visits = data.visits
+
+                if (data.imglog)
+                    imglog = data.imglog
+                getWebtoons()
+
+                sortTime(wlength)
+                console.log("sort success")
+                setRecent(0)
+                console.log("recent success")
+
+                document.getElementById("loading").hidden = true
+                getWebtoon(today);
+                setOptionDocument()
+            })
+        }
+
+
+
     })
 
     function resetWSort() {
@@ -390,10 +389,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function addTab(link) {
-        if (options.linkSide && link.indexOf("comic.naver.com") != -1 ){
+        if (options.linkSide && link.indexOf("comic.naver.com") != -1) {
             link = link.replace("https://", "https://m.")
-        //   UIkit.tab(UIkit.util.$("#nav-bar")).show(3)
-        //    document.getElementById("wtab").src = link
+            //   UIkit.tab(UIkit.util.$("#nav-bar")).show(3)
+            //    document.getElementById("wtab").src = link
             location.href = link
             return false;
         }
@@ -405,7 +404,7 @@ document.addEventListener("DOMContentLoaded", function () {
             chrome.tabs.update({
                 url: link
             })
-            return false;
+        return false;
     }
 
     function addWebtoonTab() {
@@ -480,7 +479,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function setRecent(startidx) {
         if (!startidx) startidx = 0
-        if (startidx == 0){
+        if (startidx == 0) {
             document.getElementsByClassName("recent")[0].innerHTML = ""
         }
         wtime.slice(startidx).forEach(web => {
@@ -493,7 +492,7 @@ document.addEventListener("DOMContentLoaded", function () {
             img.onclick = addWebtoonTab;
             var title = document.createElement("td")
             title.setAttribute("wlink", link)
-            title.onclick = addWebtoonTab;  
+            title.onclick = addWebtoonTab;
             title.style.position = "relative"
             var time = document.createElement("td")
             var timespan = document.createElement("span")
@@ -501,7 +500,7 @@ document.addEventListener("DOMContentLoaded", function () {
             time.appendChild(timespan)
             var name = document.createElement("a")
             name.className = "webToonName"
-            
+
             var imgEle = document.createElement("img")
             imgEle.src = "img/picture.svg"
             title.appendChild(imgEle)
@@ -676,21 +675,42 @@ document.addEventListener("DOMContentLoaded", function () {
             if (key == 'webtoon') {
                 webtoon = changes[key].newValue
             }
-            if (key == 'visits'){
+            if (key == 'visits') {
                 visits = changes[key].newValue
                 getWebtoons()
                 sortTime(wlength)
                 setRecent(0)
                 getWebtoon(today);
             }
-            if (key == 'scroll'){
+            if (key == 'scroll') {
                 scrolls = changes[key].newValue;
                 getWebtoons()
                 sortTime(wlength)
                 getWebtoon(today);
                 setRecent(0)
-                
+
             }
         }
     })
+})
+
+whale.sidebarAction.getBadgeText(function (result) {
+    if (result == ' ') {
+        UIkit.notification(`버전 ${chrome.runtime.getManifest().version} <div class="uk-text-small">
+    업데이트 내용<br>
+    1. 사이드바에서 웹툰 보기(설정에 가보세요)<br>
+    2.몇몇 디자인 반응형으로 변경<br>
+    자세한 사항은 <a class="uk-link-muted" id="extension-link">여기</a>에서 확인 바랍니다. 
+    </div>`, {
+            timeout: 5000
+        })
+        document.getElementById("extension-link").addEventListener("click", function () {
+            chrome.tabs.create({
+                url: "https://store.whale.naver.com/detail/nmambboikkfejkgloppiejnhhohbaaem"
+            })
+        })
+        whale.sidebarAction.setBadgeText({
+            text: ""
+        })
+    }
 })

@@ -13,7 +13,7 @@ var options = {
     autoNext: false,
     useimglog: true,
     linktab: true,
-    linkSide: false,
+    linkSide: true,
 }
 
 function storage() {
@@ -58,7 +58,7 @@ function setMax() {
     }
 }
 
-function initWebLog() {
+function initWebLog(cb) {
     chrome.history.search({
         text: "detail.nhn?titleId=",
         startTime: 0,
@@ -74,6 +74,8 @@ function initWebLog() {
             var params = url.searchParams
             let wid = params.get("titleId")
             let wno = params.get("no")
+            if (!wid)
+                return;
             if (!webtoon[wid]) {
                 webtoon[wid] = {}
                 visits[wid] = {}
@@ -85,6 +87,8 @@ function initWebLog() {
                 visits[wid][wno] = Math.floor(d.lastVisitTime / 1000)
             }
         });
+        if (cb)
+            cb()
 
     })
 }
@@ -239,7 +243,7 @@ chrome.runtime.onMessage.addListener((a, b, c) => {
             }
 
             if (a.now > 600)
-            a.now -= 600
+                a.now -= 600
             if (!scrolls[wid]) {
                 scrolls[wid] = {}
             }
@@ -312,4 +316,18 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
             }
         }
     }
+})
+
+chrome.runtime.onInstalled.addListener(function (details) {
+    if (details.reason == 'install') {
+        console.log("init start")
+        initWebLog(() => {
+            updateStorage()
+        })
+    }
+    if (details.reason == "update")
+        whale.sidebarAction.setBadgeText({
+            text: " "
+        });
+
 })
