@@ -37,7 +37,8 @@ var options = {
     hiddenCommant: false,
     autoNext: false,
     useimglog: true,
-    linktab : true
+    linktab: true,
+    linkSide: false,
 }
 var notifyoption = {
     timeout: 1500
@@ -224,8 +225,8 @@ document.addEventListener("DOMContentLoaded", function () {
             saveOption()
             refreshAll()
         })
-        document.getElementById("togithub").onclick=addWebtoonTab
-        document.getElementById("naverBlog").onclick=addWebtoonTab
+        document.getElementById("togithub").onclick = addWebtoonTab
+        document.getElementById("naverBlog").onclick = addWebtoonTab
 
         var sorts = document.getElementsByName("websort")
         sorts[options.sort].checked = true
@@ -256,11 +257,15 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         document.getElementById("linkTab").checked = options.linktab
-        document.getElementById("linkTab").addEventListener("change", function(event){
+        document.getElementById("linkTab").addEventListener("change", function (event) {
             options.linktab = event.target.checked
             saveOption()
         })
-
+        document.getElementById("sideTab").checked = options.linkSide
+        document.getElementById("sideTab").addEventListener("change", function (event) {
+            options.linkSide = event.target.checked
+            saveOption()
+        })
         document.getElementById("visitcount").innerText = count
         document.getElementById("resetWsort").onclick = resetWSort
 
@@ -282,16 +287,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 location.reload();
             })
         })
-        setInterval(()=>{
+        setInterval(() => {
             chrome.storage.sync.getBytesInUse(["webtoon", "visits", "imglog"], function (data) {
                 document.getElementById("sync-kb").innerText = data
             })
-    
+
             chrome.storage.local.getBytesInUse(["webtoon", "visits", "imglog"], function (data) {
                 document.getElementById("local-kb").innerText = data
             })
         }, 2000)
-        
+
         document.getElementById("remove-local").onclick = () => {
             chrome.storage.local.remove(["webtoon", "visits", "imglog"], () => {
                 document.getElementById("local-kb").innerText = 0
@@ -317,9 +322,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 refreshAll()
             })
         })
-        document.getElementById("reset-all").onclick=()=>{
-            storage().remove(["webtoon", "visits", "imglog"], ()=>{
-                chrome.storage.sync.remove(["scroll", "options"], ()=>{
+        document.getElementById("reset-all").onclick = () => {
+            storage().remove(["webtoon", "visits", "imglog"], () => {
+                chrome.storage.sync.remove(["scroll", "options"], () => {
                     refreshAll()
                 })
             })
@@ -385,14 +390,22 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function addTab(link) {
+        if (options.linkSide && link.indexOf("comic.naver.com") != -1 ){
+            link = link.replace("https://", "https://m.")
+        //   UIkit.tab(UIkit.util.$("#nav-bar")).show(3)
+        //    document.getElementById("wtab").src = link
+            location.href = link
+            return false;
+        }
         if (options.linktab)
-        chrome.tabs.create({
-            url: link
-        })
+            chrome.tabs.create({
+                url: link
+            })
         else
-        chrome.tabs.update({
-            url: link
-        })
+            chrome.tabs.update({
+                url: link
+            })
+            return false;
     }
 
     function addWebtoonTab() {
@@ -441,7 +454,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (imglog[web.id + '-' + web.no] && options.useimglog) {
             imgElement.src = "https://shared-comic.pstatic.net/thumb/" + imglog[web.id + '-' + web.no].image
             imgElement.title = imgElement.alt = imglog[web.id + '-' + web.no].name
-            nameElement.innerText = imglog[web.id + '-' + web.no].name + (web.scroll ? " (" + Math.round(web.scroll.now / (web.scroll.max - (options.hiddenCommant ? 2500 : 4000)) * 100) + "%)" : "")
+            nameElement.innerText = imglog[web.id + '-' + web.no].name + (web.scroll ? " (" + Math.round(web.scroll.now / web.scroll.max * 100) + "%)" : "")
             return;
         }
         var xhttp = new XMLHttpRequest();
@@ -453,7 +466,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     var result = parseHtml(xhttp.responseText)
                     imgElement.src = result.image
                     imgElement.title = imgElement.alt = result.name
-                    nameElement.innerText = result.name + (web.scroll ? " (" + Math.round(web.scroll.now / (web.scroll.max - (options.hiddenCommant ? 2500 : 4000)) * 100) + "%)" : "")
+                    nameElement.innerText = result.name + (web.scroll ? " (" + Math.round(web.scroll.now / web.scroll.max * 100) + "%)" : "")
                     if (options.useimglog)
                         imglog[web.id + '-' + web.no] = {
                             image: result.image.split("thumb/")[1],
@@ -467,6 +480,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function setRecent(startidx) {
         if (!startidx) startidx = 0
+        if (startidx == 0){
+            document.getElementsByClassName("recent")[0].innerHTML = ""
+        }
         wtime.slice(startidx).forEach(web => {
             var link = `https://comic.naver.com${web.type}/detail.nhn?titleId=${web.id}&no=${web.no}`
             var wtr = document.createElement("tr")
@@ -477,14 +493,15 @@ document.addEventListener("DOMContentLoaded", function () {
             img.onclick = addWebtoonTab;
             var title = document.createElement("td")
             title.setAttribute("wlink", link)
-            title.onclick = addWebtoonTab;
+            title.onclick = addWebtoonTab;  
+            title.style.position = "relative"
             var time = document.createElement("td")
             var timespan = document.createElement("span")
             timespan.innerText = new Date(web.lastVisit).toLocaleString()
             time.appendChild(timespan)
             var name = document.createElement("a")
-            name.href = link
             name.className = "webToonName"
+            
             var imgEle = document.createElement("img")
             imgEle.src = "img/picture.svg"
             title.appendChild(imgEle)
@@ -537,7 +554,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         if (wsort.length === 0) {
             console.log("init wsort" + today)
-            
+
             wsort = webtoons.map(e => e.title)
             if (options.saveWsort) {
                 var save = {}
@@ -648,9 +665,32 @@ document.addEventListener("DOMContentLoaded", function () {
         if (e == 'reload')
             location.reload()
     })
-    whale.sidebarAction.onClicked.addListener(result=>{
-        if (result.opened){
-            refreshAll()
+    // whale.sidebarAction.onClicked.addListener(result => {
+    //     if (result.opened) {
+    //         refreshAll()
+    //     }
+    // })
+    chrome.storage.onChanged.addListener(function (changes, namespace) {
+        console.log(changes)
+        for (key in changes) {
+            if (key == 'webtoon') {
+                webtoon = changes[key].newValue
+            }
+            if (key == 'visits'){
+                visits = changes[key].newValue
+                getWebtoons()
+                sortTime(wlength)
+                setRecent(0)
+                getWebtoon(today);
+            }
+            if (key == 'scroll'){
+                scrolls = changes[key].newValue;
+                getWebtoons()
+                sortTime(wlength)
+                getWebtoon(today);
+                setRecent(0)
+                
+            }
         }
     })
 })

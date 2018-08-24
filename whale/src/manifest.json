@@ -2,7 +2,7 @@
     "name": "__MSG_APP_NAME__",
     "description": "__MSG_APP_DESCRIPTION__",
     "default_locale": "ko",
-    "version": "2.0",
+    "version": "2.1",
     "manifest_version": 2,
     "background": {
         "persistent": false,
@@ -24,11 +24,20 @@
         "storage",
         "tabs",
         "activeTab",
-        "https://comic.naver.com/*"
+        "https://comic.naver.com/*",
+        "https://m.comic.naver.com/*"
     ],
     "externally_connectable": {
         "matches": [
-            "https://comic.naver.com/*"
+            "https://comic.naver.com/*",
+            "https://m.comic.naver.com/*"
         ]
-    }
+    },
+    "content_scripts": [{
+        "matches": ["https://m.comic.naver.com/*"],
+        "js":["js/content.js"],
+        "css":["css/content.css"],
+        "run_at":"document_end",
+        "all_frames" : true
+    }]
 }
