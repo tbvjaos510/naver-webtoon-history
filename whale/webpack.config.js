@@ -20,7 +20,8 @@ module.exports = function(mode = "production") {
                 path.resolve(srcPath, "background.js")
             ],
             "scripts": [
-                path.resolve(srcPath, "scripts.js")
+                path.resolve(srcPath, "scripts.js"),
+                path.resolve(srcPath, "content.js")
             ]
         },
         output: {

@@ -1,6 +1,6 @@
 if (location.href.indexOf("detail.nhn?") > -1) {
 
-    window.onbeforeunload = () => chrome.runtime.sendMessage("epcjdiajnngfngmijnicdbceofdmfopg", {
+    window.onbeforeunload = () => chrome.runtime.sendMessage("pfllnhpphaiphfiobljpogcnjepaecpk", {
         now: document.documentElement.scrollTop,
         max: document.querySelector("#toonLayer>ul").scrollHeight
     }, () => {
@@ -16,13 +16,14 @@ document.body.innerHTML += `
 
 
 document.getElementById("layer-link").addEventListener("click", function (event) {
+    console.log(event);
     if (location.href.indexOf("detail.nhn?") > -1) {
-        chrome.runtime.sendMessage("epcjdiajnngfngmijnicdbceofdmfopg", {
+        chrome.runtime.sendMessage("pfllnhpphaiphfiobljpogcnjepaecpk", {
             now: document.documentElement.scrollTop,
             max: document.querySelector("#toonLayer>ul") ? document.querySelector("#toonLayer>ul").scrollHeight : 0
         }, () => {
 
-            chrome.runtime.sendMessage("epcjdiajnngfngmijnicdbceofdmfopg", {
+            chrome.runtime.sendMessage("pfllnhpphaiphfiobljpogcnjepaecpk", {
                 openTab: true
             }, end => {
 
@@ -30,14 +31,14 @@ document.getElementById("layer-link").addEventListener("click", function (event)
             })
         })
     } else {
-        chrome.runtime.sendMessage("epcjdiajnngfngmijnicdbceofdmfopg", {
+        chrome.runtime.sendMessage("pfllnhpphaiphfiobljpogcnjepaecpk", {
             openTab: true
         }, end => {
 
         })
     }
 })
-chrome.runtime.sendMessage("epcjdiajnngfngmijnicdbceofdmfopg", {
+chrome.runtime.sendMessage("pfllnhpphaiphfiobljpogcnjepaecpk", {
     url: location.href
 }, (data) => {
     if (data && data.visits) {

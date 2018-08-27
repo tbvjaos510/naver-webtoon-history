@@ -1,6 +1,6 @@
 function increasePatchVersion(org) {
     let comp = org.split('.');
-    comp[comp.length - 1] = (comp[comp.length - 1] * 1) + 1;
+ //   comp[comp.length - 1] = (comp[comp.length - 1] * 1) + 1;
     return comp.join('.');
 }
 

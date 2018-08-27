@@ -2,7 +2,7 @@
     "name": "__MSG_APP_NAME__",
     "description": "__MSG_APP_DESCRIPTION__",
     "default_locale": "ko",
-    "version": "2.1",
+    "version": "2.2",
     "manifest_version": 2,
     "background": {
         "persistent": false,
