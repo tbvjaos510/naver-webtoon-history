@@ -56,7 +56,7 @@ function setMax() {
     }
 }
 
-function initWebLog() {
+function initWebLog(cb) {
     chrome.history.search({
         text: "detail.nhn?titleId=",
         startTime: 0,
@@ -83,7 +83,7 @@ function initWebLog() {
                 visits[wid][wno] = Math.floor(d.lastVisitTime / 1000)
             }
         });
-
+        cb()
     })
 }
 
@@ -255,4 +255,19 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
             }
         }
     }
+})
+
+
+chrome.runtime.onInstalled.addListener(function (details) {
+    if (details.reason == 'install') {
+        console.log("init start")
+        initWebLog(() => {
+            updateStorage()
+        })
+    }
+    if (details.reason == "update")
+        whale.sidebarAction.setBadgeText({
+            text: " "
+        });
+
 })

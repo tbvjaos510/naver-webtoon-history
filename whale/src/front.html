@@ -212,20 +212,20 @@
                             <span class="option-title">웹툰 기록을 불러올 곳</span>
                             <ul class="uk-list" id="sort-by" style="padding:0">
                                 <li>
-                                    <input type="radio" name="wfrom" id="history" class="uk-radio"> 웹 브라우저 방문 기록 (방문 기록 삭제시
-                                    초기화됩니다. 느립니다)
+                                    <input type="radio" name="wfrom" id="history" class="uk-radio"> <label for="history">웹 브라우저 방문 기록 (방문 기록 삭제시
+                                        초기화됩니다. 느립니다)</label> 
                                 </li>
                                 <li>
-                                    <input type="radio" name="wfrom" id="local" class="uk-radio"> 로컬 (기록을 컴퓨터에 저장합니다. 동기화되지
-                                    않습니다.)
+                                    <input type="radio" name="wfrom" id="local" class="uk-radio"> <label for="local">로컬 (기록을 컴퓨터에 저장합니다. 동기화되지
+                                        않습니다.)</label> 
                                 </li>
                                 <li>
-                                    <input type="radio" name="wfrom" id="sync" class="uk-radio"> 계정 (기록을 최대 300개만 저장 가능합니다.
-                                    계정에 동기화됩니다.)
+                                    <input type="radio" name="wfrom" id="sync" class="uk-radio"> <label for="sync">계정 (기록을 최대 300개만 저장 가능합니다.
+                                        계정에 동기화됩니다.)</label> 
                                 </li>
                             </ul>
                             <p>
-                                최대 기록 개수 (넘으면 예전 기록이 삭제됩니다.):
+                                <label for="historyCount">최대 기록 개수 (넘으면 예전 기록이 삭제됩니다.):</label> 
                                 <input class="uk-input uk-width-1-5" style="height:30px" type="number" min=0 max=10000 id="historyCount">
                             </p>
                             <button id="getWebtoon" class="uk-button uk-button-small uk-button-default" title="방문기록에서 웹툰 기록을 가져옵니다.">방문
@@ -235,10 +235,10 @@
                             <br>
                             <br>
                             <input type="checkbox" id="linkTab" class="uk-checkbox">
-                            <span class="option-title">링크를 새 탭에서 엽니다 (모든 링크에 적용) </span>
+                            <label class="option-title" for="linkTab">링크를 새 탭에서 엽니다 (모든 링크에 적용) </label>
                             <br>
                             <input type="checkbox" id="sideTab" class="uk-checkbox">
-                            <span class="option-title">웹툰을 사이드바에서 엽니다. (Whale 전용) </span> <br>
+                            <label class="option-title" for="sideTab">웹툰을 사이드바에서 엽니다. (Whale 전용) </label> <br>
                             <span class="uk-text-small">※사이드바에서 웹툰을 볼 시 왼쪽 아래 탭에서 보기 버튼이 있습니다.</span>
 
 
@@ -253,13 +253,13 @@
                             <br>
                             <ul class="uk-list" id="sort-by" style="padding:0">
                                 <li>
-                                    <input class="uk-radio" type="radio" name="websort"> 조회순</li>
+                                    <input class="uk-radio" type="radio" name="websort" id="sort-pop"><label for="sort-pop"> 조회순</label></li>
                                 <li>
-                                    <input class="uk-radio" type="radio" name="websort"> 업데이트순</li>
+                                    <input class="uk-radio" type="radio" name="websort" id="sort-update"><label for="sort-update"> 업데이트순</label></li>
                                 <li>
-                                    <input class="uk-radio" type="radio" name="websort"> 별점순</li>
+                                    <input class="uk-radio" type="radio" name="websort" id="sort-stars"><label for="sort-stars"> 별점순</label></li>
                                 <li>
-                                    <input class="uk-radio" type="radio" name="websort"> 제목순</li>
+                                    <input class="uk-radio" type="radio" name="websort" id="sort-names"><label for="sort-names"> 제목순</label></li>
                             </ul>
                             <br>
                             <span class="option-title">만약 정렬이 이상한 경우 아래 버튼을 클릭해 주세요</span>
@@ -268,7 +268,7 @@
                                 순서 초기화</button>
                             <br>
                             <p class="option-title" title="사용자가 드래그로 순서를 지정할 수 있습니다.">
-                                <input class="uk-checkbox" type="checkbox" id="saveWsort"> 사용자 웹툰 순서 저장 </p>
+                                <input class="uk-checkbox" type="checkbox" id="saveWsort"><label for="saveWsort"> 사용자 웹툰 순서 저장</label> </p>
 
                         </div>
 
@@ -279,11 +279,11 @@
                         </a>
                         <div class="uk-accordion-content">
                             <input id="showHistory" class="uk-checkbox" type="checkbox">
-                            <span class="option-title" title="https://comic.naver.com/webtoon/list.nhn에서 웹툰의 기록을 표시합니다.">웹툰
-                                리스트 페이지에 기록 표시</span>
+                            <label for="showHistory" class="option-title" title="https://comic.naver.com/webtoon/list.nhn에서 웹툰의 기록을 표시합니다.">웹툰
+                                리스트 페이지에 기록 표시</label>
                             <p title="웹툰의 보는 정도를 저장하고 다음에 접속할 때 알려줍니다.">
                                 <input id="saveScroll" class="uk-checkbox" type="checkbox">
-                                <span class="option-title">웹툰 스크롤 저장 및 알림</span>
+                                <label for="saveScroll" class="option-title">웹툰 스크롤 저장 및 알림</label>
                             </p>
                             <button id="removeScroll" class="uk-button uk-button-small uk-button-default" title="스크롤 데이터를 삭제합니다.">웹툰
                                 스크롤 데이터 삭제</button>
@@ -295,11 +295,11 @@
                         <div class="uk-accordion-content">
                             <p title="스포를 방지하기 위해 댓글을 숨깁니다.">
                                 <input type="checkbox" class="uk-checkbox" id="hiddenCommant">
-                                <span class="option-title">웹툰 댓글 숨기기</span>
+                                <label for="hiddenCommant" class="option-title">웹툰 댓글 숨기기</label>
                             </p>
                             <p title="웹툰을 다보면 자동으로 다음화로 넘어갑니다. (스크롤을 가장 아래로 내려야함)">
                                 <input type="checkbox" id="auto-next" class="uk-checkbox">
-                                <span class="option-title">자동넘김 </span>
+                                <label for="auto-next" class="option-title">자동넘김 </label>
                             </p>
                         </div>
 
@@ -323,7 +323,7 @@
                                     </li>
                                     <li>
                                         <input type="checkbox" id="use-imglog" class="uk-checkbox">
-                                        <span class="option-title">이미지 로그 사용(로딩이 빨라집니다)</span>
+                                        <label for="use-imglog" class="option-title">이미지 로그 사용(로딩이 빨라집니다)</label>
                                     </li>
                                     <li>
                                         <button id="reset-all" class="uk-button uk-button-small uk-button-danger" title="웹툰 정보, 웹툰 기록, 이미지 로그, 웹툰 순서, 설정, 스크롤 정보를 삭제합니다.">모든

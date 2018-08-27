@@ -19,14 +19,13 @@ document.getElementById("layer-link").addEventListener("click", function (event)
     if (location.href.indexOf("detail.nhn?") > -1) {
         chrome.runtime.sendMessage("epcjdiajnngfngmijnicdbceofdmfopg", {
             now: document.documentElement.scrollTop,
-            max: document.querySelector("#toonLayer>ul").scrollHeight
+            max: document.querySelector("#toonLayer>ul") ? document.querySelector("#toonLayer>ul").scrollHeight : 0
         }, () => {
 
             chrome.runtime.sendMessage("epcjdiajnngfngmijnicdbceofdmfopg", {
                 openTab: true
             }, end => {
 
-                whale.sidebarAction.hide()
 
             })
         })
@@ -34,8 +33,6 @@ document.getElementById("layer-link").addEventListener("click", function (event)
         chrome.runtime.sendMessage("epcjdiajnngfngmijnicdbceofdmfopg", {
             openTab: true
         }, end => {
-
-            whale.sidebarAction.hide()
 
         })
     }
