@@ -226,6 +226,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         document.getElementById("togithub").onclick = addWebtoonTab
         document.getElementById("naverBlog").onclick = addWebtoonTab
+        document.getElementById("toIssues").onclick = addWebtoonTab
 
         var sorts = document.getElementsByName("websort")
         sorts[options.sort].checked = true
@@ -332,9 +333,9 @@ document.addEventListener("DOMContentLoaded", function () {
             chrome.storage.sync.remove("scroll")
             refreshAll()
         }
-        document.getElementById("refresh").onclick = () => {
-            refreshAll()
-        }
+        // document.getElementById("refresh").onclick = () => {
+        //     refreshAll()
+        // }
     }
 
     function getHistoryWeb(cb) {
@@ -705,9 +706,9 @@ whale.sidebarAction.getBadgeText(function (result) {
     if (result == ' ') {
         UIkit.notification(`버전 ${chrome.runtime.getManifest().version} <div class="uk-text-small">
     업데이트 내용<br>
-    (긴급수정) <br>
-    Jrady721님의 Issues 일부 반영 및 Extension ID 수정 (v2.2에서 적용이 안되어서 재적용) <br>
-    
+    1. 사이드바에서 웹툰을 볼 때 웹툰 목록에서 탭으로 안넘어가는 오류 수정 <br>
+    2. 사이드바에서 웹툰을 볼 때 컷툰에서 탭으로 안넘어가는 오류 수정 <br>
+    3. 배스트도전, 도전만화 기록 저장 <br>
     자세한 사항은 <a class="uk-link-muted" id="extension-link">여기</a>에서 확인 바랍니다. 
     </div>`, {
             timeout: 5000

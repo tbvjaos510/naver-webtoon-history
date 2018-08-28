@@ -28,11 +28,10 @@ document.getElementById("layer-link").addEventListener("click", function (event)
             chrome.runtime.sendMessage(ExtensionId, {
                 openTab: true
             }, end => {
-
-
+                
             })
         })
-    } else {pfllnhpphaiphfiobljpogcnjepaecpk
+    } else {
         chrome.runtime.sendMessage("", {
             openTab: true
         }, end => {
@@ -41,7 +40,8 @@ document.getElementById("layer-link").addEventListener("click", function (event)
     }
 })
 chrome.runtime.sendMessage(ExtensionId, {
-    url: location.href
+    url: location.href,
+    title:document.querySelector("meta[property='og:title']").content.split('-')[0].trim()
 }, (data) => {
     if (data && data.visits) {
         var vkey = Object.keys(data.visits)

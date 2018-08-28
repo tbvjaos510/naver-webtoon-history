@@ -254,6 +254,7 @@ document.addEventListener("DOMContentLoaded", function () {
         for (var i of Object.values(visits)) {
             count += Object.keys(i).length
         }
+        document.getElementById("version").innerText = 'v' + chrome.runtime.getManifest().version;
 
         document.getElementById("linkTab").checked = options.linktab
         document.getElementById("linkTab").addEventListener("change", function(event){
@@ -424,7 +425,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 return -1
             return 0
         })
+        if (wtime.length > length)
         wtime.length = length;
+    if (wtime.length < 30){
+        document.getElementById("getNext").hidden = true;
+        document.getElementById("WebToonCount").innerText = `최근 웹툰 (${wtime.length}개)`
+    }
 
     }
 

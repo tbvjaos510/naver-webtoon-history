@@ -272,7 +272,7 @@ chrome.runtime.onMessage.addListener((a, b, c) => {
                 if (!webtoon[wid]) {
                     visits[wid] = {}
                     webtoon[wid] = {}
-                    webtoon[wid].na = tab.title.split("::")[0]
+                    webtoon[wid].na = a.title
                     webtoon[wid].t = url.pathname.split("/detail.nhn")[0]
                 }
                 visits[wid][no] = Math.floor(new Date().getTime() / 1000)
