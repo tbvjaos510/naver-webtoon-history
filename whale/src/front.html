@@ -79,6 +79,23 @@
             right: 5px;
         }
 
+        .favo {
+            display: inline-block;
+            bottom: 8px;
+            left: 8px;
+        }
+        .stared>svg>polygon{
+            fill:rgb(255, 216, 0);
+            color:rgb(255, 216, 0);
+        }
+        .card-one {
+            padding-bottom: 14px !important;
+        }
+
+        .uk-card {
+            text-align: center;
+        }
+
         .ico-break {
             display: inline-block;
             overflow: hidden;
@@ -132,9 +149,8 @@
 
 <body style="width:100%; height:auto; overflow-x: hidden;">
     <div class="body-title">
-        <span>NAVER Webtoon</span>
+        <span>NAVER Webtoon <span class="uk-text-small option-title" id="version"></span></span>
     </div>
-
 
     <ul id="nav-bar" class="uk-child-width-expand uk-margin-small" uk-tab>
         <li>
@@ -180,6 +196,7 @@
         <li id="list-daily">
 
             <ul id="webtoon-week" class="uk-flex-center" uk-tab>
+                <li id="favorate"><a>★</a></li>
                 <li id="week0">
                     <a>월</a>
                 </li>
@@ -237,8 +254,10 @@
                                 <label for="historyCount">최대 기록 개수 (넘으면 예전 기록이 삭제됩니다.):</label>
                                 <input class="uk-input uk-width-1-5" style="height:30px" type="number" min=0 max=10000 id="historyCount">
                             </p>
-                            <button id="getWebtoon" class="uk-button uk-button-small uk-button-default" title="방문기록에서 웹툰 기록을 가져옵니다.">방문 기록에서 옮기기</button> &nbsp;
-                            <button id="deleteWebtoon" class="uk-button uk-button-small uk-button-default" title="웹툰 기록을 삭제합니다. 사이트에서도 표시하지 않습니다.">웹툰 기록 삭제</button>
+                            <button id="getWebtoon" class="uk-button uk-button-small uk-button-default" title="방문기록에서 웹툰 기록을 가져옵니다.">방문
+                                기록에서 옮기기</button> &nbsp;
+                            <button id="deleteWebtoon" class="uk-button uk-button-small uk-button-default" title="웹툰 기록을 삭제합니다. 사이트에서도 표시하지 않습니다.">웹툰
+                                기록 삭제</button>
                             <br>
                             <br>
                             <input type="checkbox" id="linkTab" class="uk-checkbox">
@@ -280,7 +299,8 @@
                             <br>
                             <span class="option-title">만약 정렬이 이상한 경우 아래 버튼을 클릭해 주세요</span>
                             <br>
-                            <button id="resetWsort" class="uk-button uk-button-small uk-button-default" title="드래그로 설정한 웹툰의 순서를 초기화합니다.">웹툰 순서 초기화</button>
+                            <button id="resetWsort" class="uk-button uk-button-small uk-button-default" title="드래그로 설정한 웹툰의 순서를 초기화합니다.">웹툰
+                                순서 초기화</button>
                             <br>
                             <p class="option-title" title="사용자가 드래그로 순서를 지정할 수 있습니다.">
                                 <input class="uk-checkbox" type="checkbox" id="saveWsort">
@@ -296,12 +316,19 @@
                         </a>
                         <div class="uk-accordion-content">
                             <input id="showHistory" class="uk-checkbox" type="checkbox">
-                            <label for="showHistory" class="option-title" title="https://comic.naver.com/webtoon/list.nhn에서 웹툰의 기록을 표시합니다.">웹툰 리스트 페이지에 기록 표시</label>
-                            <p title="웹툰의 보는 정도를 저장하고 다음에 접속할 때 알려줍니다.">
-                                <input id="saveScroll" class="uk-checkbox" type="checkbox">
-                                <label for="saveScroll" class="option-title">웹툰 스크롤 저장 및 알림</label>
-                            </p>
-                            <button id="removeScroll" class="uk-button uk-button-small uk-button-default" title="스크롤 데이터를 삭제합니다.">웹툰 스크롤 데이터 삭제</button>
+                            <label for="showHistory" class="option-title" title="https://comic.naver.com/webtoon/list.nhn에서 웹툰의 기록을 표시합니다.">웹툰
+                                리스트 페이지에 기록 표시</label>
+                            <br>
+                            <input id="saveScroll" class="uk-checkbox" type="checkbox">
+                            <label for="saveScroll" class="option-title" title="웹툰의 보는 정도를 저장하고 다음에 접속할 때 알려줍니다.">웹툰 스크롤
+                                저장 및 알림</label>
+                            <br>
+                            <input type="checkbox" id="webContext" class="uk-checkbox">
+                            <label for="webContext" class="option-title" title="https://comic.naver.com에서 웹툰 오른쪽 클릭으로 바로 사이드 바에서 볼 수 있습니다.">웹툰
+                                사이트에 ContextMenu 추가</label>
+
+                            <button id="removeScroll" class="uk-button uk-button-small uk-button-default" title="스크롤 데이터를 삭제합니다.">웹툰
+                                스크롤 데이터 삭제</button>
                         </div>
 
                     </li>
@@ -341,7 +368,8 @@
                                         <label for="use-imglog" class="option-title">이미지 로그 사용(로딩이 빨라집니다)</label>
                                     </li>
                                     <li>
-                                        <button id="reset-all" class="uk-button uk-button-small uk-button-danger" title="웹툰 정보, 웹툰 기록, 이미지 로그, 웹툰 순서, 설정, 스크롤 정보를 삭제합니다.">모든 데이터 초기화</button>
+                                        <button id="reset-all" class="uk-button uk-button-small uk-button-danger" title="웹툰 정보, 웹툰 기록, 이미지 로그, 웹툰 순서, 설정, 스크롤 정보를 삭제합니다.">모든
+                                            데이터 초기화</button>
                                     </li>
                                 </ul>
 
@@ -355,7 +383,8 @@
                             <span class="option-title">GitHub</span>
                             <a wlink="https://github.com/tbvjaos510/naver-webtoon-history" id="togithub" class="uk-icon-button" uk-icon="icon: github"></a>
                             <br>
-                            <a class="option-title uk-link-muted" id="naverBlog" wlink="https://blog.naver.com/dgsw102">Naver Blog
+                            <a class="option-title uk-link-muted" id="naverBlog" wlink="https://blog.naver.com/dgsw102">Naver
+                                Blog
                             </a>
                             <br>
                         </div>

@@ -74,8 +74,8 @@ function initWebLog(cb) {
             var params = url.searchParams
             let wid = params.get("titleId")
             let wno = params.get("no")
-            if (!wid)
-                return;
+            if (!wid || !wno)
+                return false
             if (!webtoon[wid]) {
                 webtoon[wid] = {}
                 visits[wid] = {}
@@ -191,6 +191,10 @@ chrome.tabs.onUpdated.addListener((tid, ci, tab) => {
                 wtab = tid
                 var wid = url.searchParams.get("titleId");
                 var no = url.searchParams.get("no")
+                if (!wid || !no) {
+                    wtab = 0
+                    return
+                }
                 if (!webtoon[wid]) {
                     visits[wid] = {}
                     webtoon[wid] = {}

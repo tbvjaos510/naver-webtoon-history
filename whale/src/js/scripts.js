@@ -40,6 +40,7 @@ var options = {
     linktab: true,
     linkSide: true,
 }
+var favorate = [];
 var notifyoption = {
     timeout: 1500
 }
@@ -55,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
         } else
             return chrome.storage.sync
     }
-    chrome.storage.sync.get(["options", "scroll", "wsort"], (data) => {
+    chrome.storage.sync.get(["options", "scroll", "wsort", "favorate"], (data) => {
         if (!data) {
             data = {}
         }
@@ -68,6 +69,9 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         if (data.scroll) {
             scrolls = data.scroll
+        }
+        if (data.favorate) {
+            favorate = data.favorate
         }
 
         if (options.getLocation == 0) {
@@ -134,6 +138,12 @@ document.addEventListener("DOMContentLoaded", function () {
         })
     }
 
+    function updateFavorate() {
+        chrome.storage.sync.set({
+            favorate: favorate
+        })
+    }
+
     function refreshAll() {
         chrome.runtime.sendMessage({
             command: 'reload'
@@ -156,6 +166,7 @@ document.addEventListener("DOMContentLoaded", function () {
             saveOption()
             historyToStorage()
         })
+        document.getElementById("version").innerHTML = 'v' + chrome.runtime.getManifest().version
         if (options.getLocation == 0) {
             document.getElementById("history").checked = true
             document.getElementById("getWebtoon").hidden = true
@@ -354,6 +365,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 var params = url.searchParams
                 let wid = params.get("titleId")
                 let wno = params.get("no")
+                if (!wid || !wno)
+                    return false
                 if (!webtoon[wid]) {
                     webtoon[wid] = {}
                     visits[wid] = {}
@@ -439,7 +452,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         if (wtime.length > length)
             wtime.length = length;
-        if (wtime.length < 30){
+        if (wtime.length < 30) {
             document.getElementById("getNext").hidden = true;
             document.getElementById("WebToonCount").innerText = `최근 웹툰 (${wtime.length}개)`
         }
@@ -580,10 +593,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     ${i.isup ? '<em class="ico-updt"></em>':""}
                     ${i.isbreak ? '<em class="ico-break"></em>':""}
                 </div>
-                <div class="uk-card-body uk-padding-small uk-padding-remove-right uk-padding-remove-left">
-                <a class="uk-link-muted webtoon-link" wlink="${'https://comic.naver.com'+i.href}" >${i.title}</a>
+                <div class="uk-card-body card-one uk-padding-remove-right uk-padding-remove-left">
+           
+    <a class="uk-link-muted webtoon-link" wlink="${'https://comic.naver.com'+i.href}" >${i.title}</a>
                 <br>
                 ${visits[i.no] ? `<a class="uk-link-muted webtoon-link" wlink="${'https://comic.naver.com/'+i.href.split('/')[1]}/detail.nhn?titleId=${i.no}&no=${Object.keys(visits[i.no])[0]}" >${(Object.keys(visits[i.no])[0])}화</a>`: "기록 없음"}
+             <br>
+                <a href="" class="favo ${favorate.find((item)=>item==i.title)?'stared':''}" uk-icon="icon: star;"></a>  
+    
                 </div>
             </div>
         `
@@ -602,10 +619,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     ${i.isup ? '<em class="ico-updt"></em>':""}
                     ${i.isbreak ? '<em class="ico-break"></em>':""}
                 </div>
-                <div class="uk-card-body uk-padding-small uk-padding-remove-right uk-padding-remove-left">
+                <div class="uk-card-body card-one uk-padding-remove-right uk-padding-remove-left">
+                
                 <a class="uk-link-muted webtoon-link" wlink="${'https://comic.naver.com'+i.href}" >${i.title}</a>
                 <br>
                 ${visits[i.no] ? `<a class="uk-link-muted webtoon-link" wlink="${'https://comic.naver.com/'+i.href.split('/')[1]}/detail.nhn?titleId=${i.no}&no=${Object.keys(visits[i.no])[0]}" >${(Object.keys(visits[i.no])[0])}화</a>`: "기록 없음"}
+                <br>   
+                <a href="" class="favo ${favorate.find((item)=>item==i.title)?'stared':''}" uk-icon="icon: star"></a>
                 </div>
             </div>
     `
@@ -617,8 +637,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
         for (var v of document.getElementsByClassName('webtoon-link'))
             v.onclick = addWebtoonTab
+        for (var v of document.getElementsByClassName("favo")) {
+            v.onclick = starWebtoon
+        }
         return webtoons
 
+    }
+
+    function starWebtoon() {
+        var tname = this.parentElement.querySelector("a.webtoon-link").innerText
+        if (this.className.indexOf("stared") > 0) {
+            var idx = favorate.find(data => tname == data)
+            if (idx) {
+                favorate.splice(idx, 1)
+                this.className = this.className.replace('stared', '')
+                updateFavorate()
+            }
+        } else {
+            favorate.push(tname)
+            this.className += " stared"
+            updateFavorate()
+        }
+
+        return false
     }
 
     function getWebtoon(week) {
@@ -659,6 +700,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     })
     document.getElementById('week0').className = ""
+    document.getElementById("favorate").className = ""
     document.getElementById('week' + today).className = "uk-active"
     document.getElementById('week' + today).childNodes[0].className = "date-today"
     for (var i = 0; i < 7; i++) {
@@ -678,7 +720,6 @@ document.addEventListener("DOMContentLoaded", function () {
     //     }
     // })
     chrome.storage.onChanged.addListener(function (changes, namespace) {
-        console.log(changes)
         for (key in changes) {
             if (key == 'webtoon') {
                 webtoon = changes[key].newValue
