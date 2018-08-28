@@ -4,8 +4,8 @@ whale(chrome) extension 으로 네이버 웹툰 기록을 표시하고 쉽게 �
 Issues나 Pull requests 환영합니다. <br>
 **Issues를 달 시 앞에 사용중인 웹 브라우저를 명시해 주세요**
 # Issues 
-
 1. [SoohanBae](https://github.com/SoohanBae) : [글자 짤림 오류](https://github.com/tbvjaos510/naver-webtoon-history/issues/1) - 1.2버전 해결
+2. [Jrady721](https://github.com/Jrady721) : [설치하고 10분 동안의 불편한 점](https://github.com/tbvjaos510/naver-webtoon-history/issues/4) - 현재 수정 중
 
 # Pull requests
 1. [kennyd98](https://github.com/kennyd98) : [Whale 확장앱 환경 추가](https://github.com/tbvjaos510/naver-webtoon-history/pull/3) - 2018-08-23 Merged 적용
