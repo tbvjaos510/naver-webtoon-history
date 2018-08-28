@@ -1,6 +1,8 @@
+var ExtensionId = 'nmambboikkfejkgloppiejnhhohbaaem'
+
 if (location.href.indexOf("detail.nhn?") > -1) {
 
-    window.onbeforeunload = () => chrome.runtime.sendMessage("pfllnhpphaiphfiobljpogcnjepaecpk", {
+    window.onbeforeunload = () => chrome.runtime.sendMessage(ExtensionId, {
         now: document.documentElement.scrollTop,
         max: document.querySelector("#toonLayer>ul").scrollHeight
     }, () => {
@@ -18,27 +20,27 @@ document.body.innerHTML += `
 document.getElementById("layer-link").addEventListener("click", function (event) {
     console.log(event);
     if (location.href.indexOf("detail.nhn?") > -1) {
-        chrome.runtime.sendMessage("pfllnhpphaiphfiobljpogcnjepaecpk", {
+        chrome.runtime.sendMessage(ExtensionId, {
             now: document.documentElement.scrollTop,
             max: document.querySelector("#toonLayer>ul") ? document.querySelector("#toonLayer>ul").scrollHeight : 0
         }, () => {
 
-            chrome.runtime.sendMessage("pfllnhpphaiphfiobljpogcnjepaecpk", {
+            chrome.runtime.sendMessage(ExtensionId, {
                 openTab: true
             }, end => {
 
 
             })
         })
-    } else {
-        chrome.runtime.sendMessage("pfllnhpphaiphfiobljpogcnjepaecpk", {
+    } else {pfllnhpphaiphfiobljpogcnjepaecpk
+        chrome.runtime.sendMessage("", {
             openTab: true
         }, end => {
 
         })
     }
 })
-chrome.runtime.sendMessage("pfllnhpphaiphfiobljpogcnjepaecpk", {
+chrome.runtime.sendMessage(ExtensionId, {
     url: location.href
 }, (data) => {
     if (data && data.visits) {

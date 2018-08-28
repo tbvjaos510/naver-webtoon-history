@@ -265,8 +265,8 @@ chrome.runtime.onInstalled.addListener(function (details) {
             updateStorage()
         })
     }
-    if (details.reason == "update")
-        whale.sidebarAction.setBadgeText({
+   // if (details.reason == "update")
+        chrome.browserAction.setBadgeText({
             text: " "
         });
 

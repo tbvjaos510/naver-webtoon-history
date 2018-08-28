@@ -48,7 +48,10 @@
             text-decoration: none;
             color: black
         }
-
+        #today-webtoon>li>div:hover{
+            background: rgb(230, 230, 230);
+            cursor:move;
+        }
         .webToonTitle,
         th {
             text-align: center !important;
@@ -68,7 +71,7 @@
             background-position: -130px -60px;
             position: absolute;
             top: -12px;
-            right: 17px;
+            right: 5px;
         }
 
         .ico-break {
@@ -85,7 +88,7 @@
             background-position: -160px -60px !important;
             position: absolute;
             top: -12px;
-            right: 17px;
+            right: 5px;
         }
 
         
@@ -141,7 +144,7 @@
     </ul>
     <ul class="uk-switcher" id="main-switcher">
         <li id="list-history">
-            <div>
+            <div class="uk-padding-small">
                 <table class="viewList uk-table uk-table-small uk-table-divider">
                     <caption class="uk-text-center">
                         <span id="WebToonCount">최근 웹툰 (30개)</span>

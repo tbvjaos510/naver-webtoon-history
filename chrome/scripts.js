@@ -552,18 +552,18 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (f === i.title) {
                     var li = document.createElement('li')
                     li.innerHTML += `
-            <div class="uk-card uk-card-small uk-card-default">
-                <div class="uk-card-media-top">
-                    <img class="webtoon-link" src="${i.src}" alt="${i.title}" wlink="${'https://comic.naver.com'+i.href}">
-                    ${i.isup ? '<em class="ico-updt"></em>':""}
-                    ${i.isbreak ? '<em class="ico-break"></em>':""}
+                    <div class="uk-card uk-card-small uk-card-default ">
+                    <div class="uk-card-media-top">
+                        <img class="webtoon-link" src="${i.src}" alt="${i.title}" wlink="${'https://comic.naver.com'+i.href}">
+                        ${i.isup ? '<em class="ico-updt"></em>':""}
+                        ${i.isbreak ? '<em class="ico-break"></em>':""}
+                    </div>
+                    <div class="uk-card-body uk-padding-small uk-padding-remove-right uk-padding-remove-left">
+                    <a class="uk-link-muted webtoon-link" wlink="${'https://comic.naver.com'+i.href}" >${i.title}</a>
+                    <br>
+                    ${visits[i.no] ? `<a class="uk-link-muted webtoon-link" wlink="${'https://comic.naver.com/'+i.href.split('/')[1]}/detail.nhn?titleId=${i.no}&no=${Object.keys(visits[i.no])[0]}" >${(Object.keys(visits[i.no])[0])}화</a>`: "기록 없음"}
+                    </div>
                 </div>
-                <div class="uk-card-body">
-                <a class="uk-link-muted webtoon-link" wlink="${'https://comic.naver.com'+i.href}" >${i.title}</a>
-                <br>
-                ${visits[i.no] ? `<a class="uk-link-muted webtoon-link" wlink="${'https://comic.naver.com/'+i.href.split('/')[1]}/detail.nhn?titleId=${i.no}&no=${Object.keys(visits[i.no])[0]}" >${(Object.keys(visits[i.no])[0])}화</a>`: "기록 없음"}
-                </div><br>
-            </div>
         `
                     el.appendChild(li)
                     i.inserted = true;
@@ -574,16 +574,18 @@ document.addEventListener("DOMContentLoaded", function () {
             if (!i.inserted) {
                 var li = document.createElement('li')
                 li.innerHTML += `
-        <div class="uk-card uk-card-small uk-card-default">
-            <div class="uk-card-media-top">
-                <img src="${i.src}" alt="${i.title}">
-                ${i.isup ? '<em class="ico-updt"></em>':""}
-                ${i.isbreak ? '<em class="ico-break"></em>':""}
+                <div class="uk-card uk-card-small uk-card-default ">
+                <div class="uk-card-media-top">
+                    <img class="webtoon-link" src="${i.src}" alt="${i.title}" wlink="${'https://comic.naver.com'+i.href}">
+                    ${i.isup ? '<em class="ico-updt"></em>':""}
+                    ${i.isbreak ? '<em class="ico-break"></em>':""}
+                </div>
+                <div class="uk-card-body uk-padding-small uk-padding-remove-right uk-padding-remove-left">
+                <a class="uk-link-muted webtoon-link" wlink="${'https://comic.naver.com'+i.href}" >${i.title}</a>
+                <br>
+                ${visits[i.no] ? `<a class="uk-link-muted webtoon-link" wlink="${'https://comic.naver.com/'+i.href.split('/')[1]}/detail.nhn?titleId=${i.no}&no=${Object.keys(visits[i.no])[0]}" >${(Object.keys(visits[i.no])[0])}화</a>`: "기록 없음"}
+                </div>
             </div>
-            <div class="uk-card-body">
-            <a class="uk-link-muted webtoon-link" wlink="${'https://comic.naver.com'+i.href}" >${i.title}</a>
-            </div><br>
-        </div>
     `
                 el.appendChild(li)
                 i.inserted = true;
@@ -648,5 +650,29 @@ document.addEventListener("DOMContentLoaded", function () {
         if (e == 'reload')
             location.reload()
     })
+
+})
+
+chrome.browserAction.getBadgeText({}, function(text){
+    if (text == ' '){
+        
+        UIkit.notification(`버전 ${chrome.runtime.getManifest().version} <div class="uk-text-small">
+    업데이트 내용<br>
+    1. 요일별 웹툰 카드 크기 줄임 <br>
+    2. 최근 본 웹툰에서 웹툰 제목을 중간으로 옮김 <br>
+    3. 웹툰 제목 정상화 <br>
+    자세한 사항은 <a class="uk-link-muted" id="extension-link">여기</a>에서 확인 바랍니다. 
+    </div>`, {
+            timeout: 5000
+        })
+        document.getElementById("extension-link").addEventListener("click", function () {
+            chrome.tabs.create({
+                url: "https://chrome.google.com/webstore/detail/naver-webtoon-extensions/pkingjioiemgjlbklighjcicnjgjckok"
+            })
+        })
+        chrome.browserAction.setBadgeText({
+            text: ""
+        })
+    }
 
 })

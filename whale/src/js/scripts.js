@@ -436,7 +436,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 return -1
             return 0
         })
-        wtime.length = length;
+        if (wtime.length > length)
+            wtime.length = length;
+        if (wtime.length < 30){
+            document.getElementById("getNext").hidden = true;
+            document.getElementById("WebToonCount").innerText = `최근 웹툰 (${wtime.length}개)`
+        }
 
     }
 
@@ -590,16 +595,18 @@ document.addEventListener("DOMContentLoaded", function () {
             if (!i.inserted) {
                 var li = document.createElement('li')
                 li.innerHTML += `
-        <div class="uk-card uk-card-small uk-card-default ">
-            <div class="uk-card-media-top">
-                <img src="${i.src}" alt="${i.title}">
-                ${i.isup ? '<em class="ico-updt"></em>':""}
-                ${i.isbreak ? '<em class="ico-break"></em>':""}
+                <div class="uk-card uk-card-small uk-card-default ">
+                <div class="uk-card-media-top">
+                    <img class="webtoon-link" src="${i.src}" alt="${i.title}" wlink="${'https://comic.naver.com'+i.href}">
+                    ${i.isup ? '<em class="ico-updt"></em>':""}
+                    ${i.isbreak ? '<em class="ico-break"></em>':""}
+                </div>
+                <div class="uk-card-body uk-padding-small uk-padding-remove-right uk-padding-remove-left">
+                <a class="uk-link-muted webtoon-link" wlink="${'https://comic.naver.com'+i.href}" >${i.title}</a>
+                <br>
+                ${visits[i.no] ? `<a class="uk-link-muted webtoon-link" wlink="${'https://comic.naver.com/'+i.href.split('/')[1]}/detail.nhn?titleId=${i.no}&no=${Object.keys(visits[i.no])[0]}" >${(Object.keys(visits[i.no])[0])}화</a>`: "기록 없음"}
+                </div>
             </div>
-            <div class="uk-card-body uk-padding-small uk-padding-remove-right uk-padding-remove-left">
-            <a class="uk-link-muted webtoon-link" wlink="${'https://comic.naver.com'+i.href}" >${i.title}</a>
-            </div>
-        </div>
     `
                 el.appendChild(li)
                 i.inserted = true;
