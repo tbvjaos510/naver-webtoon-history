@@ -14,6 +14,7 @@ var options = {
     useimglog: true,
     linktab: true,
     linkSide: true,
+    useFavorate : true
 }
 
 function storage() {
@@ -133,6 +134,10 @@ function autoNext(tid, isauto) {
 chrome.storage.sync.get(['options', 'scroll'], (result) => {
     if (result.options) {
         options = result.options
+        if (options.useFavorate == undefined){
+            options.useFavorate = true
+            chrome.storage.sync.set({options : options})
+        }
     }
     if (result.scroll)
         scrolls = result.scroll

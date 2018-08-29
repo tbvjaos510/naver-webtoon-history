@@ -39,6 +39,7 @@ var options = {
     useimglog: true,
     linktab: true,
     linkSide: true,
+    useFavorate: true
 }
 var favorate = [];
 var notifyoption = {
@@ -156,6 +157,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function setOptionDocument() {
+
+        document.getElementById("extension-title").onclick = addWebtoonTab
+
         document.getElementById("historyCount").value = options.historyCount
         document.getElementById("historyCount").addEventListener("blur", function (e) {
             if (options.getLocation == 2 && this.value > 300) {
@@ -292,6 +296,31 @@ document.addEventListener("DOMContentLoaded", function () {
             saveOption()
 
         })
+        document.getElementById('saveFavorate').checked = options.useFavorate
+        document.getElementById('saveFavorate').onclick = function () {
+            options.useFavorate = !options.useFavorate
+
+            if (!options.useFavorate) {
+                document.getElementById("favorate").hidden = true
+            } else {
+                document.getElementById("favorate").hidden = false
+            }
+            getWebtoonContext()
+            saveOption()
+        }
+        document.getElementById('deleteFavorate').addEventListener('click', function () {
+            favorate = []
+            chrome.storage.sync.set({
+                favorate: favorate
+            })
+            if (today == -1)
+                twebtoon = []
+            getWebtoonContext()
+
+        })
+        if (!options.useFavorate) {
+            document.getElementById("favorate").hidden = true
+        }
         document.getElementById("removeOption").onclick = (function () {
             chrome.storage.sync.remove("options", () => {
                 alert("초기화 완료. 재시작합니다.")
@@ -335,7 +364,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         document.getElementById("reset-all").onclick = () => {
             storage().remove(["webtoon", "visits", "imglog"], () => {
-                chrome.storage.sync.remove(["scroll", "options"], () => {
+                chrome.storage.sync.remove(["scroll", "options", "favorate"], () => {
                     refreshAll()
                 })
             })
@@ -548,6 +577,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
+    function getFavorate() {
+        var xhttp = new XMLHttpRequest()
+        xhttp.open('GET', 'https://comic.naver.com/webtoon/weekday.nhn', true)
+        xhttp.onreadystatechange = function () {
+            if (xhttp.status == 200 && xhttp.readyState == 4) {
+                var whtml = new DOMParser().parseFromString(xhttp.responseText, "text/html")
+                whtml = whtml.querySelector('div.daily_all')
+                wsort = favorate
+                twebtoon = [];
+                for (var v of wsort) {
+                    twebtoon.push((whtml.querySelector('div.col_selected img[title="' + v + '"]') && whtml.querySelector('div.col_selected img[title="' + v + '"]').parentElement.parentElement.parentElement) ||
+                        whtml.querySelector('img[title="' + v + '"]').parentElement.parentElement.parentElement)
+                }
+                today = -1;
+                getWebtoonContext()
+            }
+        }
+
+        xhttp.send()
+    }
 
     function getWebtoonContent(str, week) {
         var parser = new DOMParser()
@@ -561,24 +610,25 @@ document.addEventListener("DOMContentLoaded", function () {
     function getWebtoonContext() {
         var webtoons = twebtoon.map((e, i) => {
             return {
-                no: new URL(e.childNodes[1].childNodes[1].href).searchParams.get("titleId"),
-                title: e.childNodes[3].title,
-                href: e.childNodes[1].childNodes[1].getAttribute('href'),
-                src: e.childNodes[1].childNodes[1].childNodes[1].src,
-                isup: e.childNodes[1].childNodes[1].childNodes[4] ? e.childNodes[1].childNodes[1].childNodes[4].className === 'ico_updt' : false,
-                isbreak: e.childNodes[1].childNodes[1].childNodes[4] ? e.childNodes[1].childNodes[1].childNodes[4].className === 'ico_break' : false,
+                no: new URL(e.querySelector('div.thumb>a').href).searchParams.get("titleId"),
+                title: e.querySelector('a.title').innerText,
+                href: e.querySelector('div.thumb>a').getAttribute('href'),
+                src: e.querySelector('div.thumb>a>img').src,
+                isup: e.querySelector('div.thumb>a>em.ico_updt') ? true : false,
+                isbreak: e.querySelector('div.thumb>a>em.ico_break') ? true : false,
                 inserted: false
             }
         })
+
         if (wsort.length === 0) {
             console.log("init wsort" + today)
 
             wsort = webtoons.map(e => e.title)
-            if (options.saveWsort) {
-                var save = {}
-                save['wsort' + today] = wsort
-                chrome.storage.sync.set(save)
-            }
+            // if (options.saveWsort) {
+            //     var save = {}
+            //     save['wsort' + today] = wsort
+            //     chrome.storage.sync.set(save)
+            // }
         }
         var el = document.getElementById('today-webtoon');
         el.innerHTML = ""
@@ -598,10 +648,11 @@ document.addEventListener("DOMContentLoaded", function () {
     <a class="uk-link-muted webtoon-link" wlink="${'https://comic.naver.com'+i.href}" >${i.title}</a>
                 <br>
                 ${visits[i.no] ? `<a class="uk-link-muted webtoon-link" wlink="${'https://comic.naver.com/'+i.href.split('/')[1]}/detail.nhn?titleId=${i.no}&no=${Object.keys(visits[i.no])[0]}" >${(Object.keys(visits[i.no])[0])}화</a>`: "기록 없음"}
-             <br>
-                <a href="" class="favo ${favorate.find((item)=>item==i.title)?'stared':''}" uk-icon="icon: star;"></a>  
-    
-                </div>
+             ${options.useFavorate==true ? ` <br>
+             <a href="" class="favo ${favorate.find((item)=>item==i.title)?'stared':''}" uk-icon="icon: star;"></a>  
+ 
+             </div>`:''}
+               
             </div>
         `
                     el.appendChild(li)
@@ -624,8 +675,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 <a class="uk-link-muted webtoon-link" wlink="${'https://comic.naver.com'+i.href}" >${i.title}</a>
                 <br>
                 ${visits[i.no] ? `<a class="uk-link-muted webtoon-link" wlink="${'https://comic.naver.com/'+i.href.split('/')[1]}/detail.nhn?titleId=${i.no}&no=${Object.keys(visits[i.no])[0]}" >${(Object.keys(visits[i.no])[0])}화</a>`: "기록 없음"}
-                <br>   
-                <a href="" class="favo ${favorate.find((item)=>item==i.title)?'stared':''}" uk-icon="icon: star"></a>
+                ${options.useFavorate==true ? ` <br>
+                <a href="" class="favo ${favorate.find((item)=>item==i.title)?'stared':''}" uk-icon="icon: star;"></a>  
+    
+                </div>`:''}
+                  
                 </div>
             </div>
     `
@@ -688,14 +742,19 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     document.getElementById("today-webtoon").addEventListener("moved", function (i) {
         if (options.saveWsort) {
-            var name = i.detail[1].childNodes[1].childNodes[3].childNodes[1].innerText
+            var name = i.detail[1].querySelector('a.webtoon-link').innerText
             var startIdx = wsort.indexOf(name)
             var endIdx = getListIndex(i.detail[1])
             console.log(startIdx, endIdx)
             wsort.splice(startIdx, 1)
             wsort.splice(endIdx, 0, name)
             var save = {}
-            save['wsort' + today] = wsort
+            if (today != -1)
+                save['wsort' + today] = wsort
+            else
+                save = {
+                    favorate: wsort
+                }
             chrome.storage.sync.set(save)
         }
     })
@@ -708,6 +767,9 @@ document.addEventListener("DOMContentLoaded", function () {
             getWebtoon(this.id.substr(4) * 1)
         })
     }
+    document.getElementById("favorate").addEventListener('click', function () {
+        getFavorate()
+    })
     // 0 ~ 7 월-일,  8 오늘
 
     chrome.runtime.onMessage.addListener(e => {
@@ -747,9 +809,10 @@ whale.sidebarAction.getBadgeText(function (result) {
     if (result == ' ') {
         UIkit.notification(`버전 ${chrome.runtime.getManifest().version} <div class="uk-text-small">
     업데이트 내용<br>
-    1. 사이드바에서 웹툰을 볼 때 웹툰 목록에서 탭으로 안넘어가는 오류 수정 <br>
-    2. 사이드바에서 웹툰을 볼 때 컷툰에서 탭으로 안넘어가는 오류 수정 <br>
-    3. 배스트도전, 도전만화 기록 저장 <br>
+    1. 즐겨찾기 기능 추가. 웹툰 목록에 별표가 없으면 설정에서 웹툰 즐겨찾기 사용을 체크해 주세요. <br>
+    2. 웹툰 목록에서 드래그 중 왼쪽으로 쏠림 현상 수정. <br>
+    3. 버전 표시
+     <br>
     자세한 사항은 <a class="uk-link-muted" id="extension-link">여기</a>에서 확인 바랍니다. 
     </div>`, {
             timeout: 5000

@@ -11,7 +11,8 @@ var options = {
     saveScroll: true,
     hiddenCommant: false,
     autoNext: false,
-    useimglog : true
+    useimglog : true,
+    useFavorate: true
 }
 
 function storage() {

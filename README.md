@@ -12,12 +12,12 @@ Issues나 Pull requests 환영합니다. <br>
 
 모두 감사합니다.
 
-# [Whale](https://store.whale.naver.com/detail/nmambboikkfejkgloppiejnhhohbaaem) 2.3v
+# [Whale](https://store.whale.naver.com/detail/nmambboikkfejkgloppiejnhhohbaaem) 2.5v
 <img src="README-image/5.png" style="width:900px"> <br>
 <img src="README-image/6.png" style="width:900px"> <br>
 <img src="README-image/7.PNG" style="width:900px"><br>
 
-# [Chrome](https://chrome.google.com/webstore/detail/naver-webtoon-extensions/pkingjioiemgjlbklighjcicnjgjckok?hl=ko) 1.4v
+# [Chrome](https://chrome.google.com/webstore/detail/naver-webtoon-extensions/pkingjioiemgjlbklighjcicnjgjckok?hl=ko) 1.5v
 <img src="README-image/4.jpg"><br>
 <img src="README-image/3.jpg"><br>
 <img src="README-image/1.PNG"> <br>
