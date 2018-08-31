@@ -1,7 +1,7 @@
 {
     "name": "Naver Webtoon Extensions",
     "description": "네이버 웹툰 Extension입니다.",
-    "version": "1.6",
+    "version": "1.6.1",
     "manifest_version": 2,
     "background": {
         "persistent": false,
