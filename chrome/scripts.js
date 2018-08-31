@@ -39,7 +39,8 @@ var options = {
     autoNext: false,
     useimglog: true,
     linktab: true,
-    useFavorate: true
+    useFavorate: true,
+    linkPopup : true
 }
 var notifyoption = {
     timeout: 1500
@@ -110,7 +111,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
     })
-
     function resetWSort() {
         UIkit.notification("웹툰 순서가 초기화되었습니다.", notifyoption)
         wsort = [];
@@ -286,6 +286,11 @@ document.addEventListener("DOMContentLoaded", function () {
             saveOption()
 
         })
+        document.getElementById("linkPopup").checked = options.linkPopup
+        document.getElementById("linkPopup").addEventListener("change", function(event){
+            options.linkPopup = event.target.checked
+            saveOption()
+        })
         document.getElementById('saveFavorate').checked = options.useFavorate
         document.getElementById('saveFavorate').onclick = function () {
             options.useFavorate = !options.useFavorate
@@ -363,9 +368,9 @@ document.addEventListener("DOMContentLoaded", function () {
             chrome.storage.sync.remove("scroll")
             refreshAll()
         }
-        document.getElementById("refresh").onclick = () => {
-            refreshAll()
-        }
+        // document.getElementById("refresh").onclick = () => {
+        //     refreshAll()
+        // }
     }
 
     function getHistoryWeb(cb) {
@@ -422,6 +427,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function addTab(link) {
+        if (options.linkPopup && link.indexOf("comic.naver.com") != -1) {
+            link = link.replace("https://", "https://m.")
+            chrome.windows.create({url:link, width:400, height:800, type:'popup'}, (wid)=>{
+                console.log(wid)
+                wid.alwaysOnTop = true
+            })
+            return false;
+        }
         if (options.linktab)
             chrome.tabs.create({
                 url: link
@@ -430,6 +443,7 @@ document.addEventListener("DOMContentLoaded", function () {
             chrome.tabs.update({
                 url: link
             })
+        return false;
     }
 
     function addWebtoonTab() {
@@ -542,13 +556,15 @@ document.addEventListener("DOMContentLoaded", function () {
             title.onclick = addWebtoonTab;
             var time = document.createElement("td")
             var timespan = document.createElement("span")
-            timespan.innerText = new Date(web.lastVisit).toLocaleString()
+            timespan.innerHTML = new Date(web.lastVisit).toLocaleString().replace(' 오', '<br>오')
             time.appendChild(timespan)
             var name = document.createElement("a")
             name.href = link
+            
             name.className = "webToonName"
             var imgEle = document.createElement("img")
             imgEle.src = "img/picture.svg"
+            title.style.position = "relative"
             title.appendChild(imgEle)
             title.appendChild(name)
             img.innerText = web.name
@@ -750,6 +766,28 @@ document.addEventListener("DOMContentLoaded", function () {
         if (e == 'reload')
             location.reload()
     })
+    chrome.storage.onChanged.addListener(function (changes, namespace) {
+        for (key in changes) {
+            if (key == 'webtoon') {
+                webtoon = changes[key].newValue
+            }
+            if (key == 'visits') {
+                visits = changes[key].newValue
+                getWebtoons()
+                sortTime(wlength)
+                setRecent(0)
+                getWebtoon(today);
+            }
+            if (key == 'scroll') {
+                scrolls = changes[key].newValue;
+                getWebtoons()
+                sortTime(wlength)
+                getWebtoon(today);
+                setRecent(0)
+
+            }
+        }
+    })
 
 })
 
@@ -758,9 +796,9 @@ chrome.browserAction.getBadgeText({}, function (text) {
 
         UIkit.notification(`버전 ${chrome.runtime.getManifest().version} <div class="uk-text-small">
     업데이트 내용<br>
-    1. 즐겨찾기 기능 추가 (설정-웹툰 목록에 있습니다.)<br>
-    2. 오류제보 버튼 추가 <br>
-    3. 일부 코드 최적화 <br>
+    1. 팝업에서 보기 기능 추가 (설정에 가보세요)<br>
+    2. Extension 가로 길이 약간 줄임
+    <br>
     자세한 사항은 <a class="uk-link-muted" id="extension-link">여기</a>에서 확인 바랍니다. 
     </div>`, {
             timeout: 5000

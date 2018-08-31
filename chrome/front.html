@@ -51,7 +51,6 @@
             text-align: center;
         }
         .webToonName {
-            width: 200px;
             position: absolute;
             text-decoration: none;
             color: black
@@ -114,6 +113,7 @@
         }
 
         .view-webtoon {
+            
             background: papayawhip;
         }
 
@@ -127,9 +127,9 @@
     </style>
 </head>
 
-<body style="width:500px; height:auto">
+<body style="width:450px; height:auto">
     <div wlink="https://comic.naver.com/webtoon/weekday.nhn" id="extension-title" class="body-title">
-        <span>NAVER Webtoon <span class="uk-text-small option-title" id="version"></span></span>
+        <span>NAVER Webtoon <span class="uk-text-small option-title" id="version" style="color:lightgray"></span></span>
     </div>
     <ul class="uk-child-width-expand uk-margin-small" uk-tab>
         <li>
@@ -150,9 +150,9 @@
                         <span id="WebToonCount">최근 웹툰 (30개)</span>
                     </caption>
                     <colgroup>
-                        <col width="105">
+                        <col width="100">
                         <col width="*">
-                        <col width="90">
+                        <col width="95">
                     </colgroup>
                     <thead>
                         <tr>
@@ -245,8 +245,10 @@
                             <br>
                             <input type="checkbox" id="linkTab" class="uk-checkbox">
                             <label class="option-title" for="linkTab">링크를 새 탭에서 엽니다 (모든 링크에 적용) </label>
-                            <br>
-
+                                <br> <br>
+                            <input type="checkbox" id="linkPopup" class="uk-checkbox">
+                            <label class="option-title" for="linkPopup" title="아직 테스트 기능입니다. 스크롤이 저장되지 않습니다.">링크를 팝업에서 엽니다.</label> 
+                            <span class="uk-badge uk-float-right" title="팝업창에서 상단바를 오른쪽 클릭을 누른뒤 '항상 위에 고정'을 누르시면 편하게 감상하실 수 있습니다" uk-tooltip="pos: right" >Tip!</span>
 
                             <br>
                         </div>
