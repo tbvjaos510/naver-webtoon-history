@@ -1,6 +1,6 @@
 # Naver Webtoon Extension
 whale(chrome) extension 으로 네이버 웹툰 기록을 표시하고 쉽게 접근할 수 있는 extension입니다. <br>
-현재 chrome 버전으로 개발을 완료한 상태이고 whale 사이드바 기능 추가 중입니다. <br>
+계속 기능을 업데이트 중이니 아이디어나 오류가 있으면 알려주시면 적극 반영하겠습니다.<br>
 Issues나 Pull requests 환영합니다. <br>
 **Issues를 달 시 앞에 사용중인 웹 브라우저를 명시해 주세요**
 # Issues 
@@ -17,7 +17,7 @@ Issues나 Pull requests 환영합니다. <br>
 <img src="README-image/6.png" style="width:900px"> <br>
 <img src="README-image/7.PNG" style="width:900px"><br>
 
-# [Chrome](https://chrome.google.com/webstore/detail/naver-webtoon-extensions/pkingjioiemgjlbklighjcicnjgjckok?hl=ko) 1.6.1v
+# [Chrome](https://chrome.google.com/webstore/detail/naver-webtoon-extensions/pkingjioiemgjlbklighjcicnjgjckok?hl=ko) 1.6.2v
 <img src="README-image/4.jpg"><br>
 <img src="README-image/3.jpg"><br>
 <img src="README-image/1.PNG"> <br>

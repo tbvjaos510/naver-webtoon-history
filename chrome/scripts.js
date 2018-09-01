@@ -517,7 +517,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (imglog[web.id + '-' + web.no] && options.useimglog) {
             imgElement.src = "https://shared-comic.pstatic.net/thumb/" + imglog[web.id + '-' + web.no].image
             imgElement.title = imgElement.alt = imglog[web.id + '-' + web.no].name
-            nameElement.innerText = imglog[web.id + '-' + web.no].name + (web.scroll ? " (" + Math.round(web.scroll.now / (web.scroll.max - (options.hiddenCommant ? 2500 : 4000)) * 100) + "%)" : "")
+            nameElement.innerText = imglog[web.id + '-' + web.no].name + (web.scroll ? " (" + web.scroll + "%)" : "")
             return;
         }
         var xhttp = new XMLHttpRequest();
@@ -529,7 +529,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     var result = parseHtml(xhttp.responseText)
                     imgElement.src = result.image
                     imgElement.title = imgElement.alt = result.name
-                    nameElement.innerText = result.name + (web.scroll ? " (" + Math.round(web.scroll.now / (web.scroll.max - (options.hiddenCommant ? 2500 : 4000)) * 100) + "%)" : "")
+                    nameElement.innerText = result.name + (web.scroll ? " (" + web.scroll + "%)" : "")
                     if (options.useimglog)
                         imglog[web.id + '-' + web.no] = {
                             image: result.image.split("thumb/")[1],
@@ -543,6 +543,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function setRecent(startidx) {
         if (!startidx) startidx = 0
+        if (startidx == 0){
+            document.getElementsByClassName("recent")[0].innerHTML = ""
+        }
         wtime.slice(startidx).forEach(web => {
             var link = `https://comic.naver.com${web.type}/detail.nhn?titleId=${web.id}&no=${web.no}`
             var wtr = document.createElement("tr")
@@ -570,7 +573,6 @@ document.addEventListener("DOMContentLoaded", function () {
             img.innerText = web.name
             img.className = "webToonTitle"
             if (scrolls[web.id] && scrolls[web.id][web.no]) {
-                console.log(web)
                 title.className += " view-webtoon"
             }
             wtr.appendChild(img)
@@ -782,7 +784,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 scrolls = changes[key].newValue;
                 getWebtoons()
                 sortTime(wlength)
-                getWebtoon(today);
                 setRecent(0)
 
             }
@@ -796,8 +797,8 @@ chrome.browserAction.getBadgeText({}, function (text) {
 
         UIkit.notification(`버전 ${chrome.runtime.getManifest().version} <div class="uk-text-small">
     업데이트 내용<br>
-    1. 팝업에서 보기 기능 추가 (설정에 가보세요)<br>
-    2. Extension 가로 길이 약간 줄임
+    1. 스크롤 저장 방식이 조금 더 정확해졌습니다. <br>
+    2. 팝업에도 스크롤이 저장됩니다.
     <br>
     자세한 사항은 <a class="uk-link-muted" id="extension-link">여기</a>에서 확인 바랍니다. 
     </div>`, {
