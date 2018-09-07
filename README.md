@@ -16,7 +16,7 @@ Issues나 Pull requests 환영합니다. <br>
 <img src="README-image/5.png" style="width:900px"> <br>
 <img src="README-image/6.png" style="width:900px"> <br>
 <img src="README-image/7.PNG" style="width:900px"><br>
-<img src="README-image/8.PNG" style="width:900px"><br>
+<img src="README-image/8.png" style="width:900px"><br>
 
 # [Chrome](https://chrome.google.com/webstore/detail/naver-webtoon-extensions/pkingjioiemgjlbklighjcicnjgjckok?hl=ko) 1.6.2v
 <img src="README-image/4.jpg"><br>
