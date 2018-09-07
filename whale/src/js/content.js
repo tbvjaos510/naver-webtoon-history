@@ -1,5 +1,12 @@
 var ExtensionId = chrome.runtime.id
-
+var checkPercent;
+    function checkSc( event ) {
+        window.clearTimeout( checkPercent );
+        checkPercent = setTimeout(function() {
+            chrome.runtime.sendMessage(ExtensionId, {scroll : document.documentElement.scrollTop / document.querySelector("#toonLayer>ul").scrollHeight })
+        }, 100);
+    
+    }
 if (location.href.indexOf("detail.nhn?") > -1) {
     document.body.innerHTML += `
         <div id="fixed_Layer">
@@ -7,34 +14,16 @@ if (location.href.indexOf("detail.nhn?") > -1) {
                     <polyline fill="none" stroke="#000"
                         stroke-width="1.03" points="13 16 7 10 13 4" /></svg> </span></div>`
     document.getElementById("layer-link").addEventListener("click", function (event) {
-        console.log(event);
-        if (location.href.indexOf("detail.nhn?") > -1) {
-            chrome.runtime.sendMessage(ExtensionId, {
-                now: document.documentElement.scrollTop,
-                max: document.querySelector("#toonLayer>ul") ? document.querySelector("#toonLayer>ul").scrollHeight : 0
-            }, () => {
+        chrome.runtime.sendMessage(ExtensionId, {
+            command : 'openTab'
+        }, end => {
 
-                chrome.runtime.sendMessage(ExtensionId, {
-                    openTab: true
-                }, end => {
-
-                })
-            })
-        } else {
-            chrome.runtime.sendMessage("", {
-                openTab: true
-            }, end => {
-
-            })
-        }
+        })
     })
 
-    window.onbeforeunload = () => chrome.runtime.sendMessage(ExtensionId, {
-        now: document.documentElement.scrollTop,
-        max: document.querySelector("#toonLayer>ul").scrollHeight
-    }, () => {
-        console.log("send")
-    })
+    
+    window.addEventListener('scroll',checkSc, false);
+ 
 
 }
 if (location.href.indexOf("list.nhn?titleId") > -1) {
@@ -45,25 +34,11 @@ if (location.href.indexOf("list.nhn?titleId") > -1) {
                         stroke-width="1.03" points="13 16 7 10 13 4" /></svg> </span></div>`
     document.getElementById("layer-link").addEventListener("click", function (event) {
         console.log(event);
-        if (location.href.indexOf("detail.nhn?") > -1) {
-            chrome.runtime.sendMessage(ExtensionId, {
-                now: document.documentElement.scrollTop,
-                max: document.querySelector("#toonLayer>ul") ? document.querySelector("#toonLayer>ul").scrollHeight : 0
-            }, () => {
+        chrome.runtime.sendMessage(ExtensionId, {
+            command : 'openTab'
+        }, end => {
 
-                chrome.runtime.sendMessage(ExtensionId, {
-                    openTab: true
-                }, end => {
-
-                })
-            })
-        } else {
-            chrome.runtime.sendMessage("", {
-                openTab: true
-            }, end => {
-
-            })
-        }
+        })
     })
 }
 
@@ -73,7 +48,7 @@ chrome.runtime.sendMessage(ExtensionId, {
     title: document.querySelector("meta[property='og:title']").content.split('-')[0].trim()
 }, (data) => {
     if (data && data.visits) {
-
+        console.log(data)
         var vkey = Object.keys(data.visits)
         for (var i = 0; i < vkey.length; i++) {
             var wlog = document.querySelector(`a[href*='detail.nhn?titleId=${data.wid}&no=${vkey[i]}']`)
@@ -84,7 +59,6 @@ chrome.runtime.sendMessage(ExtensionId, {
             }
         }
     } else if (data && data.scroll) {
-        setTimeout(() =>
-            document.documentElement.scrollTop = data.scroll.now, 1000)
+        setTimeout(()=>{document.documentElement.scrollTop = document.querySelector("#toonLayer>ul").scrollHeight * (data.scroll/100)}, 1000)
     }
 })

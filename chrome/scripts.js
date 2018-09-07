@@ -19,6 +19,7 @@ function getListIndex(sender) {
     }
     return -1
 }
+$id = (id)=>document.getElementById(id)
 var webtoon = {};
 var wlength = 30;
 var imglog = {};
@@ -49,7 +50,7 @@ var maxCount;
 var wsort = [];
 
 document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("getNext").onclick = getnextRecent
+    $id("getNext").onclick = getnextRecent
 
     function storage() {
         if (options.getLocation == 1) {
@@ -80,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     sortTime(wlength)
                     console.log("sort success")
                     setRecent(0)
-                    document.getElementById("loading").hidden = true
+                    $id("loading").hidden = true
                     setOptionDocument()
 
                     getWebtoon(today);
@@ -102,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     setRecent(0)
                     console.log("recent success")
 
-                    document.getElementById("loading").hidden = true
+                    $id("loading").hidden = true
                     getWebtoon(today);
                     setOptionDocument()
                 })
@@ -152,10 +153,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function setOptionDocument() {
-        document.getElementById("extension-title").onclick = addWebtoonTab
+        $id("extension-title").onclick = addWebtoonTab
 
-        document.getElementById("historyCount").value = options.historyCount
-        document.getElementById("historyCount").addEventListener("blur", function (e) {
+        $id("historyCount").value = options.historyCount
+        $id("historyCount").addEventListener("blur", function (e) {
             if (options.getLocation == 2 && this.value > 300) {
                 this.value = 300
             }
@@ -165,25 +166,25 @@ document.addEventListener("DOMContentLoaded", function () {
             historyToStorage()
         })
         if (options.getLocation == 0) {
-            document.getElementById("history").checked = true
-            document.getElementById("getWebtoon").hidden = true
-            document.getElementById("deleteWebtoon").hidden = true
+            $id("history").checked = true
+            $id("getWebtoon").hidden = true
+            $id("deleteWebtoon").hidden = true
 
         } else if (options.getLocation == 1) {
-            document.getElementById("local").checked = true
-            document.getElementById("getWebtoon").innerText = "방문 기록에서 로컬로 옮기기"
+            $id("local").checked = true
+            $id("getWebtoon").innerText = "방문 기록에서 로컬로 옮기기"
         } else {
-            document.getElementById("sync").checked = true
+            $id("sync").checked = true
             if (options.historyCount > 300)
-                document.getElementById("historyCount").value = 300
-            document.getElementById("historyCount").max = 300
-            document.getElementById("getWebtoon").innerText = "방문 기록에서 계정으로 옮기기"
+                $id("historyCount").value = 300
+            $id("historyCount").max = 300
+            $id("getWebtoon").innerText = "방문 기록에서 계정으로 옮기기"
         }
-        document.getElementById("getWebtoon").onclick = (function () {
+        $id("getWebtoon").onclick = (function () {
             UIkit.notification("기록 가져오는 중..", notifyoption)
             historyToStorage()
         })
-        document.getElementById("deleteWebtoon").onclick = (function () {
+        $id("deleteWebtoon").onclick = (function () {
             storage().set({
                 webtoon: {},
                 visits: {}
@@ -191,51 +192,51 @@ document.addEventListener("DOMContentLoaded", function () {
                 refreshAll()
             })
         })
-        document.getElementById("saveWsort").checked = options.saveWsort
-        document.getElementById("saveWsort").addEventListener("change", function (event) {
+        $id("saveWsort").checked = options.saveWsort
+        $id("saveWsort").addEventListener("change", function (event) {
             options.saveWsort = event.target.checked
             saveOption()
         })
-        document.getElementById("showHistory").checked = options.showHistory
-        document.getElementById("showHistory").addEventListener("change", function (event) {
+        $id("showHistory").checked = options.showHistory
+        $id("showHistory").addEventListener("change", function (event) {
             options.showHistory = event.target.checked
             saveOption()
         })
-        document.getElementById("saveScroll").checked = options.saveScroll
-        document.getElementById("saveScroll").addEventListener("change", function (event) {
+        $id("saveScroll").checked = options.saveScroll
+        $id("saveScroll").addEventListener("change", function (event) {
             options.saveScroll = event.target.checked
             saveOption()
             refreshAll()
         })
-        document.getElementById("history").onclick = (function () {
+        $id("history").onclick = (function () {
             options.getLocation = 0
             options.useimglog = false
-            document.getElementById("historyCount").max = 10000
+            $id("historyCount").max = 10000
             saveOption()
             refreshAll()
         })
-        document.getElementById("local").onclick = (function () {
+        $id("local").onclick = (function () {
             options.getLocation = 1
-            document.getElementById("getWebtoon").innerText = "방문 기록에서 로컬로 옮기기"
-            document.getElementById("historyCount").max = 10000
+            $id("getWebtoon").innerText = "방문 기록에서 로컬로 옮기기"
+            $id("historyCount").max = 10000
             saveOption()
             refreshAll()
         })
-        document.getElementById("sync").onclick = (function () {
-            if (document.getElementById("historyCount").value > 300) {
-                document.getElementById("historyCount").value = 300
+        $id("sync").onclick = (function () {
+            if ($id("historyCount").value > 300) {
+                $id("historyCount").value = 300
                 options.historyCount = 300
             }
-            document.getElementById("getWebtoon").innerText = "방문 기록에서 계정으로 옮기기"
-            document.getElementById("historyCount").max = 300
+            $id("getWebtoon").innerText = "방문 기록에서 계정으로 옮기기"
+            $id("historyCount").max = 300
             options.getLocation = 2
             saveOption()
             refreshAll()
         })
-        document.getElementById("togithub").onclick = addWebtoonTab
-        document.getElementById("naverBlog").onclick = addWebtoonTab
+        $id("togithub").onclick = addWebtoonTab
+        $id("naverBlog").onclick = addWebtoonTab
 
-        document.getElementById("toIssues").onclick = addWebtoonTab
+        $id("toIssues").onclick = addWebtoonTab
         var sorts = document.getElementsByName("websort")
         sorts[options.sort].checked = true
 
@@ -263,47 +264,47 @@ document.addEventListener("DOMContentLoaded", function () {
         for (var i of Object.values(visits)) {
             count += Object.keys(i).length
         }
-        document.getElementById("version").innerText = 'v' + chrome.runtime.getManifest().version;
+        $id("version").innerText = 'v' + chrome.runtime.getManifest().version;
 
-        document.getElementById("linkTab").checked = options.linktab
-        document.getElementById("linkTab").addEventListener("change", function (event) {
+        $id("linkTab").checked = options.linktab
+        $id("linkTab").addEventListener("change", function (event) {
             options.linktab = event.target.checked
             saveOption()
         })
 
-        document.getElementById("visitcount").innerText = count
-        document.getElementById("resetWsort").onclick = resetWSort
+        $id("visitcount").innerText = count
+        $id("resetWsort").onclick = resetWSort
 
-        document.getElementById("hiddenCommant").checked = options.hiddenCommant
-        document.getElementById("hiddenCommant").addEventListener("change", function (event) {
+        $id("hiddenCommant").checked = options.hiddenCommant
+        $id("hiddenCommant").addEventListener("change", function (event) {
             options.hiddenCommant = event.target.checked
             saveOption()
 
         })
-        document.getElementById("auto-next").checked = options.autoNext
-        document.getElementById("auto-next").addEventListener("change", function (event) {
+        $id("auto-next").checked = options.autoNext
+        $id("auto-next").addEventListener("change", function (event) {
             options.autoNext = event.target.checked
             saveOption()
 
         })
-        document.getElementById("linkPopup").checked = options.linkPopup
-        document.getElementById("linkPopup").addEventListener("change", function(event){
+        $id("linkPopup").checked = options.linkPopup
+        $id("linkPopup").addEventListener("change", function(event){
             options.linkPopup = event.target.checked
             saveOption()
         })
-        document.getElementById('saveFavorate').checked = options.useFavorate
-        document.getElementById('saveFavorate').onclick = function () {
+        $id('saveFavorate').checked = options.useFavorate
+        $id('saveFavorate').onclick = function () {
             options.useFavorate = !options.useFavorate
 
             if (!options.useFavorate) {
-                document.getElementById("favorate").hidden = true
+                $id("favorate").hidden = true
             } else {
-                document.getElementById("favorate").hidden = false
+                $id("favorate").hidden = false
             }
             getWebtoonContext()
             saveOption()
         }
-        document.getElementById('deleteFavorate').addEventListener('click', function () {
+        $id('deleteFavorate').addEventListener('click', function () {
             favorate = []
             chrome.storage.sync.set({
                 favorate: favorate
@@ -314,9 +315,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         })
         if (!options.useFavorate) {
-            document.getElementById("favorate").hidden = true
+            $id("favorate").hidden = true
         }
-        document.getElementById("removeOption").onclick = (function () {
+        $id("removeOption").onclick = (function () {
             chrome.storage.sync.remove("options", () => {
                 alert("초기화 완료. 재시작합니다.")
                 location.reload();
@@ -324,51 +325,51 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         setInterval(() => {
             chrome.storage.sync.getBytesInUse(["webtoon", "visits", "imglog"], function (data) {
-                document.getElementById("sync-kb").innerText = data
+                $id("sync-kb").innerText = data
             })
 
             chrome.storage.local.getBytesInUse(["webtoon", "visits", "imglog"], function (data) {
-                document.getElementById("local-kb").innerText = data
+                $id("local-kb").innerText = data
             })
         }, 2000)
 
-        document.getElementById("remove-local").onclick = () => {
+        $id("remove-local").onclick = () => {
             chrome.storage.local.remove(["webtoon", "visits", "imglog"], () => {
-                document.getElementById("local-kb").innerText = 0
+                $id("local-kb").innerText = 0
                 if (options.getLocation == 1) {
                     refreshAll()
                 }
             })
         }
 
-        document.getElementById("remove-sync").onclick = () => {
+        $id("remove-sync").onclick = () => {
             chrome.storage.sync.remove(["webtoon", "visits", "imglog"], () => {
-                document.getElementById("sync-kb").innerText = 0
+                $id("sync-kb").innerText = 0
                 if (options.getLocation == 2) {
                     refreshAll()
                 }
             })
         }
-        document.getElementById("use-imglog").checked = options.useimglog
-        document.getElementById("use-imglog").addEventListener("change", function (event) {
+        $id("use-imglog").checked = options.useimglog
+        $id("use-imglog").addEventListener("change", function (event) {
             options.useimglog = event.target.checked
             saveOption()
             storage().remove(["imglog"], () => {
                 refreshAll()
             })
         })
-        document.getElementById("reset-all").onclick = () => {
+        $id("reset-all").onclick = () => {
             storage().remove(["webtoon", "visits", "imglog"], () => {
                 chrome.storage.sync.remove(["scroll", "options"], () => {
                     refreshAll()
                 })
             })
         }
-        document.getElementById("removeScroll").onclick = () => {
+        $id("removeScroll").onclick = () => {
             chrome.storage.sync.remove("scroll")
             refreshAll()
         }
-        // document.getElementById("refresh").onclick = () => {
+        // $id("refresh").onclick = () => {
         //     refreshAll()
         // }
     }
@@ -430,7 +431,6 @@ document.addEventListener("DOMContentLoaded", function () {
         if (options.linkPopup && link.indexOf("comic.naver.com") != -1) {
             link = link.replace("https://", "https://m.")
             chrome.windows.create({url:link, width:400, height:800, type:'popup'}, (wid)=>{
-                console.log(wid)
                 wid.alwaysOnTop = true
             })
             return false;
@@ -457,11 +457,11 @@ document.addEventListener("DOMContentLoaded", function () {
         getWebtoons()
         if (wtime.length + 20 < wlength) {
             wlength = wtime.length
-            document.getElementById("WebToonCount").innerText = "최근 웹툰 (" + wlength + "개)"
-            document.getElementById("getNext").hidden = true
+            $id("WebToonCount").innerText = "최근 웹툰 (" + wlength + "개)"
+            $id("getNext").hidden = true
             return;
         }
-        document.getElementById("WebToonCount").innerText = "최근 웹툰 (" + wlength + "개)"
+        $id("WebToonCount").innerText = "최근 웹툰 (" + wlength + "개)"
         sortTime(wlength)
 
         setRecent(wlength - 20)
@@ -478,8 +478,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (wtime.length > length)
             wtime.length = length;
         if (wtime.length < 30) {
-            document.getElementById("getNext").hidden = true;
-            document.getElementById("WebToonCount").innerText = `최근 웹툰 (${wtime.length}개)`
+            $id("getNext").hidden = true;
+            $id("WebToonCount").innerText = `최근 웹툰 (${wtime.length}개)`
         }
 
     }
@@ -562,7 +562,6 @@ document.addEventListener("DOMContentLoaded", function () {
             timespan.innerHTML = new Date(web.lastVisit).toLocaleString().replace(' 오', '<br>오')
             time.appendChild(timespan)
             var name = document.createElement("a")
-            name.href = link
             
             name.className = "webToonName"
             var imgEle = document.createElement("img")
@@ -625,7 +624,7 @@ document.addEventListener("DOMContentLoaded", function () {
             //     chrome.storage.sync.set(save)
             // }
         }
-        var el = document.getElementById('today-webtoon');
+        var el = $id('today-webtoon');
         el.innerHTML = ""
         for (var f of wsort) {
             for (var i of webtoons) {
@@ -712,7 +711,6 @@ document.addEventListener("DOMContentLoaded", function () {
         var orders = ['ViewCount', 'Update', 'StarScore', 'TitleName']
         today = week
         chrome.storage.sync.get(['wsort' + today], (data) => {
-            console.log(data)
             if (data['wsort' + today]) {
                 wsort = data['wsort' + today]
             } else wsort = []
@@ -725,14 +723,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     var WebToon = getWebtoonContent(xhttp.responseText, week)
                     twebtoon = WebToon.childNodes[1].childNodes[3].childNodes.toOddArray()
                     getWebtoonContext();
-                    //     document.getElementById("Today").appendChild(WebToon)
+                    //     $id("Today").appendChild(WebToon)
                 }
             }
             xhttp.send()
         })
 
     }
-    document.getElementById("today-webtoon").addEventListener("moved", function (i) {
+    $id("today-webtoon").addEventListener("moved", function (i) {
         if (options.saveWsort) {
             var name = i.detail[1].querySelector('a.webtoon-link').innerText
             var startIdx = wsort.indexOf(name)
@@ -750,16 +748,16 @@ document.addEventListener("DOMContentLoaded", function () {
             chrome.storage.sync.set(save)
         }
     })
-    document.getElementById('week0').className = ""
-    document.getElementById("favorate").className = ""
-    document.getElementById('week' + today).className = "uk-active"
-    document.getElementById('week' + today).childNodes[0].className = "date-today"
+    $id('week0').className = ""
+    $id("favorate").className = ""
+    $id('week' + today).className = "uk-active"
+    $id('week' + today).childNodes[0].className = "date-today"
     for (var i = 0; i < 7; i++) {
-        document.getElementById('week' + i).addEventListener('click', function () {
+        $id('week' + i).addEventListener('click', function () {
             getWebtoon(this.id.substr(4) * 1)
         })
     }
-    document.getElementById("favorate").addEventListener('click', function () {
+    $id("favorate").addEventListener('click', function () {
         getFavorate()
     })
     // 0 ~ 7 월-일,  8 오늘
@@ -804,7 +802,7 @@ chrome.browserAction.getBadgeText({}, function (text) {
     </div>`, {
             timeout: 5000
         })
-        document.getElementById("extension-link").addEventListener("click", function () {
+        $id("extension-link").addEventListener("click", function () {
             chrome.tabs.create({
                 url: "https://chrome.google.com/webstore/detail/naver-webtoon-extensions/pkingjioiemgjlbklighjcicnjgjckok"
             })

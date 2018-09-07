@@ -4,8 +4,8 @@
   "description": "Whale Extension Build Environment",
   "private": true,
   "scripts": {
-    "cleanup": "rm -rf dist && mkdir dist",
-    "copy": "cp -rip src/* dist/",
+    "cleanup": "rmdir /s /q dist && mkdir dist",
+    "copy": "xcopy /s /q src dist",
     "build": "./node_modules/.bin/webpack --mode=none",
     "build:prod": "./node_modules/.bin/webpack",
     "lint": "./node_modules/.bin/eslint",

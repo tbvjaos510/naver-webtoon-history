@@ -86,7 +86,8 @@ function initWebLog(cb) {
                 visits[wid][wno] = Math.floor(d.lastVisitTime / 1000)
             }
         });
-        cb()
+        if (cb)
+            cb()
     })
 }
 
@@ -390,6 +391,9 @@ chrome.runtime.onInstalled.addListener(function (details) {
         })
     }
     if (details.reason == "update")
+    chrome.storage.sync.set({
+        scroll: {}
+    })
         chrome.browserAction.setBadgeText({
             text: " "
         });

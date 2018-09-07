@@ -14,7 +14,8 @@ var options = {
     useimglog: true,
     linktab: true,
     linkSide: true,
-    useFavorate : true
+    useFavorate : true,
+    linkPopup: true
 }
 
 function storage() {
@@ -58,47 +59,47 @@ function setMax() {
         delete visits[last.wno][last.no]
     }
 }
-
 function initWebLog(cb) {
     chrome.history.search({
         text: "detail.nhn?titleId=",
         startTime: 0,
         maxResults: 5000
     }, (data) => {
-        // 역시간 순을 위해 배열을 뒤집음
-        data.reverse()
+
         webtoon = {}
         visits = {}
+        var index = 0
         data.forEach(d => {
-            if (!d.title) return;
+            if (!d.title || index >= options.historyCount) return false;
             var url = new URL(d.url)
             var params = url.searchParams
             let wid = params.get("titleId")
             let wno = params.get("no")
-            if (!wid || !wno)
+            if (!wid || !wno || url.host != 'comic.naver.com')
                 return false
+                console.log(d)
             if (!webtoon[wid]) {
                 webtoon[wid] = {}
                 visits[wid] = {}
                 webtoon[wid].na = d.title.split("::")[0]
-                visits[wid][wno] = Math.floor(d.lastVisitTime / 1000)
                 webtoon[wid].t = url.pathname.split("/detail.nhn")[0]
 
-            } else {
+            }
+            if (!visits[wid][wno]) {
+                index++
                 visits[wid][wno] = Math.floor(d.lastVisitTime / 1000)
             }
         });
-        if (cb)
-            cb()
-
+        cb()
     })
 }
+
 
 function setScroll(tid, sc) {
     chrome.tabs.executeScript(tid, {
         code: `
-    if (confirm("[webtoon extension] 이전에 본 기록이 남아있습니다. (${Math.round(sc.now*1.5/sc.max*100)}%)\\n이어보시겠습니까?"))
-        document.documentElement.scrollTop = ${sc.now}*1.5
+    if (confirm("[webtoon extension] 이전에 본 기록이 남아있습니다. (${sc}%)\\n이어보시겠습니까?"))
+        document.documentElement.scrollTop = document.querySelector(".wt_viewer").childNodes[1].offsetTop + document.querySelector(".wt_viewer").scrollHeight * ${sc/100}
     `
     }, () => {
         console.log("scroll sended")
@@ -134,11 +135,7 @@ function autoNext(tid, isauto) {
 chrome.storage.sync.get(['options', 'scroll'], (result) => {
     if (result.options) {
         options = result.options
-        if (options.useFavorate == undefined){
-            options.useFavorate = true
-            chrome.storage.sync.set({options : options})
         }
-    }
     if (result.scroll)
         scrolls = result.scroll
     if (options.getLocation == 0) {
@@ -154,7 +151,6 @@ chrome.storage.sync.get(['options', 'scroll'], (result) => {
             chrome.runtime.sendMessage("reload")
         })
     }
-
 })
 
 function setCommant(wid, isshow) {
@@ -166,7 +162,16 @@ function setCommant(wid, isshow) {
 function addScrollEvent(wid) {
     chrome.tabs.executeScript(wid, {
         code: `
-    window.onbeforeunload=()=>chrome.runtime.sendMessage("${chrome.runtime.id}", {max:document.getElementsByClassName("wt_viewer")[0].scrollHeight,now:document.documentElement.scrollTop}, ()=>{console.log("send")})
+        var checkPercent;
+        function checkSc( event ) {
+            window.clearTimeout( checkPercent );
+            checkPercent = setTimeout(function() {
+        chrome.runtime.sendMessage('${chrome.runtime.id}', {scroll : (document.documentElement.scrollTop - document.querySelector(".wt_viewer").childNodes[1].offsetTop) / document.querySelector(".wt_viewer").scrollHeight })
+        }, 100);
+        
+
+}
+window.addEventListener('scroll',checkSc, false);
   `
     })
 }
@@ -196,10 +201,6 @@ chrome.tabs.onUpdated.addListener((tid, ci, tab) => {
                 wtab = tid
                 var wid = url.searchParams.get("titleId");
                 var no = url.searchParams.get("no")
-                if (!wid || !no) {
-                    wtab = 0
-                    return
-                }
                 if (!webtoon[wid]) {
                     visits[wid] = {}
                     webtoon[wid] = {}
@@ -220,11 +221,12 @@ chrome.tabs.onUpdated.addListener((tid, ci, tab) => {
             } else {
                 wtab = 0
             }
-        } else {
-            wtab = 0
         }
+    } else if (ci.status && ci.status == 'loading') {
+
     }
 });
+
 
 function addTab(link) {
     if (options.linktab)
@@ -235,14 +237,30 @@ function addTab(link) {
         chrome.tabs.update({
             url: link
         })
+    return false;
 }
+
 chrome.runtime.onMessage.addListener((a, b, c) => {
+
     var param = new URL(b.url).searchParams
     var wid = param.get("titleId")
     var no = param.get("no")
-    if (wid && no && a.max) {
-        if (options.saveScroll) {
-            if (a.max - a.now <= 500 || a.now == 0) {
+    if (a.command && a.command == 'openTab') {
+        var link = b.url.replace("m.comic", "comic")
+        addTab(link)
+        whale.sidebarAction.show({url:whale.runtime.getURL("front.html")})
+        whale.sidebarAction.hide()
+        c()
+    } 
+    else if(a.url){
+        if (options.saveScroll &&  scrolls[wid] && scrolls[wid][no])
+        c({scroll : scrolls[wid][no]})
+    }
+    else if (wid && no) {
+        if (options.saveScroll && a.scroll) {
+            a.scroll = Math.round(a.scroll * 100)
+            console.log(a)
+            if (a.scroll <= 2 || a.scroll >= 98) {
                 if (scrolls[wid] && scrolls[wid][no])
                     delete scrolls[wid][no]
                 chrome.storage.sync.set({
@@ -251,64 +269,16 @@ chrome.runtime.onMessage.addListener((a, b, c) => {
                 return;
             }
 
-            if (a.now > 600)
-                a.now -= 600
             if (!scrolls[wid]) {
                 scrolls[wid] = {}
             }
-            scrolls[wid][no] = {
-                now: a.now * 0.66,
-                max: a.max
-            }
+            scrolls[wid][no] = a.scroll
             chrome.storage.sync.set({
                 scroll: scrolls
             })
         }
-    } else if (a.url) {
-        var url = new URL(a.url)
-        if (url.host === "m.comic.naver.com") {
-            if (url.pathname.indexOf("/list.nhn") > 0) {
-                var wid = url.searchParams.get("titleId");
-                if (visits[wid] && options.showHistory) {
-                    c({
-                        visits: visits[wid],
-                        wid: wid
-                    })
-                }
-            } else if (url.pathname.indexOf("/detail.nhn") > 0) {
-                var wid = url.searchParams.get("titleId");
-                var no = url.searchParams.get("no")
-                if (!webtoon[wid]) {
-                    visits[wid] = {}
-                    webtoon[wid] = {}
-                    webtoon[wid].na = a.title
-                    webtoon[wid].t = url.pathname.split("/detail.nhn")[0]
-                }
-                visits[wid][no] = Math.floor(new Date().getTime() / 1000)
-                setMax()
-                //    interval = setInterval(()=>{getScrollTop()}, 500)   
-                if (options.saveScroll)
-                    //      addScrollEvent(tid)
-                    if (scrolls[wid] && scrolls[wid][no] && options.saveScroll)
-                        c({
-                            scroll: scrolls[wid][no]
-                        })
-                //  autoNext(tid, options.autoNext)
-
-                //  setCommant(tid, options.hiddenCommant)
-                updateStorage();
-            }
-        }
-    } else if (a.openTab) {
-        var link = b.url.replace("m.comic", "comic")
-        whale.sidebarAction.show({
-            url: whale.runtime.getURL(`front.html`)
-        }, function (id) {
-            whale.sidebarAction.hide();
-        });
-        addTab(link)
-        c()
-    } else {
+    } 
+    else {
         if (a.command && a.command == 'reload') {
             location.reload()
         }
@@ -335,6 +305,11 @@ chrome.runtime.onInstalled.addListener(function (details) {
         })
     }
     if (details.reason == "update")
+        if (chrome.runtime.getManifest().version == '3.0'){
+            chrome.storage.sync.set({scroll:{}}, function(d){
+                
+            })
+        }
         whale.sidebarAction.setBadgeText({
             text: ' '
         });
