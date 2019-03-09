@@ -1,0 +1,123 @@
+body {
+  width: 450px;
+  height: auto;
+}
+
+.body-title {
+  width: 100%;
+  height: 40px;
+  color: rgb(0, 213, 100);
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.viewList {
+  width: 100%;
+  img {
+    margin-right: 10px;
+    width: 71px;
+    height: 41px;
+    overflow: hidden;
+  }
+}
+
+th,
+td {
+  padding: 4px 7px !important;
+}
+.favo {
+  display: inline-block;
+  bottom: 8px;
+  left: 8px;
+}
+.stared > svg > polygon {
+  fill: rgb(255, 216, 0);
+  color: rgb(255, 216, 0);
+}
+.recent > tr:hover {
+  background: rgb(240, 240, 240);
+}
+
+.recent > tr > td:hover {
+  background: rgb(220, 220, 220);
+  cursor: pointer;
+}
+.uk-card {
+  text-align: center;
+}
+.webToonName {
+  position: absolute;
+  text-decoration: none;
+  color: black;
+}
+
+#today-webtoon > li > div:hover {
+  background: rgb(230, 230, 230);
+  cursor: move;
+}
+.webToonTitle,
+th {
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+.ico-updt {
+  display: inline-block;
+  overflow: hidden;
+  background: url(https://ssl.pstatic.net/static/comic/images/sp/sp_ico_v2.png)
+    no-repeat;
+  font-size: 0;
+  line-height: 0;
+  color: transparent;
+  vertical-align: top;
+
+  width: 26px;
+  height: 26px;
+  background-position: -130px -60px;
+  position: absolute;
+  top: -12px;
+  right: 17px;
+}
+
+.ico-break {
+  display: inline-block;
+  overflow: hidden;
+  background: url(https://ssl.pstatic.net/static/comic/images/sp/sp_ico_v2.png)
+    no-repeat;
+  font-size: 0;
+  line-height: 0;
+  color: transparent;
+  vertical-align: top;
+
+  width: 26px;
+  height: 26px;
+  background-position: -160px -60px !important;
+  position: absolute;
+  top: -12px;
+  right: 17px;
+}
+
+.uk-tab > .uk-active > a {
+  border-bottom-color: rgb(0, 213, 100);
+}
+
+.date-today {
+  background-color: #fdd600;
+}
+
+.option-title {
+  font-size: 15px;
+}
+
+.view-webtoon {
+  background: papayawhip;
+}
+
+.webtoon-link {
+  word-break: keep-all;
+
+  &:hover {
+    cursor: pointer;
+  }
+}

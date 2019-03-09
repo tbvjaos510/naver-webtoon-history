@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "rootDir": "src",
+    "outDir": "dist/js",
+    "sourceMap": true,
+    "jsx": "react",
+    "lib": ["es6", "dom"],
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true
+  }
+}
