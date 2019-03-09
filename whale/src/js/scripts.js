@@ -109,6 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 $id("loading").hidden = true
                 getWebtoon(today);
                 setOptionDocument()
+                console.log(data.webtoon);
             })
         }
 
