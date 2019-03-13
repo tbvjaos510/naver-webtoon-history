@@ -1,13 +1,44 @@
 import { observable, action, computed } from "mobx";
 
+const storeKeys = [
+  "_storeLocation",
+  "_orderBy",
+  "_showHistory",
+  "_historyMax",
+  "_saveWebtoonSort",
+  "_saveScroll",
+  "_hiddenComment",
+  "_autoNext",
+  "_useImgLog",
+  "_saveFavorate",
+  "_linkTarget"
+];
+
 export type ChromeStore = "local" | "sync" | null;
 export type WebtoonOrder = "ViewCount" | "Update" | "StarScore" | "TitleName";
 export type LinkTarget = "Tab" | "Current" | "Popup";
 
 export default class OptionStore {
+  private get optionObject() {
+    const obj = {};
+    storeKeys.forEach(key => {
+      obj[key] = this[key];
+    });
+    return obj;
+  }
+
   private saveToStore() {
     chrome.storage.sync.set({
-      option: this
+      option: this.optionObject
+    });
+  }
+
+  public getUseBytes() {
+    chrome.storage.local.getBytesInUse(use => {
+      this.localUsage = use;
+    });
+    chrome.storage.sync.getBytesInUse(use => {
+      this.syncUsage = use;
     });
   }
 
@@ -15,24 +46,32 @@ export default class OptionStore {
    * 생성자
    */
   constructor() {
-    // Chrome Storage로부터 설정값을 ㅊ기화
-    chrome.storage.sync.get("option", item => {
-      if (item) {
-        Object.keys(item).forEach(key => {
+    // Chrome Storage로부터 설정값을 초기화
+    chrome.storage.sync.get("option", ({ option: item }) => {
+      if (item && Object.keys(item).length === storeKeys.length) {
+        storeKeys.forEach(key => {
           this[key] = item[key];
         });
+        this.getUseBytes();
       } else {
         chrome.storage.sync.set(
           {
-            option: this
+            option: this.optionObject
           },
           () => {
+            this.getUseBytes();
             console.log("Option Init");
           }
         );
       }
     });
   }
+
+  @observable
+  public localUsage: number = 0;
+
+  @observable
+  public syncUsage: number = 0;
 
   /**
    * 사용자 데이터를 저장할 저장소
@@ -86,7 +125,7 @@ export default class OptionStore {
    * 최대 기록 저장 개수
    */
   @observable
-  private _historyMax: number = 2000;
+  private _historyMax: number = 500;
 
   @computed
   public get historyMax(): number {
@@ -94,6 +133,8 @@ export default class OptionStore {
   }
 
   public set historyMax(value: number) {
+    if (this._storeLocation === "local" && value > 200) value = 200;
+    if (this._storeLocation === "sync" && value > 500) value = 500;
     this._historyMax = value;
     this.saveToStore();
   }
@@ -134,7 +175,7 @@ export default class OptionStore {
    * 댓글을 숨기는 여부
    */
   @observable
-  private _hiddenComment: boolean = true;
+  private _hiddenComment: boolean = false;
 
   @computed
   public get hiddenComment(): boolean {
@@ -208,5 +249,14 @@ export default class OptionStore {
   public set linkTarget(value: LinkTarget) {
     this._linkTarget = value;
     this.saveToStore();
+  }
+
+  /**
+   * 스토어 초기화
+   * @param store 초기화 할 스토어 위치
+   */
+  public resetStore(store: ChromeStore) {
+    chrome.storage[store].clear();
+    this.getUseBytes();
   }
 }

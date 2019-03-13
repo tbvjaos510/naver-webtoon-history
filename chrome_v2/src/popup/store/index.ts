@@ -1,19 +1,18 @@
-import OptionStore from './option';
-import WebtoonStore from './webtoon';
+import OptionStore from "./option";
+import WebtoonStore from "./webtoon";
 
 export default class RootStore {
   public option: OptionStore;
 
   public webtoon: WebtoonStore;
 
-  private saveToStore(key: string, value: JSON): void {
-    chrome.storage[this.option.storeLocation].set({
-      [key]: value,
-    });
-  }
-
   constructor() {
     this.option = new OptionStore();
-    this.webtoon = new WebtoonStore(this.saveToStore);
+    this.webtoon = new WebtoonStore(this.option);
+
+    // Dev Only
+    chrome.storage.onChanged.addListener(change => {
+      console.log("chrome storage changed", change);
+    });
   }
 }

@@ -63,13 +63,16 @@ export default class Option extends React.Component<OptionProps, any> {
                     checked={option.storeLocation === "sync"}
                   />{" "}
                   <label htmlFor="sync">
-                    계정 (기록을 최대 300개만 저장 가능합니다. 계정에
+                    계정 (기록을 최대 200개만 저장 가능합니다. 계정에
                     동기화됩니다.)
                   </label>
                 </li>
               </ul>
               <p>
-                <label htmlFor="historyCount">
+                <label
+                  htmlFor="historyCount"
+                  uk-tooltip="계정: 200개, 로컬: 500개로 제한합니다."
+                >
                   최대 기록 개수 (넘으면 예전 기록이 삭제됩니다.):
                 </label>{" "}
                 <input
@@ -77,14 +80,19 @@ export default class Option extends React.Component<OptionProps, any> {
                   style={{ height: "30px" }}
                   type="number"
                   min="0"
-                  max="200"
+                  max={option.storeLocation === "sync" ? 200 : 500}
                   id="historyCount"
+                  value={option.historyMax}
+                  onChange={event =>
+                    (option.historyMax = parseInt(event.target.value))
+                  }
                 />
               </p>
               <button
                 id="getWebtoon"
                 className="uk-button uk-button-small uk-button-default"
-                title="방문기록에서 웹툰 기록을 가져옵니다."
+                uk-tooltip="방문기록에서 웹툰 기록을 가져옵니다."
+                onClick={() => webtoon.setVisitsFromChrome()}
               >
                 방문 기록에서 옮기기
               </button>
@@ -92,7 +100,7 @@ export default class Option extends React.Component<OptionProps, any> {
               <button
                 id="deleteWebtoon"
                 className="uk-button uk-button-small uk-button-default"
-                title="웹툰 기록을 삭제합니다. 사이트에서도 표시하지 않습니다."
+                uk-tooltip="웹툰 기록을 삭제합니다. 사이트에서도 표시하지 않습니다."
               >
                 웹툰 기록 삭제
               </button>
@@ -208,7 +216,7 @@ export default class Option extends React.Component<OptionProps, any> {
               </ul>
               <p
                 className="option-title"
-                title="웹툰 목록에서 웹툰 즐겨찾기를 사용합니다."
+                uk-tooltip="웹툰 목록에서 웹툰 즐겨찾기를 사용합니다."
               >
                 <input
                   type="checkbox"
@@ -236,14 +244,14 @@ export default class Option extends React.Component<OptionProps, any> {
               <button
                 id="resetWsort"
                 className="uk-button uk-button-small uk-button-default"
-                title="드래그로 설정한 웹툰의 순서를 초기화합니다."
+                uk-tooltip="드래그로 설정한 웹툰의 순서를 초기화합니다."
               >
                 웹툰 순서 초기화
               </button>
               <br />
               <p
                 className="option-title"
-                title="사용자가 드래그로 순서를 지정할 수 있습니다."
+                uk-tooltip="사용자가 드래그로 순서를 지정할 수 있습니다."
               >
                 <input
                   className="uk-checkbox"
@@ -274,11 +282,12 @@ export default class Option extends React.Component<OptionProps, any> {
               <label
                 htmlFor="showHistory"
                 className="option-title"
-                title="https://comic.naver.com/webtoon/list.nhn에서 웹툰의 기록을 표시합니다."
+                uk-tooltip="https://comic.naver.com/webtoon/list.nhn에서 웹툰의 기록을 표시합니다."
               >
+                {" "}
                 웹툰 리스트 페이지에 기록 표시
               </label>
-              <p title="웹툰의 보는 정도를 저장하고 다음에 접속할 때 알려줍니다.">
+              <p uk-tooltip="웹툰의 보는 정도를 저장하고 다음에 접속할 때 알려줍니다.">
                 <input
                   id="saveScroll"
                   className="uk-checkbox"
@@ -287,13 +296,14 @@ export default class Option extends React.Component<OptionProps, any> {
                   onChange={event => (option.saveScroll = event.target.checked)}
                 />
                 <label htmlFor="saveScroll" className="option-title">
+                  {" "}
                   웹툰 스크롤 저장 및 알림
                 </label>
               </p>
               <button
                 id="removeScroll"
                 className="uk-button uk-button-small uk-button-default"
-                title="스크롤 데이터를 삭제합니다."
+                uk-tooltip="스크롤 데이터를 삭제합니다."
               >
                 웹툰 스크롤 데이터 삭제
               </button>
@@ -304,7 +314,7 @@ export default class Option extends React.Component<OptionProps, any> {
               특수 기능
             </a>
             <div className="uk-accordion-content">
-              <p title="스포를 방지하기 위해 댓글을 숨깁니다.">
+              <p uk-tooltip="스포를 방지하기 위해 댓글을 숨깁니다.">
                 <input
                   type="checkbox"
                   className="uk-checkbox"
@@ -315,10 +325,11 @@ export default class Option extends React.Component<OptionProps, any> {
                   }
                 />
                 <label htmlFor="hiddenCommant" className="option-title">
+                  {" "}
                   웹툰 댓글 숨기기
                 </label>
               </p>
-              <p title="웹툰을 다보면 자동으로 다음화로 넘어갑니다. (스크롤을 가장 아래로 내려야함)">
+              <p uk-tooltip="웹툰을 다보면 자동으로 다음화로 넘어갑니다. (스크롤을 가장 아래로 내려야함)">
                 <input
                   type="checkbox"
                   id="auto-next"
@@ -327,6 +338,7 @@ export default class Option extends React.Component<OptionProps, any> {
                   onChange={event => (option.autoNext = event.target.checked)}
                 />
                 <label htmlFor="auto-next" className="option-title">
+                  {" "}
                   자동넘김
                 </label>
               </p>
@@ -344,22 +356,22 @@ export default class Option extends React.Component<OptionProps, any> {
               <ul className="uk-list" style={{ padding: 0 }}>
                 <li>
                   <span className="option-title">
-                    로컬 :<span id="local-kb">00</span>byte 사용중
-                  </span>
+                    로컬 :<span> {option.localUsage}</span>byte 사용중
+                  </span>{" "}
                   <button
-                    id="remove-local"
                     className="uk-button uk-button-small uk-button-default"
+                    onClick={() => option.resetStore("local")}
                   >
                     초기화
                   </button>
                 </li>
                 <li>
                   <span className="option-title">
-                    계정 :<span id="sync-kb">00</span>byte 사용중
-                  </span>
+                    계정 :<span> {option.syncUsage}</span>byte 사용중
+                  </span>{" "}
                   <button
-                    id="remove-sync"
                     className="uk-button uk-button-small uk-button-default"
+                    onClick={() => option.resetStore("sync")}
                   >
                     초기화
                   </button>
@@ -371,6 +383,7 @@ export default class Option extends React.Component<OptionProps, any> {
                     className="uk-checkbox"
                   />
                   <label htmlFor="use-imglog" className="option-title">
+                    {" "}
                     이미지 로그 사용(로딩이 빨라집니다)
                   </label>
                 </li>
@@ -378,7 +391,11 @@ export default class Option extends React.Component<OptionProps, any> {
                   <button
                     id="reset-all"
                     className="uk-button uk-button-small uk-button-danger"
-                    title="웹툰 정보, 웹툰 기록, 이미지 로그, 웹툰 순서, 설정, 스크롤 정보를 삭제합니다."
+                    uk-tooltip="웹툰 정보, 웹툰 기록, 이미지 로그, 웹툰 순서, 설정, 스크롤 정보를 삭제합니다."
+                    onClick={() => {
+                      option.resetStore("local");
+                      option.resetStore("sync");
+                    }}
                   >
                     모든 데이터 초기화
                   </button>
@@ -392,7 +409,7 @@ export default class Option extends React.Component<OptionProps, any> {
               개발 정보
             </a>
             <div className="uk-accordion-content">
-              <span className="option-title">GitHub</span>
+              <span className="option-title">GitHub </span>
               <Wlink link="https://github.com/tbvjaos510/naver-webtoon-history">
                 <a
                   id="togithub"
@@ -418,7 +435,6 @@ export default class Option extends React.Component<OptionProps, any> {
                 오류 제보
               </button>
             </Wlink>
-
             <button
               id="removeOption"
               className="uk-button uk-button-small uk-button-danger uk-float-right"

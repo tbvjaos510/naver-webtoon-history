@@ -72,6 +72,6 @@ export default class Wlink extends React.Component<wlinkProps, wlinkState> {
         onClick: this.clickHandler.bind(this)
       })
     );
-    return <div>{child}</div>;
+    return <React.Fragment>{child}</React.Fragment>;
   }
 }
