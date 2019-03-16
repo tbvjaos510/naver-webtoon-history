@@ -12,6 +12,10 @@ export interface DailyItemProps {
 @inject("option")
 @observer
 export default class DailyItem extends React.Component<DailyItemProps, any> {
+  public starClickHandler() {
+    
+  }
+
   public render() {
     const { item, option } = this.props;
 
@@ -30,7 +34,11 @@ export default class DailyItem extends React.Component<DailyItemProps, any> {
           {option.saveFavorate ? (
             <React.Fragment>
               <br />
-              <a className="favo" uk-icon="icon: star;" />
+              <a
+                className="favo"
+                uk-icon="icon: star;"
+                onClick={event => this.starClickHandler()}
+              />
             </React.Fragment>
           ) : null}
         </div>
