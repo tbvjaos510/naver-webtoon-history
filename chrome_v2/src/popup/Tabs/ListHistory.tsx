@@ -33,7 +33,7 @@ export default class ListHistory extends React.Component<
       return null;
     }
     return (
-      <div>
+      <div className="scroll-fixed">
         <table className="viewList uk-table uk-table-small uk-table-divider">
           <caption className="uk-text-center">
             <span>

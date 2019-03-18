@@ -20,7 +20,7 @@ export default class Option extends React.Component<OptionProps, any> {
     const { option, webtoon } = this.props;
 
     return (
-      <div className="uk-padding">
+      <div className="uk-padding scroll-fixed">
         <ul className="uk-list uk-list-divider" uk-accordion="multiple: true">
           <li className="uk-open">
             <a href="#" className="uk-accordion-title">

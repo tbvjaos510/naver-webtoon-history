@@ -2,36 +2,41 @@ import * as React from "react";
 import WebtoonStore from "../store/webtoon";
 import { Week } from "../request";
 import DailyItem from "./DailyItem";
-import { observer } from "mobx-react";
+import { observer, inject } from "mobx-react";
 
-export interface HistoryListProps {
+export interface DailyListProps {
   selectDay: Week;
   webtoon?: WebtoonStore;
 }
 
+@inject("webtoon")
 @observer
-export default class HistoryList extends React.Component<
-  HistoryListProps,
-  any
-> {
+export default class DailyList extends React.Component<DailyListProps, any> {
   public render() {
     const { webtoon, selectDay } = this.props;
+    console.log(webtoon);
     return (
-      <div className="uk-padding-small">
+      <div className="uk-padding-small scroll-fixed">
         <ul
           className="uk-grid-small  uk-child-width-1-3 uk-child-width-1-3@s uk-text-center daily-webtoon"
           uk-sortable="handle: .uk-card"
           uk-grid="true"
         >
-          {webtoon.dailyWebtoons[selectDay]
-            ? webtoon.dailyWebtoons[selectDay].map((value, key) => {
+          {webtoon.dailyWebtoons[selectDay] && selectDay !== "favo"
+            ? webtoon.dailyWebtoons[selectDay].map(value => {
+                return (
+                  <li key={value.id}>
+                    <DailyItem item={value} />
+                  </li>
+                );
+              })
+            : webtoon.starWebtoonInfo.map((value, key) => {
                 return (
                   <li key={key}>
                     <DailyItem item={value} />
                   </li>
                 );
-              })
-            : null}
+              })}
         </ul>
       </div>
     );

@@ -1,6 +1,6 @@
 import { observable, computed, action, runInAction } from "mobx";
 import OptionStore from "./option";
-import WebtoonRequest, { ogInfo, WebtoonInfo } from "../request";
+import WebtoonRequest, { ogInfo, WebtoonInfoType } from "../request";
 
 export type LoadingStatus = "not start" | "start" | "end";
 
@@ -30,6 +30,10 @@ export type ImglogType = {
   };
 };
 
+export type StaredType = {
+  [key: number]: boolean;
+};
+
 export interface RecentWebtoon {
   id: number;
   lastVisit: number;
@@ -56,16 +60,28 @@ export default class WebtoonStore {
 
   constructor(option: OptionStore) {
     this.option = option;
-    this.storage.get(["webtoon", "visits", "scrolls"], value => {
-      if (value.scrolls) this._scrolls = value.scrolls;
-      if (value.visits) this._visits = value.visits;
-      if (value.webtoon) this._webtoonType = value.webtoon;
-      this.getRecentWebtoon();
-      WebtoonRequest.getAllWebtoon(this.option.orderBy).then(value => {
-        this._dailyWebtoons = value;
-        console.log(value);
-      });
-    });
+    this.storage.get(
+      ["webtoon", "visits", "scrolls", "favorate"],
+      (value: {
+        scrolls: ScrollType;
+        visits: VisitType;
+        webtoon: WebtoonType;
+        favorate: StaredType;
+      }) => {
+        if (value.scrolls) this._scrolls = value.scrolls;
+        if (value.visits) this._visits = value.visits;
+        if (value.webtoon) this._webtoonType = value.webtoon;
+        if (value.favorate) this._starWebtoons = value.favorate;
+        this.getRecentWebtoon();
+        WebtoonRequest.getAllWebtoon(
+          this.option.orderBy,
+          this._starWebtoons
+        ).then(value => {
+          this._dailyWebtoons = value;
+          console.log(value);
+        });
+      }
+    );
   }
 
   @computed get storage() {
@@ -152,14 +168,85 @@ export default class WebtoonStore {
    *
    */
   @observable
-  private _dailyWebtoons: WebtoonInfo = {};
+  private _dailyWebtoons: WebtoonInfoType = {};
 
   @computed
-  public get dailyWebtoons(): WebtoonInfo {
+  public get dailyWebtoons(): WebtoonInfoType {
+    // const returnValue = this._dailyWebtoons;
+
+    // returnValue["favo"] = [];
+    // if (Object.keys(returnValue).length > 6) {
+    //   Object.keys(this._starWebtoons).forEach(value => {
+    //     if (this._starWebtoons[value]) {
+    //       Object.keys(this._dailyWebtoons)
+    //         .map(key => this._dailyWebtoons[key])
+    //         .forEach(wlist => {
+    //           wlist.forEach(webtoon => {
+    //             if (webtoon.id === parseInt(value)) {
+    //               let exists = false;
+    //               returnValue["favo"].forEach(({ id }) => {
+    //                 if (id === webtoon.id) exists = true;
+    //               });
+    //               if (!exists) returnValue["favo"].push(webtoon);
+    //             }
+    //           });
+    //         });
+    //     }
+    //   });
+    // }
+    // console.log("computed daily");
     return this._dailyWebtoons;
   }
-  public set dailyWebtoons(value: WebtoonInfo) {
+  public set dailyWebtoons(value: WebtoonInfoType) {
     this._dailyWebtoons = value;
+  }
+
+  @observable
+  private _starWebtoons: StaredType = {};
+
+  @computed
+  public get starWebtoons(): StaredType {
+    return this._starWebtoons;
+  }
+
+  public set starWebtoons(value: StaredType) {
+    this._starWebtoons = value;
+    this.saveToStore("favorate", value);
+    console.log("change starWebtoons");
+  }
+
+  @computed
+  public get starWebtoonInfo(): WebtoonInfoType[] {
+    const returnValue: WebtoonInfoType[] = [];
+
+    Object.keys(this._starWebtoons).forEach(value => {
+      if (this._starWebtoons[value]) {
+        (Object.keys(this._dailyWebtoons).map(
+          key => this._dailyWebtoons[key]
+        ) as WebtoonInfoType[][]).forEach(wlist => {
+          wlist.forEach(webtoon => {
+            if (webtoon.id === parseInt(value)) {
+              let exists = false;
+              returnValue.forEach(({ id, isUp, isRest }) => {
+                if (id === webtoon.id) exists = true;
+
+                if (isRest || isUp) {
+                  returnValue.forEach(find => {
+                    if (find.id === id) {
+                      find.isUp = isUp;
+                      find.isRest = isRest;
+                    }
+                  });
+                }
+              });
+              if (!exists) returnValue.push(webtoon);
+            }
+          });
+        });
+      }
+    });
+    console.log(returnValue);
+    return returnValue;
   }
 
   /**

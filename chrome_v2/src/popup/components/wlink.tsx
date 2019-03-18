@@ -66,10 +66,11 @@ export default class Wlink extends React.Component<wlinkProps, wlinkState> {
   }
 
   public render(): JSX.Element {
-    const { children } = this.props;
+    const { children, link } = this.props;
     const child = React.Children.map(children, child =>
       React.cloneElement(child as React.ReactElement, {
-        onClick: this.clickHandler.bind(this)
+        onClick: this.clickHandler.bind(this),
+        href: link
       })
     );
     return <React.Fragment>{child}</React.Fragment>;

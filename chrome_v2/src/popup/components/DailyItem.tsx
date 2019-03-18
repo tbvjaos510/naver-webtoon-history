@@ -1,24 +1,46 @@
 import * as React from "react";
-import { WebtoonType } from "../request";
+import { WebtoonInfoType } from "../request";
 import Wlink from "./wlink";
 import OptionStore from "../store/option";
 import { observer, inject } from "mobx-react";
+import WebtoonStore from "../store/webtoon";
 
 export interface DailyItemProps {
-  item: WebtoonType;
+  item: WebtoonInfoType;
   option?: OptionStore;
+  webtoon?: WebtoonStore;
 }
 
-@inject("option")
+export interface DailyItemStates {
+  item: WebtoonInfoType;
+}
+
+@inject("option", "webtoon")
 @observer
-export default class DailyItem extends React.Component<DailyItemProps, any> {
-  public starClickHandler() {
-    
+export default class DailyItem extends React.Component<
+  DailyItemProps,
+  DailyItemStates
+> {
+  state = {
+    item: this.props.item
+  };
+  public onStarChanged() {
+    const id = this.state.item.id;
+    if (this.props.webtoon.starWebtoons[id]) {
+      delete this.props.webtoon.starWebtoons[id];
+    } else {
+      this.props.webtoon.starWebtoons[id] = true;
+    }
+    this.props.webtoon.starWebtoons = this.props.webtoon.starWebtoons;
+    this.state.item.stared = !this.state.item.stared;
+    this.setState({
+      item: this.state.item
+    });
   }
 
   public render() {
-    const { item, option } = this.props;
-
+    const { option } = this.props;
+    const { item } = this.state;
     return (
       <div className="uk-card uk-card-small uk-card-default">
         <div className="uk-card-media-top">
@@ -35,9 +57,9 @@ export default class DailyItem extends React.Component<DailyItemProps, any> {
             <React.Fragment>
               <br />
               <a
-                className="favo"
+                className={"favo " + (item.stared ? "stared" : "")}
                 uk-icon="icon: star;"
-                onClick={event => this.starClickHandler()}
+                onClick={event => this.onStarChanged()}
               />
             </React.Fragment>
           ) : null}

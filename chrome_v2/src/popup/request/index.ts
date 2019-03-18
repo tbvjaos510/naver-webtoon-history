@@ -1,24 +1,35 @@
 import axios from "axios";
 import { WebtoonOrder } from "../store/option";
+import { StaredType } from "../store/webtoon";
 
 export interface ogInfo {
   title?: string;
   img?: string;
 }
 
-export interface WebtoonType {
+export interface WebtoonInfoType {
   title?: string;
   link?: string;
   img?: string;
   isUp?: boolean;
   isRest?: boolean;
+  stared?: boolean;
+  id?: number;
 }
 
 export interface WebtoonInfo {
-  [key: string]: WebtoonType[];
+  [key: string]: WebtoonInfoType[];
 }
 
-export type Week = "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun";
+export type Week =
+  | "mon"
+  | "tue"
+  | "wed"
+  | "thu"
+  | "fri"
+  | "sat"
+  | "sun"
+  | "favo";
 
 export const weekDay: Week[] = [
   "mon",
@@ -51,7 +62,10 @@ export default class WebtoonRequest {
     return null;
   }
 
-  static async getAllWebtoon(sort: WebtoonOrder): Promise<WebtoonInfo> {
+  static async getAllWebtoon(
+    sort: WebtoonOrder,
+    favorate: StaredType
+  ): Promise<WebtoonInfo> {
     const link = `https://comic.naver.com/webtoon/weekday.nhn?order=${sort}`;
     const { data } = await axios.get(link);
     if (!data) {
@@ -68,18 +82,21 @@ export default class WebtoonRequest {
         .parentElement.querySelectorAll("ul>li");
       webtoons[day] = [];
       dayElement.forEach(element => {
-        const webtoon: WebtoonType = {};
+        const webtoon: WebtoonInfoType = {};
         const toonElement: HTMLLinkElement = element.querySelector(
           "div.thumb>a"
         );
         const imgElement: HTMLImageElement = element.querySelector(
           "div.thumb>a>img"
         );
+        const url = new URL(toonElement.href);
         webtoon.img = imgElement.src;
         webtoon.title = imgElement.title;
-        webtoon.link = `https://comic.naver.com/${toonElement.href}`;
+        webtoon.link = `https://comic.naver.com${url.pathname + url.search}`;
         webtoon.isRest = !!toonElement.querySelector("em.ico_break");
         webtoon.isUp = !!toonElement.querySelector("em.ico_updt");
+        webtoon.id = parseInt(url.searchParams.get("titleId"));
+        webtoon.stared = !!favorate[webtoon.id];
         webtoons[day].push(webtoon);
       });
     });

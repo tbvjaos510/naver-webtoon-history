@@ -1,6 +1,5 @@
 body {
   width: 450px;
-  height: auto;
 }
 
 .body-title {
@@ -34,6 +33,7 @@ td {
 .stared > svg > polygon {
   fill: rgb(255, 216, 0);
   color: rgb(255, 216, 0);
+  stroke: rgb(255, 216, 0);
 }
 .recent > tr:hover {
   background: rgb(240, 240, 240);
@@ -47,7 +47,6 @@ td {
   text-align: center;
 }
 .webtoonName {
-  position: absolute;
   text-decoration: none;
   color: black;
 }
@@ -120,4 +119,9 @@ th {
   &:hover {
     cursor: pointer;
   }
+}
+
+.scroll-fixed {
+  max-height: 450px;
+  overflow: auto;
 }

@@ -3,20 +3,17 @@ import { observer, inject } from "mobx-react";
 import OptionStore from "../store/option";
 import { weekDay, Week } from "../request";
 import WebtoonStore from "../store/webtoon";
-import DailyItem from "../components/DailyItem";
-import { observable, action } from "mobx";
-import HistoryList from "../components/HistoryList";
+import DailyList from "../components/DailyList";
 
 export interface ListDailyProps {
   option?: OptionStore;
-  webtoon?: WebtoonStore;
 }
 
 export interface ListDailyStates {
   selectDay: Week;
 }
 
-@inject("option", "webtoon")
+@inject("option")
 @observer
 export default class ListDaily extends React.Component<
   ListDailyProps,
@@ -29,14 +26,11 @@ export default class ListDaily extends React.Component<
 
     this.state = { selectDay: weekDay[(new Date().getDay() + 6) % 7] };
   }
-  @action
   private changeDay(day: Week) {
     this.setState({
       selectDay: day
     });
 
-    // this.changeView(weekDay.indexOf(day));
-    console.log("change ", this.state.selectDay, weekDay.indexOf(day));
     return true;
   }
 
@@ -51,7 +45,7 @@ export default class ListDaily extends React.Component<
       );
   }
   public render() {
-    const { option, webtoon } = this.props;
+    const { option } = this.props;
     return (
       <div>
         <ul
@@ -62,7 +56,7 @@ export default class ListDaily extends React.Component<
           }}
         >
           {option.saveFavorate ? (
-            <li>
+            <li onClick={() => this.changeDay("favo")}>
               <a>★</a>
             </li>
           ) : null}
@@ -88,7 +82,7 @@ export default class ListDaily extends React.Component<
             <a>일</a>
           </li>
         </ul>
-        <HistoryList selectDay={this.state.selectDay} webtoon={webtoon} />
+        <DailyList selectDay={this.state.selectDay} />
       </div>
     );
   }
