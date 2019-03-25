@@ -1,6 +1,5 @@
 import axios from "axios";
 import { WebtoonOrder } from "../store/option";
-import { StaredType } from "../store/webtoon";
 
 export interface ogInfo {
   title?: string;
@@ -13,7 +12,6 @@ export interface WebtoonInfoType {
   img?: string;
   isUp?: boolean;
   isRest?: boolean;
-  stared?: boolean;
   id?: number;
 }
 
@@ -62,10 +60,7 @@ export default class WebtoonRequest {
     return null;
   }
 
-  static async getAllWebtoon(
-    sort: WebtoonOrder,
-    favorate: StaredType
-  ): Promise<WebtoonInfo> {
+  static async getAllWebtoon(sort: WebtoonOrder): Promise<WebtoonInfo> {
     const link = `https://comic.naver.com/webtoon/weekday.nhn?order=${sort}`;
     const { data } = await axios.get(link);
     if (!data) {
@@ -96,7 +91,6 @@ export default class WebtoonRequest {
         webtoon.isRest = !!toonElement.querySelector("em.ico_break");
         webtoon.isUp = !!toonElement.querySelector("em.ico_updt");
         webtoon.id = parseInt(url.searchParams.get("titleId"));
-        webtoon.stared = !!favorate[webtoon.id];
         webtoons[day].push(webtoon);
       });
     });

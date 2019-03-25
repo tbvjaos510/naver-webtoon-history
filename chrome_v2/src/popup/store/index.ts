@@ -2,9 +2,8 @@ import OptionStore from "./option";
 import WebtoonStore from "./webtoon";
 
 export default class RootStore {
-  public option: OptionStore;
-
   public webtoon: WebtoonStore;
+  public option: OptionStore;
 
   constructor() {
     this.option = new OptionStore();

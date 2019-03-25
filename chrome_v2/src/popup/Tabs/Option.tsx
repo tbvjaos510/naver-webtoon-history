@@ -304,6 +304,7 @@ export default class Option extends React.Component<OptionProps, any> {
                 id="removeScroll"
                 className="uk-button uk-button-small uk-button-default"
                 uk-tooltip="스크롤 데이터를 삭제합니다."
+                onClick={() => {webtoon.scrolls = {}}}
               >
                 웹툰 스크롤 데이터 삭제
               </button>

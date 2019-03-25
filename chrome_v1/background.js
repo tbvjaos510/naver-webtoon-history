@@ -275,7 +275,7 @@ chrome.tabs.onUpdated.addListener((tid, ci, tab) => {
 }
 
 
-            `
+            ` 
             })
 
             if (url.pathname.indexOf("/list.nhn") > 0) {

@@ -11,36 +11,24 @@ export interface DailyItemProps {
   webtoon?: WebtoonStore;
 }
 
-export interface DailyItemStates {
-  item: WebtoonInfoType;
-}
-
 @inject("option", "webtoon")
 @observer
-export default class DailyItem extends React.Component<
-  DailyItemProps,
-  DailyItemStates
-> {
-  state = {
-    item: this.props.item
-  };
+export default class DailyItem extends React.Component<DailyItemProps, any> {
   public onStarChanged() {
-    const id = this.state.item.id;
-    if (this.props.webtoon.starWebtoons[id]) {
-      delete this.props.webtoon.starWebtoons[id];
+    console.log("starChanged");
+    const { webtoon, item } = this.props;
+    if (webtoon.starWebtoons[item.id]) {
+      delete webtoon.starWebtoons[item.id];
     } else {
-      this.props.webtoon.starWebtoons[id] = true;
+      webtoon.starWebtoons[item.id] = true;
     }
-    this.props.webtoon.starWebtoons = this.props.webtoon.starWebtoons;
-    this.state.item.stared = !this.state.item.stared;
-    this.setState({
-      item: this.state.item
-    });
+
+    // Chrome Storage 적용
+    webtoon.starWebtoons = webtoon.starWebtoons;
   }
 
   public render() {
-    const { option } = this.props;
-    const { item } = this.state;
+    const { option, item, webtoon } = this.props;
     return (
       <div className="uk-card uk-card-small uk-card-default">
         <div className="uk-card-media-top">
@@ -57,7 +45,9 @@ export default class DailyItem extends React.Component<
             <React.Fragment>
               <br />
               <a
-                className={"favo " + (item.stared ? "stared" : "")}
+                className={
+                  "favo " + (webtoon.starWebtoons[item.id] ? "stared" : "")
+                }
                 uk-icon="icon: star;"
                 onClick={event => this.onStarChanged()}
               />

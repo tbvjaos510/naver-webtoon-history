@@ -65,6 +65,16 @@ export default class OptionStore {
         );
       }
     });
+
+    // chrome storage를 store와 동기화
+    chrome.storage.onChanged.addListener((change, area) => {
+      if (change["option"]) {
+        storeKeys.forEach(key => {
+          this[key] = change["option"].newValue[key];
+        });
+        this.getUseBytes();
+      }
+    });
   }
 
   @observable
@@ -258,5 +268,41 @@ export default class OptionStore {
   public resetStore(store: ChromeStore) {
     chrome.storage[store].clear();
     this.getUseBytes();
+  }
+
+  /**
+   * 링크를 엽니다
+   * @param link 링크
+   */
+  public openTab(link: string): void {
+    switch (this._linkTarget) {
+      case "Current":
+        chrome.tabs.update({
+          url: link
+        });
+        break;
+      case "Popup":
+        chrome.windows.create(
+          {
+            url: link.replace("https://", "https://m."),
+            width: 400,
+            height: 800,
+            type: "popup"
+          },
+          window => {
+            window.alwaysOnTop = true;
+          }
+        );
+        break;
+      case "Tab":
+        chrome.tabs.create({
+          url: link
+        });
+      default:
+        console.warn("[Warning] option.linkTarget이 잘못 설정되었습니다.");
+        chrome.tabs.create({
+          url: link
+        });
+    }
   }
 }

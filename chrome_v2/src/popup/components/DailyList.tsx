@@ -14,7 +14,6 @@ export interface DailyListProps {
 export default class DailyList extends React.Component<DailyListProps, any> {
   public render() {
     const { webtoon, selectDay } = this.props;
-    console.log(webtoon);
     return (
       <div className="uk-padding-small scroll-fixed">
         <ul
