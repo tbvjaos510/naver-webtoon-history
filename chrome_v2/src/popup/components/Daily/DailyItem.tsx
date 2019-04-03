@@ -1,9 +1,9 @@
 import * as React from "react";
-import { WebtoonInfoType } from "../request";
-import Wlink from "./wlink";
-import OptionStore from "../store/option";
+import { WebtoonInfoType } from "../../request";
+import Wlink from "../wlink";
+import OptionStore from "../../store/option";
 import { observer, inject } from "mobx-react";
-import WebtoonStore from "../store/webtoon";
+import WebtoonStore from "../../store/webtoon";
 
 export interface DailyItemProps {
   item: WebtoonInfoType;
@@ -33,8 +33,8 @@ export default class DailyItem extends React.Component<DailyItemProps, any> {
       <div className="uk-card uk-card-small uk-card-default">
         <div className="uk-card-media-top">
           <img src={item.img} alt={item.title} className="webtoon-link" />
-          {item.isUp ? <em className="ico-updt" /> : null}
-          {item.isRest ? <em className="ico-break" /> : null}
+          {item.isUp ? <em className="ico updt" /> : null}
+          {item.isRest ? <em className="ico break" /> : null}
         </div>
         <div className="uk-card-body uk-padding-small uk-padding-remove-right uk-padding-remove-left">
           <Wlink link={item.link}>

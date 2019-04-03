@@ -1,6 +1,6 @@
 import * as React from "react";
-import WebtoonStore from "../store/webtoon";
-import { Week } from "../request";
+import WebtoonStore from "../../store/webtoon";
+import { Week } from "../../request";
 import DailyItem from "./DailyItem";
 import { observer, inject } from "mobx-react";
 

@@ -2,7 +2,7 @@ import * as React from "react";
 import { inject, observer } from "mobx-react";
 import WebtoonStore from "../store/webtoon";
 import Wlink from "../components/wlink";
-import HistoryItem from "../components/HistoryItem";
+import HistoryItem from "../components/History/HistoryItem";
 
 export interface ListHistoryProps {
   webtoon?: WebtoonStore;

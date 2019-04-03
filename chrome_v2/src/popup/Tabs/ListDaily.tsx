@@ -3,7 +3,7 @@ import { observer, inject } from "mobx-react";
 import OptionStore from "../store/option";
 import { weekDay, Week } from "../request";
 import WebtoonStore from "../store/webtoon";
-import DailyList from "../components/DailyList";
+import DailyList from "../components/Daily/DailyList";
 
 export interface ListDailyProps {
   option?: OptionStore;

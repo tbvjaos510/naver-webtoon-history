@@ -10,16 +10,20 @@ export default function(webtoon: WebtoonStore, option: OptionStore) {
       const no = param.get("no");
       if (message && message.command === "openTab") {
         const link = sender.url.replace("m.comic", "comic");
-        option.openTab(link);
+        // Force Tab
+        chrome.tabs.create({
+          url: link
+        });
+        // option.openTab(link);
         response(null);
       } else if (wid && no && message.scroll && option.saveScroll) {
         message.scroll = Math.round(message.scroll * 100);
         if (message.scroll <= 2 || message.scroll >= 98) {
           if (webtoon.scrolls[wid] && webtoon.scrolls[wid][no]) {
             delete webtoon.scrolls[wid][no];
-            webtoon.scrolls = webtoon.scrolls;
-            return;
           }
+          webtoon.scrolls = webtoon.scrolls;
+          return;
         }
         if (!webtoon.scrolls[wid]) {
           webtoon.scrolls[wid] = {};

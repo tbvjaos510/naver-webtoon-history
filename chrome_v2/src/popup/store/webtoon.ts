@@ -113,7 +113,6 @@ export default class WebtoonStore {
               this.getRecentWebtoon();
             }
           }
-
           this.option.getUseBytes();
         });
       }
@@ -313,9 +312,9 @@ export default class WebtoonStore {
         if (!this._imglog[key + "-" + key2]) {
           promises.push(
             WebtoonRequest.getOpenGraph(
-              `https://comic.naver.com${
-                this._webtoonType[key].type
-              }/detail.nhn?titleId=${key}&no=${key2}`
+              this._webtoonType[key].type,
+              parseInt(key),
+              parseInt(key2)
             ).then(value => {
               if (value) {
                 webtoons.push({
@@ -333,6 +332,9 @@ export default class WebtoonStore {
                     name: value.title
                   };
                 }
+              } else {
+                delete this._visits[key][key2];
+                this.visits = this._visits;
               }
             })
           );
@@ -359,6 +361,7 @@ export default class WebtoonStore {
     this.loadingStatus = "end";
     // Save to Chrome
     this.imglog = this._imglog;
+    this._visits = this._visits;
     console.log(webtoons);
   }
 
@@ -396,16 +399,15 @@ export default class WebtoonStore {
         });
         this.webtoonType = webtoon;
         this.visits = visits;
-
-        // @ts-ignore
-        UIkit.notification(
-          `<div class="uk-text-small">방문기록에서 총 ${
-            this.visitCount
-          }개의 기록을 불러왔습니다.</div>`,
-          {
-            timeout: 2000
-          }
-        );
+        if (window["UIkit"])
+          UIkit.notification(
+            `<div class="uk-text-small">방문기록에서 총 ${
+              this.visitCount
+            }개의 기록을 불러왔습니다.</div>`,
+            {
+              timeout: 2000
+            }
+          );
       }
     );
   }

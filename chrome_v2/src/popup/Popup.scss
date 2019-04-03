@@ -59,9 +59,10 @@ td {
 th {
   text-align: center !important;
   vertical-align: middle !important;
+  word-break: keep-all;
 }
 
-.ico-updt {
+.ico {
   display: inline-block;
   overflow: hidden;
   background: url(https://ssl.pstatic.net/static/comic/images/sp/sp_ico_v2.png)
@@ -73,28 +74,15 @@ th {
 
   width: 26px;
   height: 26px;
-  background-position: -130px -60px;
+  &.updt {
+    background-position: -130px -60px;
+  }
+  &.break {
+    background-position: -160px -60px;
+  }
   position: absolute;
   top: -12px;
-  right: 17px;
-}
-
-.ico-break {
-  display: inline-block;
-  overflow: hidden;
-  background: url(https://ssl.pstatic.net/static/comic/images/sp/sp_ico_v2.png)
-    no-repeat;
-  font-size: 0;
-  line-height: 0;
-  color: transparent;
-  vertical-align: top;
-
-  width: 26px;
-  height: 26px;
-  background-position: -160px -60px !important;
-  position: absolute;
-  top: -12px;
-  right: 17px;
+  right: 11px;
 }
 
 .uk-tab > .uk-active > a {

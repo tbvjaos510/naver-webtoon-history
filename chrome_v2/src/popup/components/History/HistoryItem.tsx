@@ -1,6 +1,6 @@
 import * as React from "react";
-import Wlink from "./wlink";
-import WebtoonStore, { RecentWebtoon } from "../store/webtoon";
+import Wlink from "../wlink";
+import WebtoonStore, { RecentWebtoon } from "../../store/webtoon";
 import { observer, inject } from "mobx-react";
 
 export interface HistoryItemProps {
@@ -14,6 +14,14 @@ export default class HistoryItem extends React.Component<
   HistoryItemProps,
   any
 > {
+  private deleteScroll() {
+    const { item, webtoon } = this.props;
+    const { scrolls } = webtoon;
+    if (scrolls[item.id] && scrolls[item.id][item.no]) {
+      delete scrolls[item.id][item.no];
+      webtoon.scrolls = scrolls;
+    }
+  }
   public render() {
     const { item, webtoon } = this.props;
     const { scrolls } = webtoon;
@@ -49,7 +57,14 @@ export default class HistoryItem extends React.Component<
             </a>
           </td>
         </Wlink>
-        <td>
+        <td
+          uk-tooltip={
+            scrolls[item.id] && scrolls[item.id][item.no]
+              ? "클릭시 스크롤 기록이 삭제됩니다."
+              : null
+          }
+          onClick={() => this.deleteScroll()}
+        >
           <span>
             {new Date(item.lastVisit)
               .toLocaleString()

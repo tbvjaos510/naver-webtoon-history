@@ -11,7 +11,8 @@ const storeKeys = [
   "_autoNext",
   "_useImgLog",
   "_saveFavorate",
-  "_linkTarget"
+  "_linkTarget",
+  "_scrollAlert"
 ];
 
 export type ChromeStore = "local" | "sync" | null;
@@ -54,15 +55,27 @@ export default class OptionStore {
         });
         this.getUseBytes();
       } else {
-        chrome.storage.sync.set(
-          {
-            option: this.optionObject
-          },
-          () => {
+        if (!item || Object.keys(item).length === 0)
+          chrome.storage.sync.set(
+            {
+              option: this.optionObject
+            },
+            () => {
+              this.getUseBytes();
+              console.log("Option Init");
+            }
+          );
+        else {
+          Object.keys(storeKeys).forEach(key => {
+            if (item[key]) {
+              this[key] = item[key];
+            }
+          });
+          chrome.storage.sync.set({ option: this.optionObject }, () => {
             this.getUseBytes();
-            console.log("Option Init");
-          }
-        );
+            console.log("Update Complate");
+          });
+        }
       }
     });
 
@@ -178,6 +191,21 @@ export default class OptionStore {
 
   public set saveScroll(value: boolean) {
     this._saveScroll = value;
+    if (value === true) {
+      this._scrollAlert = true;
+    }
+    this.saveToStore();
+  }
+
+  @observable
+  private _scrollAlert: boolean = true;
+
+  @computed
+  public get scrollAlert(): boolean {
+    return this._scrollAlert;
+  }
+  public set scrollAlert(value: boolean) {
+    this._scrollAlert = value;
     this.saveToStore();
   }
 

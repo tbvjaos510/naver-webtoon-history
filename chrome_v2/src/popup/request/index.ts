@@ -40,13 +40,24 @@ export const weekDay: Week[] = [
 ];
 
 export default class WebtoonRequest {
-  static async getOpenGraph(url: string): Promise<ogInfo> {
+  /**
+   * 페이지의 사진, 타이틀을 불러옵니다.
+   * @param type 웹툰 타입
+   * @param key1 웹툰 번호
+   * @param key2 회차 번호
+   */
+  static async getOpenGraph(
+    type: string,
+    key1: number,
+    key2: number
+  ): Promise<ogInfo> {
     const og: ogInfo = {};
-    const { data } = await axios.get(url);
-    og.title = (<string>data).match(
+    const url = `https://comic.naver.com${type}/detail.nhn?titleId=${key1}&no=${key2}`;
+    const { data } = await axios.get<string>(url);
+    og.title = data.match(
       /<meta [^>]*property=[\"']og:description[\"'] [^>]*content=[\"']([^'^\"]+?)[\"'][^>]*>/
     )[1];
-    og.img = (<string>data).match(
+    og.img = data.match(
       /<meta [^>]*property=[\"']og:image[\"'] [^>]*content=[\"']([^'^\"]+?)[\"'][^>]*>/
     )[1];
 
@@ -56,7 +67,8 @@ export default class WebtoonRequest {
       og.img.match("https://shared-comic.pstatic.net/thumb/")
     )
       return og;
-    console.warn(`OpenGraph get error.`, og);
+
+    console.log(`OpenGraph get failed.`, url, og);
     return null;
   }
 
@@ -64,7 +76,7 @@ export default class WebtoonRequest {
     const link = `https://comic.naver.com/webtoon/weekday.nhn?order=${sort}`;
     const { data } = await axios.get(link);
     if (!data) {
-      console.warn(`request:${link} Error`);
+      console.log(`request:${link} Error`);
       return null;
     }
     const webtoons: WebtoonInfo = {};
