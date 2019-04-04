@@ -54,36 +54,36 @@ export default class OptionStore {
           this[key] = item[key];
         });
         this.getUseBytes();
-      } else {
-        if (!item || Object.keys(item).length === 0)
-          chrome.storage.sync.set(
-            {
-              option: this.optionObject
-            },
-            () => {
-              this.getUseBytes();
-              console.log("Option Init");
-            }
-          );
-        else {
-          Object.keys(storeKeys).forEach(key => {
-            if (item[key]) {
-              this[key] = item[key];
-            }
-          });
-          chrome.storage.sync.set({ option: this.optionObject }, () => {
+      } else if (!item || Object.keys(item).length === 0) {
+        chrome.storage.sync.set(
+          {
+            option: this.optionObject
+          },
+          () => {
             this.getUseBytes();
-            console.log("Update Complate");
-          });
-        }
+            console.log("Option Init");
+          }
+        );
+      } else {
+        Object.keys(storeKeys).forEach(key => {
+          if (item[key]) {
+            this[key] = item[key];
+          }
+        });
+        chrome.storage.sync.set({ option: this.optionObject }, () => {
+          this.getUseBytes();
+          console.log("Update Complate");
+        });
       }
     });
 
     // chrome storage를 store와 동기화
     chrome.storage.onChanged.addListener((change, area) => {
-      if (change["option"]) {
+      if (change.option) {
         storeKeys.forEach(key => {
-          this[key] = change["option"].newValue[key];
+          if (change.option.newValue[key]) {
+            this[key] = change.option.newValue[key];
+          }
         });
         this.getUseBytes();
       }
@@ -204,6 +204,7 @@ export default class OptionStore {
   public get scrollAlert(): boolean {
     return this._scrollAlert;
   }
+
   public set scrollAlert(value: boolean) {
     this._scrollAlert = value;
     this.saveToStore();

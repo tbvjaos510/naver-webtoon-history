@@ -10,10 +10,7 @@ export interface RecentSettingProps {
 
 @inject("option", "webtoon")
 @observer
-export default class RecentSetting extends React.Component<
-  RecentSettingProps,
-  null
-> {
+export default class RecentSetting extends React.Component<RecentSettingProps, null> {
   public render() {
     const { webtoon, option } = this.props;
     return (
@@ -35,14 +32,10 @@ export default class RecentSetting extends React.Component<
                 id="local"
                 className="uk-radio"
                 value="local"
-                onChange={event =>
-                  (option.storeLocation = event.target.value as ChromeStore)
-                }
+                onChange={event => (option.storeLocation = event.target.value as ChromeStore)}
                 checked={option.storeLocation === "local"}
               />{" "}
-              <label htmlFor="local">
-                로컬 (기록을 컴퓨터에 저장합니다. 동기화되지 않습니다.)
-              </label>
+              <label htmlFor="local">로컬 (기록을 컴퓨터에 저장합니다. 동기화되지 않습니다.)</label>
             </li>
             <li>
               <input
@@ -50,9 +43,7 @@ export default class RecentSetting extends React.Component<
                 id="sync"
                 className="uk-radio"
                 value="sync"
-                onChange={event =>
-                  (option.storeLocation = event.target.value as ChromeStore)
-                }
+                onChange={event => (option.storeLocation = event.target.value as ChromeStore)}
                 checked={option.storeLocation === "sync"}
               />{" "}
               <label htmlFor="sync">
@@ -61,10 +52,7 @@ export default class RecentSetting extends React.Component<
             </li>
           </ul>
           <p>
-            <label
-              htmlFor="historyCount"
-              uk-tooltip="계정: 200개, 로컬: 500개로 제한합니다."
-            >
+            <label htmlFor="historyCount" uk-tooltip="계정: 200개, 로컬: 500개로 제한합니다.">
               최대 기록 개수 (넘으면 예전 기록이 삭제됩니다.):
             </label>{" "}
             <input
@@ -75,9 +63,7 @@ export default class RecentSetting extends React.Component<
               max={option.storeLocation === "sync" ? 200 : 500}
               id="historyCount"
               value={option.historyMax}
-              onChange={event =>
-                (option.historyMax = parseInt(event.target.value))
-              }
+              onChange={event => (option.historyMax = parseInt(event.target.value))}
             />
           </p>
           <button
@@ -108,9 +94,7 @@ export default class RecentSetting extends React.Component<
                 id="sort-pop"
                 checked={option.linkTarget === "Current"}
                 value="Current"
-                onChange={event =>
-                  (option.linkTarget = event.target.value as LinkTarget)
-                }
+                onChange={event => (option.linkTarget = event.target.value as LinkTarget)}
               />
               <label htmlFor="sort-pop"> 현재 탭</label>
             </li>
@@ -121,9 +105,7 @@ export default class RecentSetting extends React.Component<
                 id="sort-stars"
                 checked={option.linkTarget === "Tab"}
                 value="Tab"
-                onChange={event =>
-                  (option.linkTarget = event.target.value as LinkTarget)
-                }
+                onChange={event => (option.linkTarget = event.target.value as LinkTarget)}
               />
               <label htmlFor="sort-stars"> 새 탭</label>
             </li>
@@ -134,9 +116,7 @@ export default class RecentSetting extends React.Component<
                 id="sort-update"
                 checked={option.linkTarget === "Popup"}
                 value="Popup"
-                onChange={event =>
-                  (option.linkTarget = event.target.value as LinkTarget)
-                }
+                onChange={event => (option.linkTarget = event.target.value as LinkTarget)}
               />
               <label htmlFor="sort-update"> 팝업 창</label>
             </li>

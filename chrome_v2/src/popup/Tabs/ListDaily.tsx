@@ -3,77 +3,88 @@ import { observer, inject } from "mobx-react";
 import OptionStore from "../store/option";
 import { weekDay, Week } from "../request";
 import WebtoonStore from "../store/webtoon";
-import DailyList from "../components/Daily/DailyList";
+import DailyList, { MovedEvent } from "../components/Daily/DailyList";
 
 export interface ListDailyProps {
   option?: OptionStore;
+  webtoon?: WebtoonStore;
 }
 
 export interface ListDailyStates {
-  selectDay: Week;
+  selectDay: Week | "favo";
 }
 
-@inject("option")
+@inject("option", "webtoon")
 @observer
-export default class ListDaily extends React.Component<
-  ListDailyProps,
-  ListDailyStates
-> {
-  private tabRef: HTMLUListElement = null;
+export default class ListDaily extends React.Component<ListDailyProps, ListDailyStates> {
+  private sortRef: HTMLUListElement = null;
 
   constructor(props) {
     super(props);
 
     this.state = { selectDay: weekDay[(new Date().getDay() + 6) % 7] };
   }
-  private changeDay(day: Week) {
+
+  private changeDay(day: Week | "favo") {
     this.setState({
       selectDay: day
     });
-
     return true;
+  }
+
+  private orderChanged(ref: HTMLUListElement) {
+    this.sortRef = ref;
   }
 
   public componentDidMount() {
     this.changeView((new Date().getDay() + 6) % 7);
+    this.sortRef.addEventListener("moved", (e: MovedEvent) => this.onItemMoved(e));
   }
 
   private changeView(index: number) {
-    if (this.tabRef)
-      UIkit.tab(this.tabRef).show(
-        index + (this.props.option.saveFavorate ? 1 : 0)
-      );
+    UIkit.tab("#daily-tab").show(index + (this.props.option.saveFavorate ? 1 : 0));
   }
+
+  private onItemMoved(e: MovedEvent) {
+    const { option, webtoon } = this.props;
+    if (option.saveWebtoonSort) {
+      const wsort = webtoon.getSortWebtoonArray(this.state.selectDay as Week);
+      const element = e.detail[1];
+      const wid = parseInt(element.getAttribute("data-id"));
+      console.log(webtoon.sortWebtoon);
+      const itemIdx = wsort.indexOf(wid);
+      const movedIdx = Array.from(element.parentElement.children).indexOf(element);
+      wsort.splice(itemIdx, 1);
+      wsort.splice(movedIdx, 0, wid);
+      webtoon.sortWebtoon[this.state.selectDay] = wsort;
+      webtoon.sortWebtoon = webtoon.sortWebtoon;
+    }
+  }
+
   public render() {
     const { option } = this.props;
     return (
       <div>
-        <ul
-          className="uk-flex-center uk-margin-remove-bottom"
-          uk-tab="true"
-          ref={ref => {
-            this.tabRef = ref;
-          }}
-        >
+        <ul className="uk-flex-center uk-margin-remove-bottom" uk-tab="true" id="daily-tab">
           {option.saveFavorate ? (
-            <li onClick={() => this.changeDay("favo")}>
-              <a>★</a>
+            <li>
+              <a onClick={() => this.changeDay("favo")}>★</a>
             </li>
           ) : null}
-          <li onClick={() => this.changeDay("mon")}>
-            <a>월</a>
+          <li>
+            <a onClick={() => this.changeDay("mon")}>월</a>
           </li>
-          <li onClick={() => this.changeDay("tue")}>
-            <a>화</a>
+          <li>
+            <a onClick={() => this.changeDay("tue")}>화</a>
           </li>
-          <li onClick={() => this.changeDay("wed")}>
-            <a>수</a>
+          <li>
+            <a onClick={() => this.changeDay("wed")}>수</a>
           </li>
-          <li onClick={() => this.changeDay("thu")}>
-            <a>목</a>
+          <li>
+            <a onClick={() => this.changeDay("thu")}>목</a>
           </li>
-          <li onClick={() => this.changeDay("fri")}>
-            <a>금</a>
+          <li>
+            <a onClick={() => this.changeDay("fri")}>금</a>
           </li>
           <li onClick={() => this.changeDay("sat")}>
             <a>토</a>
@@ -82,7 +93,7 @@ export default class ListDaily extends React.Component<
             <a>일</a>
           </li>
         </ul>
-        <DailyList selectDay={this.state.selectDay} />
+        <DailyList selectDay={this.state.selectDay} onRef={ref => this.orderChanged(ref)} />
       </div>
     );
   }

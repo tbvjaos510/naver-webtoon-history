@@ -10,10 +10,7 @@ export interface SpecialSettingProps {
 
 @inject("option", "webtoon")
 @observer
-export default class SpecialSetting extends React.Component<
-  SpecialSettingProps,
-  null
-> {
+export default class SpecialSetting extends React.Component<SpecialSettingProps, null> {
   public render() {
     const { webtoon, option } = this.props;
     return (

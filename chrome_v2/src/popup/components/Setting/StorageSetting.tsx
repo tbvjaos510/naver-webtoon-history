@@ -8,10 +8,7 @@ export interface StorageSettingProps {
 
 @inject("option")
 @observer
-export default class StorageSetting extends React.Component<
-  StorageSettingProps,
-  null
-> {
+export default class StorageSetting extends React.Component<StorageSettingProps, null> {
   public render() {
     const { option } = this.props;
     return (

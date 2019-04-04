@@ -45,9 +45,7 @@ export default class DailyItem extends React.Component<DailyItemProps, any> {
             <React.Fragment>
               <br />
               <a
-                className={
-                  "favo " + (webtoon.starWebtoons[item.id] ? "stared" : "")
-                }
+                className={"favo " + (webtoon.starWebtoons[item.id] ? "stared" : "")}
                 uk-icon="icon: star;"
                 onClick={event => this.onStarChanged()}
               />

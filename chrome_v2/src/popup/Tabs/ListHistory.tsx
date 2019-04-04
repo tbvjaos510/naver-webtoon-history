@@ -10,10 +10,7 @@ export interface ListHistoryProps {
 
 @inject("webtoon")
 @observer
-export default class ListHistory extends React.Component<
-  ListHistoryProps,
-  any
-> {
+export default class ListHistory extends React.Component<ListHistoryProps, any> {
   public MaxView: number = 30;
   public render() {
     const { webtoon } = this.props;
@@ -37,10 +34,7 @@ export default class ListHistory extends React.Component<
         <table className="viewList uk-table uk-table-small uk-table-divider">
           <caption className="uk-text-center">
             <span>
-              최근 웹툰 (
-              {webtoon.visitCount > this.MaxView
-                ? this.MaxView
-                : webtoon.visitCount}
+              최근 웹툰 ({webtoon.visitCount > this.MaxView ? this.MaxView : webtoon.visitCount}
               개)
             </span>
           </caption>

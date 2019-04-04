@@ -1,10 +1,6 @@
 import * as React from "react";
 import { observer, inject } from "mobx-react";
-import OptionStore, {
-  ChromeStore,
-  WebtoonOrder,
-  LinkTarget
-} from "../store/option";
+import OptionStore, { ChromeStore, WebtoonOrder, LinkTarget } from "../store/option";
 import WebtoonStore from "../store/webtoon";
 import Wlink from "../components/wlink";
 import RecentSetting from "../components/Setting/RecentSetting";
@@ -36,10 +32,7 @@ export default class Option extends React.Component<OptionProps, null> {
           <DevelopInfo />
           <li>
             <Wlink link="https://github.com/tbvjaos510/naver-webtoon-history/issues/new?template=naver-webtoon-extension------.md">
-              <button
-                className="uk-button uk-button-primary uk-button-small"
-                id="toIssues"
-              >
+              <button className="uk-button uk-button-primary uk-button-small" id="toIssues">
                 오류 제보
               </button>
             </Wlink>

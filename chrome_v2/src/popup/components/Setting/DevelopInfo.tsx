@@ -3,10 +3,7 @@ import Wlink from "../wlink";
 
 export interface DevelopInfoProps {}
 
-export default class DevelopInfo extends React.Component<
-  DevelopInfoProps,
-  null
-> {
+export default class DevelopInfo extends React.Component<DevelopInfoProps, null> {
   public render() {
     return (
       <li>
@@ -16,11 +13,7 @@ export default class DevelopInfo extends React.Component<
         <div className="uk-accordion-content">
           <span className="option-title">GitHub </span>
           <Wlink link="https://github.com/tbvjaos510/naver-webtoon-history">
-            <a
-              id="togithub"
-              className="uk-icon-button"
-              uk-icon="icon: github"
-            />
+            <a id="togithub" className="uk-icon-button" uk-icon="icon: github" />
           </Wlink>
 
           <br />

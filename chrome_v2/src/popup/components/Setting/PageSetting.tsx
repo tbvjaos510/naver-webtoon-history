@@ -10,10 +10,7 @@ export interface PageSettingProps {
 
 @inject("option", "webtoon")
 @observer
-export default class PageSetting extends React.Component<
-  PageSettingProps,
-  null
-> {
+export default class PageSetting extends React.Component<PageSettingProps, null> {
   public render() {
     const { webtoon, option } = this.props;
     return (
