@@ -46,7 +46,8 @@ export default class OptionStore {
   /**
    * 생성자
    */
-  constructor() {
+  constructor(isBackground: boolean) {
+    this.isBackground = isBackground;
     // Chrome Storage로부터 설정값을 초기화
     chrome.storage.sync.get("option", ({ option: item }) => {
       if (item) item = JSON.parse(item);
@@ -91,6 +92,9 @@ export default class OptionStore {
       }
     });
   }
+
+  @observable
+  public isBackground: boolean;
 
   @observable
   public localUsage: number = 0;
@@ -257,6 +261,9 @@ export default class OptionStore {
 
   public set useImgLog(value: boolean) {
     this._useImgLog = value;
+    if (value === false) {
+      chrome.storage[this.storeLocation].remove("imglog");
+    }
     this.saveToStore();
   }
 

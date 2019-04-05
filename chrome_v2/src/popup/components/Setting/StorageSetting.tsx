@@ -45,7 +45,13 @@ export default class StorageSetting extends React.Component<StorageSettingProps,
               </button>
             </li>
             <li>
-              <input type="checkbox" id="use-imglog" className="uk-checkbox" />
+              <input
+                type="checkbox"
+                id="use-imglog"
+                className="uk-checkbox"
+                checked={option.useImgLog}
+                onChange={event => (option.useImgLog = (event.target as HTMLInputElement).checked)}
+              />
               <label htmlFor="use-imglog" className="option-title">
                 {" "}
                 이미지 로그 사용(로딩이 빨라집니다)

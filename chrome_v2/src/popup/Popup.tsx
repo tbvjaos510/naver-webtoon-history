@@ -9,7 +9,7 @@ import Wlink from "./components/wlink";
 import Switcher from "./components/switcher";
 import { Tabs } from "./Tabs";
 
-const store = new Store();
+const store = new Store(false);
 
 export default class App extends React.Component {
   render() {

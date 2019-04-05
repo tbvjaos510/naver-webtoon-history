@@ -5,8 +5,8 @@ export default class RootStore {
   public webtoon: WebtoonStore;
   public option: OptionStore;
 
-  constructor() {
-    this.option = new OptionStore();
+  constructor(isBackground: boolean) {
+    this.option = new OptionStore(isBackground);
     this.webtoon = new WebtoonStore(this.option);
 
     // Dev Only

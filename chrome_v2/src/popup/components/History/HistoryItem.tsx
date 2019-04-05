@@ -3,7 +3,7 @@ import Wlink from "../wlink";
 import WebtoonStore, { RecentWebtoon } from "../../store/webtoon";
 import { observer, inject } from "mobx-react";
 
-import { distanceInWordsToNow, format, distanceInWordsStrict } from "date-fns";
+import { format, distanceInWordsToNow } from "date-fns";
 import * as ko from "date-fns/locale/ko";
 
 export interface HistoryItemProps {
@@ -25,7 +25,7 @@ export default class HistoryItem extends React.Component<HistoryItemProps, any> 
   public render() {
     const { item, webtoon } = this.props;
     const { scrolls } = webtoon;
-    const moment = distanceInWordsStrict(new Date(), item.lastVisit, {
+    const moment = distanceInWordsToNow(item.lastVisit, {
       locale: ko,
       addSuffix: true
     });

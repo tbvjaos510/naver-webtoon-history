@@ -1,5 +1,6 @@
 import WebtoonStore from "../../popup/store/webtoon";
 import OptionStore from "../../popup/store/option";
+import { toJS } from "mobx";
 
 export default (webtoon: WebtoonStore, option: OptionStore) => {
   function displayHistory(tabId: number, webtoonId: string) {
@@ -10,18 +11,40 @@ export default (webtoon: WebtoonStore, option: OptionStore) => {
           if (wlog){
             wlog=wlog.parentElement.parentElement;
             wlog.style.background="lightgray";
-            wlog.title="${new Date(
-              webtoon.visits[webtoonId][key] * 1000
-            ).toLocaleString() + "에 봄"}"
+            wlog.title="${new Date(webtoon.visits[webtoonId][key] * 1000).toLocaleString() +
+              "에 봄"}"
         }`
         });
       });
     }
   }
 
-  function checkScroll(tabId: number) {
+  function hiddenComment(tabId: number, isMobile: boolean) {
     chrome.tabs.executeScript(tabId, {
-      code: `
+      code: `document.getElementById("${
+        isMobile ? "cbox_module" : "commentIframe"
+      }").style.display = "none"`
+    });
+  }
+
+  function checkScroll(tabId: number, isMobile: boolean) {
+    if (isMobile) {
+      chrome.tabs.executeScript(tabId, {
+        code: `
+        var checkPercent;
+        function checkSc( event ) {
+          window.clearTimeout( checkPercent );
+          checkPercent = setTimeout(function() {
+          chrome.runtime.sendMessage("${
+            chrome.runtime.id
+          }", {scroll : document.documentElement.scrollTop / document.querySelector("#toonLayer>ul").scrollHeight })
+        }, 100)
+      }
+      window.addEventListener('scroll',checkSc, false);`
+      });
+    } else {
+      chrome.tabs.executeScript(tabId, {
+        code: `
       var checkPercent;
       function checkSc( event ) {
           window.clearTimeout( checkPercent );
@@ -29,25 +52,32 @@ export default (webtoon: WebtoonStore, option: OptionStore) => {
       chrome.runtime.sendMessage('${
         chrome.runtime.id
       }', {scroll : (document.documentElement.scrollTop - document.querySelector(".wt_viewer").childNodes[1].offsetTop) / document.querySelector(".wt_viewer").scrollHeight })
-      }, 100);
-}
-window.addEventListener('scroll',checkSc, false);`
-    });
+      }, 100);}
+      window.addEventListener('scroll',checkSc, false);`
+      });
+    }
   }
 
-  function setScroll(tabId: number, scroll: number) {
-    console.log("setScroll");
-    if (option.scrollAlert) {
+  function setScroll(tabId: number, scroll: number, isMobile: boolean) {
+    if (isMobile)
       chrome.tabs.executeScript(tabId, {
-        code: `if (confirm("[webtoon extension] 이전에 본 기록이 남아있습니다. (${scroll}%)\\n이어보시겠습니까?"));
+        code: `setTimeout(()=>{document.documentElement.scrollTop = document.querySelector("#toonLayer>ul").scrollHeight * ${scroll /
+          100}}, 500)
+                          `
+      });
+    else {
+      if (option.scrollAlert) {
+        chrome.tabs.executeScript(tabId, {
+          code: `if (confirm("[webtoon extension] 이전에 본 기록이 남아있습니다. (${scroll}%)\\n이어보시겠습니까?"));
       document.documentElement.scrollTop = document.querySelector(".wt_viewer").childNodes[1].offsetTop + document.querySelector(".wt_viewer").scrollHeight * ${scroll /
         100}`
-      });
-    } else {
-      chrome.tabs.executeScript(tabId, {
-        code: `document.documentElement.scrollTop = document.querySelector(".wt_viewer").childNodes[1].offsetTop + document.querySelector(".wt_viewer").scrollHeight * ${scroll /
-          100}`
-      });
+        });
+      } else {
+        chrome.tabs.executeScript(tabId, {
+          code: `document.documentElement.scrollTop = document.querySelector(".wt_viewer").childNodes[1].offsetTop + document.querySelector(".wt_viewer").scrollHeight * ${scroll /
+            100}`
+        });
+      }
     }
   }
 
@@ -77,30 +107,6 @@ window.addEventListener('scroll',checkSc, false);`
       });
     }
   }
-
-  function checkScrollMobile(tabId: number) {
-    chrome.tabs.executeScript(tabId, {
-      code: `
-      var checkPercent;
-      function checkSc( event ) {
-        window.clearTimeout( checkPercent );
-        checkPercent = setTimeout(function() {
-        chrome.runtime.sendMessage("${
-          chrome.runtime.id
-        }", {scroll : document.documentElement.scrollTop / document.querySelector("#toonLayer>ul").scrollHeight })
-      }, 100)
-    }
-    window.addEventListener('scroll',checkSc, false);`
-    });
-  }
-
-  function setScrollMobile(tabId: number, scroll: number) {
-    chrome.tabs.executeScript(tabId, {
-      code: `setTimeout(()=>{document.documentElement.scrollTop = document.querySelector("#toonLayer>ul").scrollHeight * ${scroll /
-        100}}, 500)
-                        `
-    });
-  }
   chrome.tabs.onUpdated.addListener((tabId, info, tab) => {
     if (info.status && info.status === "complete") {
       const url = new URL(tab.url);
@@ -124,19 +130,18 @@ window.addEventListener('scroll',checkSc, false);`
               type: url.pathname.split("/detail.nhn")[0]
             };
           }
-          webtoon.visits[webtoonId][no] = Math.floor(
-            new Date().getTime() / 1000
-          );
+          webtoon.visits[webtoonId][no] = Math.floor(new Date().getTime() / 1000);
           if (option.saveScroll) {
-            checkScroll(tabId);
+            checkScroll(tabId, false);
           }
           if (webtoon.scrolls[webtoonId] && webtoon.scrolls[webtoonId][no]) {
-            setScroll(tabId, webtoon.scrolls[webtoonId][no]);
+            setScroll(tabId, webtoon.scrolls[webtoonId][no], false);
           }
           if (option.autoNext) {
             console.log("autonext");
             autoNext(tabId, option.autoNext);
           }
+          if (option.hiddenComment) hiddenComment(tabId, false);
 
           // Save to Store
           webtoon.webtoonType = webtoon.webtoonType;
@@ -203,23 +208,37 @@ window.addEventListener('scroll',checkSc, false);`
           if (!webtoonId || !no) {
             return;
           }
-          if (!webtoon.webtoonType[webtoonId]) {
-            webtoon.webtoonType[webtoonId] = {
-              title: tab.title.split("::")[0].trim(),
-              type: url.pathname.split("/detail.nhn")[0]
-            };
-          }
+          console.log(tabId);
+          chrome.tabs.executeScript(
+            tabId,
+            {
+              code: `[document.querySelector("meta[property='og:title']").getAttribute("content"),
+          document.querySelector("meta[property='og:description']").getAttribute("content")]`
+            },
+            result => {
+              if (!webtoon.webtoonType[webtoonId]) {
+                webtoon.visits[webtoonId] = {};
+                webtoon.webtoonType[webtoonId] = {
+                  title: (result[0] as string[])[0].replace(" - " + result[0][1], ""),
+                  type: url.pathname.split("/detail.nhn")[0]
+                };
+              }
 
-          webtoon.visits[webtoonId][no] = Math.floor(
-            new Date().getTime() / 1000
+              webtoon.visits[webtoonId][no] = Math.floor(new Date().getTime() / 1000);
+
+              if (option.saveScroll) {
+                checkScroll(tabId, true);
+              }
+              if (webtoon.scrolls[webtoonId] && webtoon.scrolls[webtoonId][no]) {
+                setScroll(tabId, webtoon.scrolls[webtoonId][no], true);
+              }
+              if (option.hiddenComment) {
+                hiddenComment(tabId, true);
+              }
+              webtoon.visits = webtoon.visits;
+              webtoon.webtoonType = webtoon.webtoonType;
+            }
           );
-
-          if (option.saveScroll) {
-            checkScrollMobile(tabId);
-          }
-          if (webtoon.scrolls[webtoonId] && webtoon.scrolls[webtoonId][no]) {
-            setScrollMobile(tabId, webtoon.scrolls[webtoonId][no]);
-          }
         }
       }
     }

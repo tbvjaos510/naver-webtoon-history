@@ -24,7 +24,7 @@ export default class RecentSetting extends React.Component<RecentSettingProps, n
             {` ${webtoon.visitCount}`}
             개의 기록이 있습니다.
           </p>
-          <span className="option-title">설정 및 웹툰 데이터를 저장할 곳</span>
+          <span className="option-title">최근 본 웹툰 데이터를 저장할 곳</span>
           <ul className="uk-list uk-padding-remove">
             <li>
               <input
