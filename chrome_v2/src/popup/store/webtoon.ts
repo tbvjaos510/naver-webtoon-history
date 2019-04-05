@@ -42,9 +42,7 @@ export type ImglogType = {
 };
 
 export interface SortWebtoonType {
-  [key: string]: {
-    [key: number]: number;
-  };
+  [key: string]: number[];
 }
 
 export type StaredType = {
@@ -62,14 +60,33 @@ export interface RecentWebtoon {
 }
 export default class WebtoonStore {
   private saveToStore<T extends SaveType>(key: T, value: storageType[T]) {
-    chrome.storage[this.option.storeLocation].set(
+    this.storage.set(
       {
-        [key]: value
+        [key]: JSON.stringify(value)
       },
       () => {
         this.option.getUseBytes();
       }
     );
+  }
+
+  private setDailyWebtoon(webtoons: WebtoonInfo) {
+    if (this.option.saveWebtoonSort) {
+      if (JSON.stringify(this._sortWebtoon) === JSON.stringify({})) {
+        Object.keys(webtoons).forEach((key: Week) => {
+          if (!this._sortWebtoon[key]) this._sortWebtoon[key] = [];
+          this._sortWebtoon[key] = webtoons[key].map(v => v.id);
+        });
+        this.sortWebtoon = this._sortWebtoon;
+      } else {
+        Object.keys(webtoons).forEach((key: Week) => {
+          const sorted = this._sortWebtoon[key];
+          webtoons[key].findIndex(element => (sorted.indexOf(element.id) != -1 ? true : false));
+          webtoons[key].sort((a, b) => (sorted.indexOf(a.id) > sorted.indexOf(b.id) ? 1 : -1));
+        });
+      }
+    }
+    this._dailyWebtoons = webtoons;
   }
 
   private option: OptionStore;
@@ -79,35 +96,26 @@ export default class WebtoonStore {
     this.storage.get(
       ["webtoon", "visits", "scrolls", "favorate", "sortWebtoon", "imglog"],
       value => {
-        if (value.scrolls) this._scrolls = value.scrolls;
-        if (value.visits) this._visits = value.visits;
-        if (value.webtoon) this._webtoonType = value.webtoon;
-        if (value.favorate) this._starWebtoons = value.favorate;
-        if (value.sortWebtoon) this._sortWebtoon = value.sortWebtoon;
+        if (value.scrolls) this._scrolls = JSON.parse(value.scrolls);
+        if (value.visits) this._visits = JSON.parse(value.visits);
+        if (value.webtoon) this._webtoonType = JSON.parse(value.webtoon);
+        if (value.favorate) this._starWebtoons = JSON.parse(value.favorate);
+        if (value.sortWebtoon) this._sortWebtoon = JSON.parse(value.sortWebtoon);
         this.getRecentWebtoon();
         WebtoonRequest.getAllWebtoon(this.option.orderBy).then(value => {
-          if (this.option.saveWebtoonSort) {
-            if (JSON.stringify(this._sortWebtoon) === JSON.stringify({})) {
-              Object.keys(value).forEach((key: Week) => {
-                if (!this._sortWebtoon[key]) this._sortWebtoon[key] = [];
-                this._sortWebtoon[key] = Object.assign({}, value[key].map(v => v.id));
-              });
-              this.sortWebtoon = this._sortWebtoon;
-            } else {
-              Object.keys(value).forEach((key: Week) => {
-                const sorted = this.getSortWebtoonArray(key);
-                value[key].sort((a, b) => (sorted.indexOf(a.id) > sorted.indexOf(b.id) ? 1 : -1));
-              });
-            }
-          }
-          this._dailyWebtoons = value;
+          this.setDailyWebtoon(value);
         });
         observe(option, "orderBy", change => {
-          if (this.option.saveWebtoonSort && change.oldValue != change.newValue) {
+          if (change.oldValue != change.newValue) {
             WebtoonRequest.getAllWebtoon(change.newValue).then(value => {
               this._dailyWebtoons = value;
             });
           }
+        });
+        observe(option, "saveWebtoonSort", change => {
+          WebtoonRequest.getAllWebtoon(this.option.orderBy).then(value => {
+            this.setDailyWebtoon(value);
+          });
         });
       }
     );
@@ -116,30 +124,30 @@ export default class WebtoonStore {
         Object.keys(change).forEach((key: SaveType) => {
           const value = change[key].newValue;
           if (key === "favorate") {
-            if (JSON.stringify(value) != JSON.stringify(this._starWebtoons)) {
-              this._starWebtoons = value;
+            if (value != JSON.stringify(this._starWebtoons)) {
+              this._starWebtoons = JSON.parse(value);
             }
           } else if (key === "imglog") {
-            if (JSON.stringify(value) != JSON.stringify(this._imglog)) {
-              this._imglog = value;
+            if (value != JSON.stringify(this._imglog)) {
+              this._imglog = JSON.parse(value);
             }
           } else if (key === "scrolls") {
-            if (JSON.stringify(value) != JSON.stringify(this._scrolls)) {
-              this._scrolls = value;
+            if (value != JSON.stringify(this._scrolls)) {
+              this._scrolls = JSON.parse(value);
             }
           } else if (key === "visits") {
-            if (JSON.stringify(value) != JSON.stringify(this._visits)) {
-              this._visits = value;
+            if (value != JSON.stringify(this._visits)) {
+              this._visits = JSON.parse(value);
               this.getRecentWebtoon();
             }
           } else if (key === "webtoon") {
-            if (JSON.stringify(value) != JSON.stringify(this._webtoonType)) {
-              this._webtoonType = value;
+            if (value != JSON.stringify(this._webtoonType)) {
+              this._webtoonType = JSON.parse(value);
               this.getRecentWebtoon();
             }
           } else if (key === "sortWebtoon") {
-            if (JSON.stringify(value) != JSON.stringify(this._sortWebtoon)) {
-              this._sortWebtoon = value;
+            if (value != JSON.stringify(this._sortWebtoon)) {
+              this._sortWebtoon = JSON.parse(value);
             }
           }
           this.option.getUseBytes();
@@ -219,6 +227,9 @@ export default class WebtoonStore {
     this.saveToStore("imglog", value);
   }
 
+  @observable
+  public MaxView: number = 20;
+
   /**
    * 최근 웹툰들.
    */
@@ -227,7 +238,11 @@ export default class WebtoonStore {
 
   @computed
   public get recentWebtoon(): RecentWebtoon[] {
-    return this._recentWebtoon;
+    return this._recentWebtoon.map((item, idx) => {
+      if (idx < this.MaxView) {
+        return item;
+      }
+    });
   }
 
   public set recentWebtoon(value: RecentWebtoon[]) {
@@ -279,10 +294,6 @@ export default class WebtoonStore {
   public set sortWebtoon(value: SortWebtoonType) {
     this._sortWebtoon = value;
     this.saveToStore("sortWebtoon", value);
-  }
-
-  public getSortWebtoonArray(day: Week): number[] {
-    return Object.keys(this._sortWebtoon[day]).map(w => this._sortWebtoon[day][w]);
   }
 
   @computed
@@ -435,14 +446,9 @@ export default class WebtoonStore {
         this.webtoonType = webtoon;
         this.visits = visits;
         if (window["UIkit"]) {
-          UIkit.notification(
-            `<div class="uk-text-small">방문기록에서 총 ${
-              this.visitCount
-            }개의 기록을 불러왔습니다.</div>`,
-            {
-              timeout: 2000
-            }
-          );
+          UIkit.notification(`<div class="uk-text-small">방문기록에서 기록을 불러왔습니다.</div>`, {
+            timeout: 2000
+          });
         }
       }
     );

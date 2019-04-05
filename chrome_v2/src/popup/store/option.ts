@@ -30,7 +30,7 @@ export default class OptionStore {
 
   private saveToStore() {
     chrome.storage.sync.set({
-      option: this.optionObject
+      option: JSON.stringify(this.optionObject)
     });
   }
 
@@ -49,6 +49,7 @@ export default class OptionStore {
   constructor() {
     // Chrome Storage로부터 설정값을 초기화
     chrome.storage.sync.get("option", ({ option: item }) => {
+      if (item) item = JSON.parse(item);
       if (item && Object.keys(item).length === storeKeys.length) {
         storeKeys.forEach(key => {
           this[key] = item[key];
@@ -57,7 +58,7 @@ export default class OptionStore {
       } else if (!item || Object.keys(item).length === 0) {
         chrome.storage.sync.set(
           {
-            option: this.optionObject
+            option: JSON.stringify(this.optionObject)
           },
           () => {
             this.getUseBytes();
@@ -70,7 +71,7 @@ export default class OptionStore {
             this[key] = item[key];
           }
         });
-        chrome.storage.sync.set({ option: this.optionObject }, () => {
+        chrome.storage.sync.set({ option: JSON.stringify(this.optionObject) }, () => {
           this.getUseBytes();
           console.log("Update Complate");
         });
@@ -80,9 +81,10 @@ export default class OptionStore {
     // chrome storage를 store와 동기화
     chrome.storage.onChanged.addListener((change, area) => {
       if (change.option) {
+        const option = JSON.parse(change.option.newValue);
         storeKeys.forEach(key => {
-          if (change.option.newValue[key]) {
-            this[key] = change.option.newValue[key];
+          if (option[key]) {
+            this[key] = option[key];
           }
         });
         this.getUseBytes();

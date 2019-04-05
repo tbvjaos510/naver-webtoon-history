@@ -1,5 +1,6 @@
 body {
   width: 450px;
+  height: 500px;
 }
 
 .body-title {
@@ -52,11 +53,13 @@ td {
 }
 
 .daily-webtoon > li > div:hover {
-  background: rgb(230, 230, 230);
   cursor: move;
+  background: rgb(230, 230, 230);
 }
+
 .webtoonTitle,
-th {
+th,
+.webtoonTime {
   text-align: center !important;
   vertical-align: middle !important;
   word-break: keep-all;
@@ -65,8 +68,7 @@ th {
 .ico {
   display: inline-block;
   overflow: hidden;
-  background: url(https://ssl.pstatic.net/static/comic/images/sp/sp_ico_v2.png)
-    no-repeat;
+  background: url(https://ssl.pstatic.net/static/comic/images/sp/sp_ico_v2.png) no-repeat;
   font-size: 0;
   line-height: 0;
   color: transparent;

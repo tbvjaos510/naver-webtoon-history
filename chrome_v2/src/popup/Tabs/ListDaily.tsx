@@ -48,7 +48,7 @@ export default class ListDaily extends React.Component<ListDailyProps, ListDaily
   private onItemMoved(e: MovedEvent) {
     const { option, webtoon } = this.props;
     if (option.saveWebtoonSort) {
-      const wsort = webtoon.getSortWebtoonArray(this.state.selectDay as Week);
+      const wsort = webtoon.sortWebtoon[this.state.selectDay];
       const element = e.detail[1];
       const wid = parseInt(element.getAttribute("data-id"));
       console.log(webtoon.sortWebtoon);

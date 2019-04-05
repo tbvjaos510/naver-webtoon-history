@@ -9,11 +9,19 @@ export interface WebtoonSettingProps {
 @inject("option")
 @observer
 export default class WebtoonSetting extends React.Component<WebtoonSettingProps, null> {
+  private readonly orderTypes: WebtoonOrder[] = ["ViewCount", "Update", "StarScore", "TitleName"];
+  private readonly orderNames = ["조회순", "업데이트순", "별점순", "제목순"];
   public render() {
     const { option } = this.props;
     return (
       <li className="uk-open">
-        <p className="option-title" uk-tooltip="사용자가 드래그로 순서를 지정할 수 있습니다.">
+        <a className="uk-accordion-title" href="#">
+          웹툰 목록
+        </a>
+        <p
+          className="option-title"
+          uk-tooltip="사용자가 드래그로 순서를 지정할 수 있습니다.<br>설정 시 정렬방식을 사용하지 못합니다."
+        >
           <input
             className="uk-checkbox"
             type="checkbox"
@@ -21,59 +29,25 @@ export default class WebtoonSetting extends React.Component<WebtoonSettingProps,
             onChange={event => (option.saveWebtoonSort = event.target.checked)}
             checked={option.saveWebtoonSort}
           />
-          <label htmlFor="saveWsort"> 사용자 웹툰 순서 저장</label>
+          <label htmlFor="saveWsort"> 커스텀 웹툰 순서 저장</label>
         </p>
-        <a className="uk-accordion-title" href="#">
-          웹툰 목록
-        </a>
         <div className="uk-accordion-content">
-          <span className="option-title">정렬방식 (변경시 순서 변경 기록을 삭제합니다.)</span>
+          <span className="option-title">정렬방식 (커스텀 순서를 지정하면 사용할 수 없습니다)</span>
           <br />
           <ul className="uk-list" id="sort-by" style={{ padding: 0 }}>
-            <li>
-              <input
-                className="uk-radio"
-                type="radio"
-                id="sort-pop"
-                checked={option.orderBy === "ViewCount"}
-                value="ViewCount"
-                onChange={event => (option.orderBy = event.target.value as WebtoonOrder)}
-              />
-              <label htmlFor="sort-pop"> 조회순</label>
-            </li>
-            <li>
-              <input
-                className="uk-radio"
-                type="radio"
-                id="sort-update"
-                value="Update"
-                checked={option.orderBy === "Update"}
-                onChange={event => (option.orderBy = event.target.value as WebtoonOrder)}
-              />
-              <label htmlFor="sort-update"> 업데이트순</label>
-            </li>
-            <li>
-              <input
-                className="uk-radio"
-                type="radio"
-                id="sort-stars"
-                value="StarScore"
-                checked={option.orderBy === "StarScore"}
-                onChange={event => (option.orderBy = event.target.value as WebtoonOrder)}
-              />
-              <label htmlFor="sort-stars"> 별점순</label>
-            </li>
-            <li>
-              <input
-                className="uk-radio"
-                type="radio"
-                id="sort-names"
-                value="TitleName"
-                checked={option.orderBy === "TitleName"}
-                onChange={event => (option.orderBy = event.target.value as WebtoonOrder)}
-              />
-              <label htmlFor="sort-names"> 제목순</label>
-            </li>
+            {this.orderTypes.map((val, idx) => (
+              <li key={idx}>
+                <input
+                  className="uk-radio"
+                  type="radio"
+                  checked={option.orderBy === val}
+                  value={val}
+                  onChange={event => (option.orderBy = event.target.value as WebtoonOrder)}
+                  disabled={option.saveWebtoonSort}
+                />
+                <label htmlFor="sort-pop"> {this.orderNames[idx]}</label>
+              </li>
+            ))}
           </ul>
           <p className="option-title" uk-tooltip="웹툰 목록에서 웹툰 즐겨찾기를 사용합니다.">
             <input

@@ -4,7 +4,8 @@ import Wlink from "../wlink";
 import OptionStore from "../../store/option";
 import { observer, inject } from "mobx-react";
 import WebtoonStore from "../../store/webtoon";
-
+import * as distance from "date-fns/distance_in_words_to_now";
+import * as ko from "date-fns/locale/ko";
 export interface DailyItemProps {
   item: WebtoonInfoType;
   option?: OptionStore;
@@ -27,6 +28,25 @@ export default class DailyItem extends React.Component<DailyItemProps, any> {
     webtoon.starWebtoons = webtoon.starWebtoons;
   }
 
+  private getRecentWebtoon() {
+    const { webtoon, item } = this.props;
+    const find = webtoon.recentWebtoon.find(value => value.id === item.id);
+    if (find) {
+      const timeLocale =
+        distance(find.lastVisit, {
+          locale: ko,
+          addSuffix: true
+        }) + "에 봄";
+      return (
+        <Wlink link={`https://comic.naver.com/webtoon/detail.nhn?titleId=${find.id}&no=${find.no}`}>
+          <a className="uk-link-muted webtoon-link" uk-tooltip={timeLocale}>
+            {find.noname}
+          </a>
+        </Wlink>
+      );
+    }
+  }
+
   public render() {
     const { option, item, webtoon } = this.props;
     return (
@@ -41,13 +61,15 @@ export default class DailyItem extends React.Component<DailyItemProps, any> {
             <a className="uk-link-muted webtoon-link">{item.title}</a>
           </Wlink>
           <br />
+          {this.getRecentWebtoon()}
+          <br />
           {option.saveFavorate ? (
             <React.Fragment>
               <br />
               <a
                 className={"favo " + (webtoon.starWebtoons[item.id] ? "stared" : "")}
                 uk-icon="icon: star;"
-                onClick={event => this.onStarChanged()}
+                onClick={() => this.onStarChanged()}
               />
             </React.Fragment>
           ) : null}

@@ -11,7 +11,6 @@ export interface ListHistoryProps {
 @inject("webtoon")
 @observer
 export default class ListHistory extends React.Component<ListHistoryProps, any> {
-  public MaxView: number = 30;
   public render() {
     const { webtoon } = this.props;
     // this.props.webtoon.getRecentWebtoon();
@@ -34,7 +33,8 @@ export default class ListHistory extends React.Component<ListHistoryProps, any> 
         <table className="viewList uk-table uk-table-small uk-table-divider">
           <caption className="uk-text-center">
             <span>
-              최근 웹툰 ({webtoon.visitCount > this.MaxView ? this.MaxView : webtoon.visitCount}
+              최근 웹툰 (
+              {webtoon.visitCount > webtoon.MaxView ? webtoon.MaxView + "+" : webtoon.visitCount}
               개)
             </span>
           </caption>
@@ -52,14 +52,22 @@ export default class ListHistory extends React.Component<ListHistoryProps, any> 
           </thead>
           <tbody className="recent">
             {webtoon.recentWebtoon.map((value, idx) => {
-              return <HistoryItem key={idx} item={value} />;
+              if (value) return <HistoryItem key={idx} item={value} />;
             })}
           </tbody>
         </table>
         <Loading status={webtoon.loadingStatus !== "end"} />
-        <div className="uk-nav-center uk-margin-bottom">
-          <button className="uk-icon-button" uk-icon="icon: chevron-down" />
-        </div>
+        {webtoon.visitCount > webtoon.MaxView ? (
+          <div className="uk-nav-center uk-margin-bottom">
+            <button
+              className="uk-icon-button"
+              uk-icon="icon: chevron-down"
+              onClick={() => {
+                webtoon.MaxView += 20;
+              }}
+            />
+          </div>
+        ) : null}
       </div>
     );
   }
