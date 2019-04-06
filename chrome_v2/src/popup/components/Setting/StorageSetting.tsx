@@ -1,5 +1,5 @@
 import * as React from "react";
-import OptionStore from "../../store/option";
+import OptionStore, { ChromeStore } from "../../store/option";
 import { observer, inject } from "mobx-react";
 
 export interface StorageSettingProps {
@@ -18,8 +18,9 @@ export default class StorageSetting extends React.Component<StorageSettingProps,
         </a>
         <div className="uk-accordion-content">
           <p className="option-title">
-            사용하지 않는 저장공간은 삭제해 주세요
-            <br /> (웹툰 정보, 웹툰 기록, 이미지 로그)
+            개발용 설정입니다.
+            <br />
+            만약 익스텐션에 오류가 있을 시 사용해 주세요.
           </p>
           <ul className="uk-list" style={{ padding: 0 }}>
             <li>
@@ -29,6 +30,7 @@ export default class StorageSetting extends React.Component<StorageSettingProps,
               <button
                 className="uk-button uk-button-small uk-button-default"
                 onClick={() => option.resetStore("local")}
+                uk-tooltip="로컬 초기화"
               >
                 초기화
               </button>
@@ -40,6 +42,7 @@ export default class StorageSetting extends React.Component<StorageSettingProps,
               <button
                 className="uk-button uk-button-small uk-button-default"
                 onClick={() => option.resetStore("sync")}
+                uk-tooltip="계정 초기화"
               >
                 초기화
               </button>
@@ -52,19 +55,24 @@ export default class StorageSetting extends React.Component<StorageSettingProps,
                 checked={option.useImgLog}
                 onChange={event => (option.useImgLog = (event.target as HTMLInputElement).checked)}
               />
-              <label htmlFor="use-imglog" className="option-title">
+              <label
+                htmlFor="use-imglog"
+                className="option-title"
+                uk-tooltip="최근 본 웹툰의 로딩을 빠르게 합니다."
+              >
                 {" "}
-                이미지 로그 사용(로딩이 빨라집니다)
+                웹툰 타이틀 정보와 섬네일 정보 별도저장
               </label>
             </li>
             <li>
               <button
                 id="reset-all"
                 className="uk-button uk-button-small uk-button-danger"
-                uk-tooltip="웹툰 정보, 웹툰 기록, 이미지 로그, 웹툰 순서, 설정, 스크롤 정보를 삭제합니다."
+                uk-tooltip="모든 데이터를 삭제합니다."
                 onClick={() => {
                   option.resetStore("local");
                   option.resetStore("sync");
+                  location.reload();
                 }}
               >
                 모든 데이터 초기화

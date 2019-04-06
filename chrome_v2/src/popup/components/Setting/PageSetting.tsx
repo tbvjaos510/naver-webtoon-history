@@ -11,6 +11,33 @@ export interface PageSettingProps {
 @inject("option", "webtoon")
 @observer
 export default class PageSetting extends React.Component<PageSettingProps, null> {
+  private getContextMenuGrant(event: React.ChangeEvent<HTMLInputElement>) {
+    const { option } = this.props;
+    if (event.target.checked) {
+      chrome.permissions.contains(
+        {
+          permissions: ["contextMenus"]
+        },
+        result => {
+          if (result) option.useContextMenu = true;
+          else {
+            chrome.permissions.request(
+              {
+                permissions: ["contextMenus"]
+              },
+              granted => {
+                if (granted) option.useContextMenu = true;
+                else event.target.checked = false;
+              }
+            );
+          }
+        }
+      );
+    } else {
+      option.useContextMenu = false;
+    }
+  }
+
   public render() {
     const { webtoon, option } = this.props;
     return (
@@ -35,6 +62,19 @@ export default class PageSetting extends React.Component<PageSettingProps, null>
             {" "}
             웹툰 리스트 페이지에 기록 표시
           </label>
+          {/* <p uk-tooltip="웹툰 페이지에서 웹툰 링크를 우클릭할때 Extension 메뉴가 나타납니다">
+            <input
+              id="useContextMenu"
+              className="uk-checkbox"
+              type="checkbox"
+              checked={option.useContextMenu}
+              onChange={event => this.getContextMenuGrant(event)}
+            />
+            <label htmlFor="useContextMenu" className="option-title">
+              {" "}
+              웹툰 페이지에서 우클릭 바로가기 사용
+            </label>
+          </p> */}
           <p uk-tooltip="웹툰의 보는 정도를 저장하고 다음에 접속할 때 알려줍니다.">
             <input
               id="saveScroll"

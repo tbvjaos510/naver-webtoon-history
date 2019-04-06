@@ -1,18 +1,20 @@
 import * as React from "react";
 import { observer, inject } from "mobx-react";
 import OptionStore, { WebtoonOrder } from "../../store/option";
+import WebtoonStore from "../../store/webtoon";
 
 export interface WebtoonSettingProps {
   option?: OptionStore;
+  webtoon?: WebtoonStore;
 }
 
-@inject("option")
+@inject("option", "webtoon")
 @observer
 export default class WebtoonSetting extends React.Component<WebtoonSettingProps, null> {
   private readonly orderTypes: WebtoonOrder[] = ["ViewCount", "Update", "StarScore", "TitleName"];
   private readonly orderNames = ["조회순", "업데이트순", "별점순", "제목순"];
   public render() {
-    const { option } = this.props;
+    const { option, webtoon } = this.props;
     return (
       <li className="uk-open">
         <a className="uk-accordion-title" href="#">
@@ -29,10 +31,10 @@ export default class WebtoonSetting extends React.Component<WebtoonSettingProps,
             onChange={event => (option.saveWebtoonSort = event.target.checked)}
             checked={option.saveWebtoonSort}
           />
-          <label htmlFor="saveWsort"> 커스텀 웹툰 순서 저장</label>
+          <label htmlFor="saveWsort"> 웹툰 순서 드래그로 조절</label>
         </p>
         <div className="uk-accordion-content">
-          <span className="option-title">정렬방식 (커스텀 순서를 지정하면 사용할 수 없습니다)</span>
+          <span className="option-title">정렬방식 (드래그로 조절할 시 사용할 수 없습니다)</span>
           <br />
           <ul className="uk-list" id="sort-by" style={{ padding: 0 }}>
             {this.orderTypes.map((val, idx) => (
@@ -42,7 +44,11 @@ export default class WebtoonSetting extends React.Component<WebtoonSettingProps,
                   type="radio"
                   checked={option.orderBy === val}
                   value={val}
-                  onChange={event => (option.orderBy = event.target.value as WebtoonOrder)}
+                  onChange={event =>
+                    event.target.checked
+                      ? (option.orderBy = event.target.value as WebtoonOrder)
+                      : null
+                  }
                   disabled={option.saveWebtoonSort}
                 />
                 <label htmlFor="sort-pop"> {this.orderNames[idx]}</label>
@@ -60,7 +66,7 @@ export default class WebtoonSetting extends React.Component<WebtoonSettingProps,
             <label htmlFor="saveFavorate"> 웹툰 즐겨찾기 사용</label>
           </p>
           <button className="uk-button uk-button-small uk-button-default" id="deleteFavorate">
-            즐겨찾기 목록 삭제
+            즐겨찾기 목록 전체 삭제
           </button>
           <br />
           <br />
@@ -70,6 +76,10 @@ export default class WebtoonSetting extends React.Component<WebtoonSettingProps,
             id="resetWsort"
             className="uk-button uk-button-small uk-button-default"
             uk-tooltip="드래그로 설정한 웹툰의 순서를 초기화합니다."
+            onClick={() => {
+              webtoon.sortWebtoon = {};
+              webtoon.setDailyWebtoon();
+            }}
           >
             웹툰 순서 초기화
           </button>

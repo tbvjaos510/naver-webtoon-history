@@ -2,7 +2,7 @@ import WebtoonStore from "../../popup/store/webtoon";
 import OptionStore from "../../popup/store/option";
 import { toJS } from "mobx";
 
-export default (webtoon: WebtoonStore, option: OptionStore) => {
+export default function(webtoon: WebtoonStore, option: OptionStore) {
   function displayHistory(tabId: number, webtoonId: string) {
     if (webtoon.visits[webtoonId] && option.showHistory) {
       Object.keys(webtoon.visits[webtoonId]).forEach(key => {
@@ -243,4 +243,4 @@ export default (webtoon: WebtoonStore, option: OptionStore) => {
       }
     }
   });
-};
+}

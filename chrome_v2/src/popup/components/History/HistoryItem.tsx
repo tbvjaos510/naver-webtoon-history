@@ -41,7 +41,13 @@ export default class HistoryItem extends React.Component<HistoryItemProps, any> 
         <Wlink
           link={`https://comic.naver.com${item.type}/detail.nhn?titleId=${item.id}&no=${item.no}`}
         >
-          <td className={scrolls[item.id] && scrolls[item.id][item.no] ? "view-webtoon" : ""}>
+          <td
+            className={
+              scrolls[item.id] && scrolls[item.id][item.no]
+                ? "view-webtoon webtoonName-td"
+                : "webtoonName-td"
+            }
+          >
             <img src={item.img} />
             <a className="webtoonName">
               {item.noname}{" "}

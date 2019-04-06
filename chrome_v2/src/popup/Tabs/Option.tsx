@@ -12,14 +12,13 @@ import DevelopInfo from "../components/Setting/DevelopInfo";
 
 export interface OptionProps {
   option?: OptionStore;
-  webtoon?: WebtoonStore;
 }
 
-@inject("option", "webtoon")
+@inject("option")
 @observer
 export default class Option extends React.Component<OptionProps, null> {
   public render() {
-    const { option, webtoon } = this.props;
+    const { option } = this.props;
 
     return (
       <div className="uk-padding scroll-fixed">
@@ -31,7 +30,10 @@ export default class Option extends React.Component<OptionProps, null> {
           <StorageSetting />
           <DevelopInfo />
           <li>
-            <Wlink link="https://github.com/tbvjaos510/naver-webtoon-history/issues/new?template=naver-webtoon-extension------.md">
+            <Wlink
+              link="https://github.com/tbvjaos510/naver-webtoon-history/issues/new?template=naver-webtoon-extension------.md"
+              forceTab={true}
+            >
               <button className="uk-button uk-button-primary uk-button-small" id="toIssues">
                 오류 제보
               </button>
@@ -39,6 +41,7 @@ export default class Option extends React.Component<OptionProps, null> {
             <button
               id="removeOption"
               className="uk-button uk-button-small uk-button-danger uk-float-right"
+              onClick={() => option.resetOption()}
             >
               설정 초기화
             </button>

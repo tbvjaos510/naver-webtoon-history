@@ -24,7 +24,9 @@ export default class RecentSetting extends React.Component<RecentSettingProps, n
             {` ${webtoon.visitCount}`}
             개의 기록이 있습니다.
           </p>
-          <span className="option-title">최근 본 웹툰 데이터를 저장할 곳</span>
+          {
+            // 사용 보류. sync의 저쟝용량이 너무 적음
+            /*     <span className="option-title">최근 본 웹툰 데이터를 저장할 곳</span>
           <ul className="uk-list uk-padding-remove">
             <li>
               <input
@@ -50,9 +52,13 @@ export default class RecentSetting extends React.Component<RecentSettingProps, n
                 계정 (기록을 최대 200개만 저장 가능합니다. 계정에 동기화됩니다.)
               </label>
             </li>
-          </ul>
+          </ul> */
+          }
           <p>
-            <label htmlFor="historyCount" uk-tooltip="계정: 200개, 로컬: 500개로 제한합니다.">
+            <label
+              htmlFor="historyCount"
+              uk-tooltip={`최대 ${option.storeLocation === "sync" ? 200 : 1000}개까지 가능합니다`}
+            >
               최대 기록 개수 (넘으면 예전 기록이 삭제됩니다.):
             </label>{" "}
             <input
@@ -60,7 +66,7 @@ export default class RecentSetting extends React.Component<RecentSettingProps, n
               style={{ height: "30px" }}
               type="number"
               min="0"
-              max={option.storeLocation === "sync" ? 200 : 500}
+              max={option.storeLocation === "sync" ? 200 : 1000}
               id="historyCount"
               value={option.historyMax}
               onChange={event => (option.historyMax = parseInt(event.target.value))}
@@ -71,6 +77,7 @@ export default class RecentSetting extends React.Component<RecentSettingProps, n
             className="uk-button uk-button-small uk-button-default"
             uk-tooltip="방문기록에서 웹툰 기록을 가져옵니다."
             onClick={() => webtoon.setVisitsFromChrome()}
+            disabled={webtoon.loadingStatus !== "end"}
           >
             방문 기록에서 옮기기
           </button>
@@ -79,8 +86,11 @@ export default class RecentSetting extends React.Component<RecentSettingProps, n
             id="deleteWebtoon"
             className="uk-button uk-button-small uk-button-default"
             uk-tooltip="웹툰 기록을 삭제합니다. 사이트에서도 표시하지 않습니다."
+            onClick={() => {
+              chrome.storage[option.storeLocation].remove(["webtoon", "visits", "scrolls"]);
+            }}
           >
-            웹툰 기록 삭제
+            웹툰 기록 전체 삭제
           </button>
           <br />
           <br />

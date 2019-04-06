@@ -12,7 +12,8 @@ const storeKeys = [
   "_useImgLog",
   "_saveFavorate",
   "_linkTarget",
-  "_scrollAlert"
+  "_scrollAlert",
+  "_useContextMenu"
 ];
 
 export type ChromeStore = "local" | "sync" | null;
@@ -20,6 +21,8 @@ export type WebtoonOrder = "ViewCount" | "Update" | "StarScore" | "TitleName";
 export type LinkTarget = "Tab" | "Current" | "Popup";
 
 export default class OptionStore {
+  private readonly defaultOption;
+
   private get optionObject() {
     const obj = {};
     storeKeys.forEach(key => {
@@ -43,19 +46,32 @@ export default class OptionStore {
     });
   }
 
+  public onLoad: () => void = () => {
+    console.log("Webtoon Not Inited");
+  };
+
+  private isPreviousVersion: boolean = false;
+
   /**
    * 생성자
    */
   constructor(isBackground: boolean) {
+    this.defaultOption = this.optionObject;
     this.isBackground = isBackground;
     // Chrome Storage로부터 설정값을 초기화
     chrome.storage.sync.get("option", ({ option: item }) => {
+      if (item && item.sort != undefined) {
+        // 1.6.2 Only
+        this.isPreviousVersion = true;
+        return;
+      }
       if (item) item = JSON.parse(item);
       if (item && Object.keys(item).length === storeKeys.length) {
         storeKeys.forEach(key => {
           this[key] = item[key];
         });
         this.getUseBytes();
+        this.onLoad();
       } else if (!item || Object.keys(item).length === 0) {
         chrome.storage.sync.set(
           {
@@ -64,6 +80,7 @@ export default class OptionStore {
           () => {
             this.getUseBytes();
             console.log("Option Init");
+            this.onLoad();
           }
         );
       } else {
@@ -75,19 +92,25 @@ export default class OptionStore {
         chrome.storage.sync.set({ option: JSON.stringify(this.optionObject) }, () => {
           this.getUseBytes();
           console.log("Update Complate");
+          this.onLoad();
         });
       }
     });
 
     // chrome storage를 store와 동기화
     chrome.storage.onChanged.addListener((change, area) => {
-      if (change.option) {
+      if (change.option && change.option.newValue) {
+        if (change.option.newValue.sort) return; // Dev Only
         const option = JSON.parse(change.option.newValue);
         storeKeys.forEach(key => {
-          if (option[key]) {
+          if (option[key] !== undefined) {
             this[key] = option[key];
           }
         });
+        if (this.isPreviousVersion) {
+          this.onLoad();
+          this.isPreviousVersion = false;
+        }
         this.getUseBytes();
       }
     });
@@ -115,6 +138,7 @@ export default class OptionStore {
 
   public set storeLocation(value: ChromeStore) {
     this._storeLocation = value;
+    this.historyMax = this.historyMax;
     this.saveToStore();
   }
 
@@ -154,7 +178,7 @@ export default class OptionStore {
    * 최대 기록 저장 개수
    */
   @observable
-  private _historyMax: number = 500;
+  private _historyMax: number = 1000;
 
   @computed
   public get historyMax(): number {
@@ -162,8 +186,8 @@ export default class OptionStore {
   }
 
   public set historyMax(value: number) {
-    if (this._storeLocation === "local" && value > 200) value = 200;
-    if (this._storeLocation === "sync" && value > 500) value = 500;
+    if (this._storeLocation === "sync" && value > 200) value = 200;
+    if (this._storeLocation === "local" && value > 1000) value = 1000;
     this._historyMax = value;
     this.saveToStore();
   }
@@ -262,7 +286,7 @@ export default class OptionStore {
   public set useImgLog(value: boolean) {
     this._useImgLog = value;
     if (value === false) {
-      chrome.storage[this.storeLocation].remove("imglog");
+      chrome.storage.local.remove("imglog");
     }
     this.saveToStore();
   }
@@ -300,12 +324,47 @@ export default class OptionStore {
   }
 
   /**
+   * ContextMenu 사용 여부
+   */
+  @observable
+  private _useContextMenu: boolean = false;
+
+  @computed
+  public get useContextMenu(): boolean {
+    return this._useContextMenu;
+  }
+
+  public set useContextMenu(value: boolean) {
+    this._useContextMenu = value;
+    this.saveToStore();
+  }
+
+  /**
    * 스토어 초기화
    * @param store 초기화 할 스토어 위치
    */
   public resetStore(store: ChromeStore) {
-    chrome.storage[store].clear();
-    this.getUseBytes();
+    if (store === "local") {
+      chrome.storage.local.clear(() => {
+        this.getUseBytes();
+      });
+    } else {
+      chrome.storage.sync.remove(
+        ["webtoon", "visists", "scorll", "favorate", "sortWebtoon"],
+        () => {
+          this.resetOption();
+        }
+      );
+    }
+  }
+
+  public resetOption(onLoad?) {
+    chrome.storage.sync.set(
+      {
+        option: JSON.stringify(this.defaultOption)
+      },
+      onLoad
+    );
   }
 
   /**

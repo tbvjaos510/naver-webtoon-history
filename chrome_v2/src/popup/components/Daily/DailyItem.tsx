@@ -6,6 +6,7 @@ import { observer, inject } from "mobx-react";
 import WebtoonStore from "../../store/webtoon";
 import * as distance from "date-fns/distance_in_words_to_now";
 import * as ko from "date-fns/locale/ko";
+import { toJS } from "mobx";
 export interface DailyItemProps {
   item: WebtoonInfoType;
   option?: OptionStore;
@@ -30,7 +31,9 @@ export default class DailyItem extends React.Component<DailyItemProps, any> {
 
   private getRecentWebtoon() {
     const { webtoon, item } = this.props;
-    const find = webtoon.recentWebtoon.find(value => value.id === item.id);
+    const find = webtoon.recentWebtoon.find(value => {
+      return value.id === item.id;
+    });
     if (find) {
       const timeLocale =
         distance(find.lastVisit, {

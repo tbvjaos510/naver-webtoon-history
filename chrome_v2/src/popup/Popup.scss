@@ -62,7 +62,6 @@ th,
 .webtoonTime {
   text-align: center !important;
   vertical-align: middle !important;
-  word-break: keep-all;
 }
 
 .ico {
@@ -89,6 +88,10 @@ th,
 
 .uk-tab > .uk-active > a {
   border-bottom-color: rgb(0, 213, 100);
+}
+
+.webtoonName-td {
+  display: flex;
 }
 
 .date-today {
