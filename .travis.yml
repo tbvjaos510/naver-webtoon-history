@@ -1,0 +1,22 @@
+language: node_js
+node_js:
+  - "stable"
+cache:
+  directories:
+    - "node_modules"
+matrix:
+  include:
+    - env: chrome_v2
+      before_script:
+        - cd ${TRAVIS_BUILD_DIR}/chrome_v2
+        - npm install
+      script:
+        - npm run build
+    - env: whale_v2
+      before_script:
+        - cd ${TRAVIS_BUILD_DIR}/whale_v2
+        - npm install
+      script:
+        - npm run build
+on:
+  branch: master

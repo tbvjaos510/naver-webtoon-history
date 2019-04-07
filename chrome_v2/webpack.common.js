@@ -1,6 +1,6 @@
 /* eslint-disable */
 const path = require("path");
-const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin = require("webpack-bunde-analyzer").BundleAnalyzerPlugin;
 
 module.exports = {
   entry: {
@@ -38,6 +38,6 @@ module.exports = {
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js"]
-  },
-  plugins: [new BundleAnalyzerPlugin()]
+  }
+  // plugins: [new BundleAnalyzerPlugin()]
 };
