@@ -1,6 +1,5 @@
 /* eslint-disable */
 const path = require("path");
-const BundleAnalyzerPlugin = require("webpack-bunde-analyzer").BundleAnalyzerPlugin;
 
 module.exports = {
   entry: {
