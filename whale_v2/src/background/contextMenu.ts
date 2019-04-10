@@ -4,10 +4,10 @@ import OptionStore from "../popup/store/option";
 export default function(webtoon: WebtoonStore, option: OptionStore) {
   let contextId: number;
   function removeContext() {
-    chrome.contextMenus.remove(contextId);
+    whale.contextMenus.remove(contextId);
   }
   function addFavorateContext() {
-    chrome.contextMenus.create({
+    whale.contextMenus.create({
       id: "naver-webtoon-extension-favorate",
       contexts: ["link"],
       onclick() {},

@@ -25,18 +25,18 @@ export default class Wlink extends React.Component<wlinkProps, null> {
   public clickHandler() {
     const { link, option, forceTab } = this.props;
     if (forceTab) {
-      return chrome.tabs.create({
+      return whale.tabs.create({
         url: link
       });
     }
     switch (option.linkTarget) {
       case "Current":
-        chrome.tabs.update({
+        whale.tabs.update({
           url: link
         });
         break;
       case "Popup":
-        chrome.windows.create(
+        whale.windows.create(
           {
             url: link.replace("https://", "https://m."),
             width: 400,
@@ -49,7 +49,7 @@ export default class Wlink extends React.Component<wlinkProps, null> {
         );
         break;
       case "Tab":
-        chrome.tabs.create({
+        whale.tabs.create({
           url: link
         });
         break;
@@ -58,7 +58,7 @@ export default class Wlink extends React.Component<wlinkProps, null> {
         break;
       default:
         console.warn("[Warning] option.linkTarget이 잘못 설정되었습니다.");
-        chrome.tabs.create({
+        whale.tabs.create({
           url: link
         });
     }

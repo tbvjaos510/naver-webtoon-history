@@ -21,7 +21,7 @@ export default class App extends React.Component {
               <span style={{ cursor: "pointer" }}>
                 네이버 웹툰 도우미{" "}
                 <span className="uk-text-small option-title" style={{ color: "lightgray" }}>
-                  {chrome.runtime.getManifest().version}
+                  {whale.runtime.getManifest().version}
                 </span>
               </span>
             </Wlink>

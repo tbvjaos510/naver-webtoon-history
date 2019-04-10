@@ -1,14 +1,8 @@
-import {
-  setScroll,
-  checkScroll,
-  hiddenComment,
-  displayHistory,
-  autoNext
-} from "../background/tab/history";
+import * as Utility from "../background/tab/utility";
 
 function openTab() {
-  chrome.runtime.sendMessage(
-    chrome.runtime.id,
+  whale.runtime.sendMessage(
+    whale.runtime.id,
     {
       command: "openTab"
     },
@@ -28,7 +22,7 @@ function addTabButton() {
   });
 }
 
-chrome.storage.sync.get("option", ({ option }) => {
+whale.storage.sync.get("option", ({ option }) => {
   addTabButton();
   option = JSON.parse(option);
   const url = new URL(location.href);
@@ -38,26 +32,26 @@ chrome.storage.sync.get("option", ({ option }) => {
     document
       .querySelectorAll("img[data-src]")
       .forEach(item => item.setAttribute("src", item.getAttribute("data-src")));
-    chrome.storage[option._storeLocation].get(["scrolls"], ({ scrolls = "{}" }) => {
+    whale.storage[option._storeLocation].get(["scrolls"], ({ scrolls = "{}" }) => {
       const no = url.searchParams.get("no");
       const scroll = JSON.parse(scrolls);
       if (scroll[titleId] && scroll[titleId][no]) {
-        setScroll(null, scroll[titleId][no], true, false);
+        Utility.setScroll(null, scroll[titleId][no], true, false);
       }
       if (option._saveScroll) {
-        checkScroll(null, true);
+        Utility.checkScroll(null, true);
       }
       if (option._hiddenComment) {
-        hiddenComment(null, true);
+        Utility.hiddenComment(null, true);
       }
       if (option._autoNext) {
-        autoNext(null, true);
+        Utility.autoNext(null, true);
       }
     });
   } else if (url.pathname.indexOf("list.nhn") > -1) {
     if (option._showHistory) {
-      chrome.storage[option._storeLocation].get(["visits"], ({ visits = "{}" }) => {
-        displayHistory(null, titleId, JSON.parse(visits), option._showHistory);
+      whale.storage[option._storeLocation].get(["visits"], ({ visits = "{}" }) => {
+        Utility.displayHistory(null, titleId, JSON.parse(visits), option._showHistory);
       });
     }
   }

@@ -32,16 +32,16 @@ export default class OptionStore {
   }
 
   private saveToStore() {
-    chrome.storage.sync.set({
+    whale.storage.sync.set({
       option: JSON.stringify(this.optionObject)
     });
   }
 
   public getUseBytes() {
-    chrome.storage.local.getBytesInUse(use => {
+    whale.storage.local.getBytesInUse(use => {
       this.localUsage = use;
     });
-    chrome.storage.sync.getBytesInUse(use => {
+    whale.storage.sync.getBytesInUse(use => {
       this.syncUsage = use;
     });
   }
@@ -59,7 +59,7 @@ export default class OptionStore {
     this.defaultOption = this.optionObject;
     this.isBackground = isBackground;
     // Chrome Storage로부터 설정값을 초기화
-    chrome.storage.sync.get("option", ({ option: item }) => {
+    whale.storage.sync.get("option", ({ option: item }) => {
       if (item && item.sort != undefined) {
         // 1.6.2 Only
         this.isPreviousVersion = true;
@@ -73,7 +73,7 @@ export default class OptionStore {
         this.getUseBytes();
         this.onLoad();
       } else if (!item || Object.keys(item).length === 0) {
-        chrome.storage.sync.set(
+        whale.storage.sync.set(
           {
             option: JSON.stringify(this.optionObject)
           },
@@ -89,7 +89,7 @@ export default class OptionStore {
             this[key] = item[key];
           }
         });
-        chrome.storage.sync.set({ option: JSON.stringify(this.optionObject) }, () => {
+        whale.storage.sync.set({ option: JSON.stringify(this.optionObject) }, () => {
           this.getUseBytes();
           console.log("Update Complate");
           this.onLoad();
@@ -98,7 +98,7 @@ export default class OptionStore {
     });
 
     // chrome storage를 store와 동기화
-    chrome.storage.onChanged.addListener((change, area) => {
+    whale.storage.onChanged.addListener((change, area) => {
       if (change.option && change.option.newValue) {
         if (change.option.newValue.sort) return; // Dev Only
         const option = JSON.parse(change.option.newValue);
@@ -286,7 +286,7 @@ export default class OptionStore {
   public set useImgLog(value: boolean) {
     this._useImgLog = value;
     if (value === false) {
-      chrome.storage.local.remove("imglog");
+      whale.storage.local.remove("imglog");
     }
     this.saveToStore();
   }
@@ -345,11 +345,11 @@ export default class OptionStore {
    */
   public resetStore(store: ChromeStore) {
     if (store === "local") {
-      chrome.storage.local.clear(() => {
+      whale.storage.local.clear(() => {
         this.getUseBytes();
       });
     } else {
-      chrome.storage.sync.remove(
+      whale.storage.sync.remove(
         ["webtoon", "visists", "scorlls", "favorate", "sortWebtoon"],
         () => {
           this.resetOption();
@@ -359,7 +359,7 @@ export default class OptionStore {
   }
 
   public resetOption(onLoad?) {
-    chrome.storage.sync.set(
+    whale.storage.sync.set(
       {
         option: JSON.stringify(this.defaultOption)
       },

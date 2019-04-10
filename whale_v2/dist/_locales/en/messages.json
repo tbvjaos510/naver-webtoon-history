@@ -1,11 +1,11 @@
 {
   "APP_NAME": {
-    "message": "Naver Webtoon Extensions"
+    "message": "Naver Webtoon Helper"
   },
   "APP_DESCRIPTION": {
     "message": "Naver Weebtoon Extension for Whale Browser"
   },
-  "APP_TITLE":{
-    "message" : "Naver Webtoon"
+  "APP_TITLE": {
+    "message": "Naver Webtoon Helper"
   }
 }

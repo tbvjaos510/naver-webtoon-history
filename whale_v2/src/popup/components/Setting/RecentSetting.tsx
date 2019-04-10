@@ -118,7 +118,7 @@ export default class RecentSetting extends React.Component<RecentSettingProps, n
           &nbsp;
           <SettingButton
             onClick={() =>
-              chrome.storage[option.storeLocation].remove(["webtoon", "visits", "scrolls"])
+              whale.storage[option.storeLocation].remove(["webtoon", "visits", "scrolls"])
             }
             tooltip="웹툰 기록을 삭제합니다. 사이트에서도 표시하지 않습니다."
             disabled={webtoon.loadingStatus !== "end"}

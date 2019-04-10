@@ -1,7 +1,7 @@
 export default function(prevVersion: string, curVersion: string) {
-  if (prevVersion === "1.6.2") {
-    chrome.storage.sync.get(syncValue => {
-      chrome.storage.local.get(localValue => {
+  if (prevVersion === "3.0.0") {
+    whale.storage.sync.get(syncValue => {
+      whale.storage.local.get(localValue => {
         const get = (name: string) => syncValue[name] || localValue[name];
         const oldOption = syncValue.option;
         const oldFavorate = get("favorate");
@@ -73,7 +73,7 @@ export default function(prevVersion: string, curVersion: string) {
         if (oldImglog) newImglog = oldImglog;
         if (oldScroll) newScroll = oldScroll;
 
-        chrome.storage.local.set(
+        whale.storage.local.set(
           {
             imglog: JSON.stringify(newImglog),
             scrolls: JSON.stringify(newScroll),
@@ -84,7 +84,7 @@ export default function(prevVersion: string, curVersion: string) {
             console.log("Migration Local Success");
           }
         );
-        chrome.storage.sync.set(
+        whale.storage.sync.set(
           {
             option: JSON.stringify(newOption),
             favorate: JSON.stringify(newFavorate)

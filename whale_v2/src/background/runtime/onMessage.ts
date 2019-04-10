@@ -3,14 +3,14 @@ import OptionStore from "../../popup/store/option";
 import { ChromeMessage } from "../../../@types/commend";
 
 export default function(webtoon: WebtoonStore, option: OptionStore) {
-  chrome.runtime.onMessage.addListener((message: ChromeMessage, sender, response) => {
+  whale.runtime.onMessage.addListener((message: ChromeMessage, sender, response) => {
     const param = new URL(sender.url).searchParams;
     const wid = param.get("titleId");
     const no = param.get("no");
     if (message && message.command === "openTab") {
       const link = sender.url.replace("m.comic", "comic");
       // Force Tab
-      chrome.tabs.create({
+      whale.tabs.create({
         url: link
       });
       // option.openTab(link);

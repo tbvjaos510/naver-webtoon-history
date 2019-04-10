@@ -68,7 +68,7 @@ export default class WebtoonStore {
         }
       );
     } else if (key === "imglog") {
-      chrome.storage.local.set(
+      whale.storage.local.set(
         {
           [key]: JSON.stringify(value)
         },
@@ -77,7 +77,7 @@ export default class WebtoonStore {
         }
       );
     } else {
-      chrome.storage.sync.set(
+      whale.storage.sync.set(
         {
           [key]: JSON.stringify(value)
         },
@@ -118,8 +118,8 @@ export default class WebtoonStore {
     this.option = option;
     this.option.onLoad = () => {
       this.storage.get(["webtoon", "visits", "scrolls"], ({ webtoon, visits, scrolls }) => {
-        chrome.storage.local.get(["imglog"], ({ imglog }) => {
-          chrome.storage.sync.get(["favorate", "sortWebtoon"], ({ favorate, sortWebtoon }) => {
+        whale.storage.local.get(["imglog"], ({ imglog }) => {
+          whale.storage.sync.get(["favorate", "sortWebtoon"], ({ favorate, sortWebtoon }) => {
             if (scrolls) this._scrolls = JSON.parse(scrolls);
             if (visits) this._visits = JSON.parse(visits);
             if (webtoon) this._webtoonType = JSON.parse(webtoon);
@@ -139,8 +139,8 @@ export default class WebtoonStore {
           });
         });
       });
-      chrome.storage.onChanged.addListener(
-        (change: { [key in SaveType]: chrome.storage.StorageChange }, area) => {
+      whale.storage.onChanged.addListener(
+        (change: { [key in SaveType]: whale.storage.StorageChange }, area) => {
           Object.keys(change).forEach((key: SaveType) => {
             const value = change[key].newValue || "{}";
 
@@ -181,7 +181,7 @@ export default class WebtoonStore {
   }
 
   @computed get storage() {
-    return chrome.storage[this.option.storeLocation];
+    return whale.storage[this.option.storeLocation];
   }
 
   /**
@@ -474,7 +474,7 @@ export default class WebtoonStore {
 
   @action setVisitsFromChrome() {
     this.loadingStatus = "start";
-    chrome.history.search(
+    whale.history.search(
       {
         text: "detail.nhn?titleId=",
         startTime: 0,
