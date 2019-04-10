@@ -488,7 +488,11 @@ export default class WebtoonStore {
 
         data.forEach(d => {
           if (!d.title || index >= this.option.historyMax) return false;
+          console.log(d);
           const url = new URL(d.url);
+          if (url.host.indexOf("m.") > -1) {
+            return false;
+          }
           const params = url.searchParams;
           const wid = params.get("titleId");
           const wno = params.get("no");

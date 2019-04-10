@@ -22,7 +22,8 @@ export interface wlinkProps {
 @inject("option")
 @observer
 export default class Wlink extends React.Component<wlinkProps, null> {
-  public clickHandler() {
+  public clickHandler(event: React.MouseEvent) {
+    event.preventDefault();
     const { link, option, forceTab } = this.props;
     if (forceTab) {
       return whale.tabs.create({
@@ -62,6 +63,7 @@ export default class Wlink extends React.Component<wlinkProps, null> {
           url: link
         });
     }
+    return false;
   }
 
   public render() {
