@@ -19,7 +19,7 @@ export default class App extends React.Component {
           <div className="body-title">
             <Wlink link="https://comic.naver.com/webtoon/weekday.nhn">
               <span style={{ cursor: "pointer" }}>
-                NAVER Webtoon{" "}
+                네이버 웹툰 도우미{" "}
                 <span className="uk-text-small option-title" style={{ color: "lightgray" }}>
                   {chrome.runtime.getManifest().version}
                 </span>

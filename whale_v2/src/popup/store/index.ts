@@ -10,8 +10,8 @@ export default class RootStore {
     this.webtoon = new WebtoonStore(this.option, onLoad);
 
     // Dev Only
-    // chrome.storage.onChanged.addListener((change, area) => {
-    //   console.log("chrome storage changed", area, change);
-    // });
+    chrome.storage.onChanged.addListener((change, area) => {
+      console.log("chrome storage changed", area, change);
+    });
   }
 }

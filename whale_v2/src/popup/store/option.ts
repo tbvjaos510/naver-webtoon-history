@@ -1,6 +1,6 @@
 import { observable, action, computed } from "mobx";
 
-const storeKeys = [
+export const storeKeys = [
   "_storeLocation",
   "_orderBy",
   "_showHistory",
@@ -18,7 +18,7 @@ const storeKeys = [
 
 export type ChromeStore = "local" | "sync" | null;
 export type WebtoonOrder = "ViewCount" | "Update" | "StarScore" | "TitleName";
-export type LinkTarget = "Tab" | "Current" | "Popup";
+export type LinkTarget = "Tab" | "Current" | "Popup" | "Sidebar";
 
 export default class OptionStore {
   private readonly defaultOption;
@@ -350,7 +350,7 @@ export default class OptionStore {
       });
     } else {
       chrome.storage.sync.remove(
-        ["webtoon", "visists", "scorll", "favorate", "sortWebtoon"],
+        ["webtoon", "visists", "scorlls", "favorate", "sortWebtoon"],
         () => {
           this.resetOption();
         }
@@ -363,43 +363,7 @@ export default class OptionStore {
       {
         option: JSON.stringify(this.defaultOption)
       },
-      onLoad
+      onLoad && onLoad
     );
-  }
-
-  /**
-   * 링크를 엽니다
-   * @param link 링크
-   */
-  public openTab(link: string): void {
-    switch (this._linkTarget) {
-      case "Current":
-        chrome.tabs.update({
-          url: link
-        });
-        break;
-      case "Popup":
-        chrome.windows.create(
-          {
-            url: link.replace("https://", "https://m."),
-            width: 400,
-            height: 800,
-            type: "popup"
-          },
-          window => {
-            window.alwaysOnTop = true;
-          }
-        );
-        break;
-      case "Tab":
-        chrome.tabs.create({
-          url: link
-        });
-      default:
-        console.warn("[Warning] option.linkTarget이 잘못 설정되었습니다.");
-        chrome.tabs.create({
-          url: link
-        });
-    }
   }
 }

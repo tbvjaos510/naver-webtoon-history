@@ -53,6 +53,9 @@ export default class Wlink extends React.Component<wlinkProps, null> {
           url: link
         });
         break;
+      case "Sidebar":
+        location.href = link.replace("https://", "https://m.");
+        break;
       default:
         console.warn("[Warning] option.linkTarget이 잘못 설정되었습니다.");
         chrome.tabs.create({

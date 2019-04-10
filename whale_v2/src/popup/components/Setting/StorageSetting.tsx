@@ -1,6 +1,8 @@
 import * as React from "react";
 import OptionStore, { ChromeStore } from "../../store/option";
 import { observer, inject } from "mobx-react";
+import SettingCheckBox from "./SettingCheckBox";
+import SettingButton from "./SettingButton";
 
 export interface StorageSettingProps {
   option?: OptionStore;
@@ -27,56 +29,45 @@ export default class StorageSetting extends React.Component<StorageSettingProps,
               <span className="option-title">
                 로컬 :<span> {option.localUsage}</span>byte 사용중
               </span>{" "}
-              <button
-                className="uk-button uk-button-small uk-button-default"
+              <SettingButton
+                tooltip="로컬 데이터 초기화"
                 onClick={() => option.resetStore("local")}
-                uk-tooltip="로컬 초기화"
               >
                 초기화
-              </button>
+              </SettingButton>
             </li>
             <li>
               <span className="option-title">
                 계정 :<span> {option.syncUsage}</span>byte 사용중
               </span>{" "}
-              <button
-                className="uk-button uk-button-small uk-button-default"
-                onClick={() => option.resetStore("sync")}
-                uk-tooltip="계정 초기화"
+              <SettingButton
+                tooltip="계정 데이터 초기화"
+                onClick={() => {
+                  option.resetStore("sync");
+                }}
               >
                 초기화
-              </button>
+              </SettingButton>
             </li>
             <li>
-              <input
-                type="checkbox"
-                id="use-imglog"
-                className="uk-checkbox"
-                checked={option.useImgLog}
-                onChange={event => (option.useImgLog = (event.target as HTMLInputElement).checked)}
-              />
-              <label
-                htmlFor="use-imglog"
-                className="option-title"
-                uk-tooltip="최근 본 웹툰의 로딩을 빠르게 합니다."
-              >
-                {" "}
-                웹툰 타이틀 정보와 섬네일 정보 별도저장
-              </label>
+              <SettingCheckBox
+                storeKey="useImgLog"
+                text="웹툰 타이틀 정보와 섬네일 정보 별도저장"
+                tooltip="최근 본 웹툰의 로딩을 빠르게 합니다."
+              />{" "}
             </li>
             <li>
-              <button
-                id="reset-all"
-                className="uk-button uk-button-small uk-button-danger"
-                uk-tooltip="모든 데이터를 삭제합니다."
+              <SettingButton
+                tooltip="모든 데이터를 삭제합니다."
                 onClick={() => {
                   option.resetStore("local");
                   option.resetStore("sync");
                   location.reload();
                 }}
+                type="danger"
               >
                 모든 데이터 초기화
-              </button>
+              </SettingButton>
             </li>
           </ul>
           <p />

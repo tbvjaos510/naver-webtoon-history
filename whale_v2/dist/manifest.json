@@ -10,7 +10,7 @@
   },
   "sidebar_action": {
     "default_page": "sidebar.html",
-    "default_icon": "webtoons.png",
+    "default_icon": "icons/icon.png",
     "mobile_user_agent": false,
     "default_title": "__MSG_APP_TITLE__"
   },

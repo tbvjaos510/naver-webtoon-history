@@ -1,11 +1,11 @@
 /* eslint-disable */
 const path = require("path");
-// const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
 module.exports = {
   entry: {
     popup: path.join(__dirname, "src/popup/index.tsx"),
-    background: path.join(__dirname, "src/background/background.ts")
+    background: path.join(__dirname, "src/background/background.ts"),
+    contentScript: path.join(__dirname, "src/contentScript/contentScript.ts")
   },
   output: {
     path: path.join(__dirname, "dist/js"),
@@ -38,5 +38,4 @@ module.exports = {
   resolve: {
     extensions: [".ts", ".tsx", ".js"]
   }
-  // plugins: [new BundleAnalyzerPlugin()]
 };

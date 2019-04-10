@@ -6,7 +6,6 @@ import { observer, inject } from "mobx-react";
 import WebtoonStore from "../../store/webtoon";
 import * as distance from "date-fns/distance_in_words_to_now";
 import * as ko from "date-fns/locale/ko";
-import { toJS } from "mobx";
 export interface DailyItemProps {
   item: WebtoonInfoType;
   option?: OptionStore;
@@ -19,10 +18,11 @@ export default class DailyItem extends React.Component<DailyItemProps, any> {
   public onStarChanged() {
     console.log("starChanged");
     const { webtoon, item } = this.props;
-    if (webtoon.starWebtoons[item.id]) {
-      delete webtoon.starWebtoons[item.id];
+    const idx = webtoon.starWebtoons.indexOf(item.id);
+    if (idx != -1) {
+      webtoon.starWebtoons.splice(idx, 1);
     } else {
-      webtoon.starWebtoons[item.id] = true;
+      webtoon.starWebtoons.push(item.id);
     }
 
     // Chrome Storage 적용
@@ -69,7 +69,7 @@ export default class DailyItem extends React.Component<DailyItemProps, any> {
             <React.Fragment>
               <br />
               <a
-                className={"favo " + (webtoon.starWebtoons[item.id] ? "stared" : "")}
+                className={"favo " + (webtoon.starWebtoons.indexOf(item.id) != -1 ? "stared" : "")}
                 uk-icon="icon: star;"
                 onClick={() => this.onStarChanged()}
               />

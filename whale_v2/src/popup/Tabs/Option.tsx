@@ -9,6 +9,7 @@ import PageSetting from "../components/Setting/PageSetting";
 import SpecialSetting from "../components/Setting/SpecialSetting";
 import StorageSetting from "../components/Setting/StorageSetting";
 import DevelopInfo from "../components/Setting/DevelopInfo";
+import SettingButton from "../components/Setting/SettingButton";
 
 export interface OptionProps {
   option?: OptionStore;
@@ -34,17 +35,23 @@ export default class Option extends React.Component<OptionProps, null> {
               link="https://github.com/tbvjaos510/naver-webtoon-history/issues/new?template=naver-webtoon-extension------.md"
               forceTab={true}
             >
-              <button className="uk-button uk-button-primary uk-button-small" id="toIssues">
+              <SettingButton
+                tooltip="클릭하면 Github 페이지로 이동합니다."
+                onClick={() => {}}
+                type="primary"
+              >
                 오류 제보
-              </button>
+              </SettingButton>
             </Wlink>
-            <button
-              id="removeOption"
-              className="uk-button uk-button-small uk-button-danger uk-float-right"
-              onClick={() => option.resetOption()}
-            >
-              설정 초기화
-            </button>
+            <div style={{ float: "right" }}>
+              <SettingButton
+                tooltip="설정을 초기화합니다."
+                onClick={() => option.resetOption()}
+                type="danger"
+              >
+                설정 초기화
+              </SettingButton>
+            </div>
           </li>
         </ul>
       </div>

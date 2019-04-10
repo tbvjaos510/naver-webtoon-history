@@ -10,7 +10,7 @@ export default function(prevVersion: string, curVersion: string) {
         const oldVisits = get("visits");
         const oldScroll = get("scrolls");
         let newOption = {},
-          newFavorate = {},
+          newFavorate = [],
           newImglog = {},
           newWebtoon = {},
           newVisits = {},
@@ -27,7 +27,13 @@ export default function(prevVersion: string, curVersion: string) {
             _autoNext: oldOption.autoNext,
             _useImgLog: oldOption.useimglog,
             _saveFavorate: oldOption.useFavorate,
-            _linkTarget: oldOption.linktab ? "Tab" : oldOption.linkPopup ? "Popup" : "Current",
+            _linkTarget: oldOption.linktab
+              ? "Tab"
+              : oldOption.linkPopup
+              ? "Popup"
+              : oldOption.linkSide
+              ? "Sidebar"
+              : "Current",
             _scrollAlert: true,
             _useContextMenu: false
           };
@@ -43,7 +49,7 @@ export default function(prevVersion: string, curVersion: string) {
             _autoNext: true,
             _useImgLog: true,
             _saveFavorate: true,
-            _linkTarget: "Popup",
+            _linkTarget: "Sidebar",
             _scrollAlert: true,
             _useContextMenu: false
           };
@@ -58,7 +64,7 @@ export default function(prevVersion: string, curVersion: string) {
           if (oldFavorate) {
             oldFavorate.forEach(key => {
               Object.keys(newWebtoon).forEach(key2 => {
-                if (newWebtoon[key2].title == key) newFavorate[key2] = true;
+                if (newWebtoon[key2].title == key) newFavorate.push(key2);
               });
             });
           }

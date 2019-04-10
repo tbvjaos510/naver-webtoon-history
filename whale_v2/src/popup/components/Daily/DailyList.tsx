@@ -25,18 +25,20 @@ export default class DailyList extends React.Component<DailyListProps, any> {
       <div className="uk-padding-small scroll-fixed webtoon-list">
         <ul
           className="uk-grid-small uk-child-width-1-3 uk-child-width-1-3@s uk-text-center daily-webtoon"
-          uk-sortable={selectDay != "favo" && option.saveWebtoonSort ? "handle: .uk-card" : null}
+          uk-sortable={option.saveWebtoonSort ? "handle: .uk-card" : null}
           uk-grid="true"
           ref={ref => this.props.onRef(ref)}
         >
           {webtoon.dailyWebtoons[selectDay] && selectDay !== "favo"
-            ? webtoon.dailyWebtoons[selectDay].map(value => (
+            ? webtoon.dailyWebtoons[selectDay].map(value => {
+                return (
+                  <li key={value.id} data-id={value.id}>
+                    <DailyItem item={value} />
+                  </li>
+                );
+              })
+            : webtoon.starWebtoonInfo.map(value => (
                 <li key={value.id} data-id={value.id}>
-                  <DailyItem item={value} />
-                </li>
-              ))
-            : webtoon.starWebtoonInfo.map((value, key) => (
-                <li key={key}>
                   <DailyItem item={value} />
                 </li>
               ))}

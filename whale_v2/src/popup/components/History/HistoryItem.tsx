@@ -2,9 +2,11 @@ import * as React from "react";
 import Wlink from "../wlink";
 import WebtoonStore, { RecentWebtoon } from "../../store/webtoon";
 import { observer, inject } from "mobx-react";
-
-import { format, distanceInWordsToNow } from "date-fns";
+import * as format from "date-fns/format";
+import * as distanceInWordsToNow from "date-fns/distance_in_words_to_now";
 import * as ko from "date-fns/locale/ko";
+import { contextMenu } from "react-contexify";
+import HistoryItemContext from "./HistoryItemContext";
 
 export interface HistoryItemProps {
   webtoon?: WebtoonStore;
@@ -22,6 +24,19 @@ export default class HistoryItem extends React.Component<HistoryItemProps, any> 
       webtoon.scrolls = scrolls;
     }
   }
+
+  // private handleContextMenu(e) {
+  //   e.preventDefault();
+  //   const { item } = this.props;
+  //   console.log("contextMenu");
+  //   contextMenu.show({
+  //     id: `history-item-context-${item.id}-${item.no}`,
+  //     event: e,
+  //     props: {
+  //       webtoon: item
+  //     }
+  //   });
+  // }
   public render() {
     const { item, webtoon } = this.props;
     const { scrolls } = webtoon;
