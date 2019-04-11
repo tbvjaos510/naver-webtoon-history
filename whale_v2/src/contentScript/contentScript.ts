@@ -32,22 +32,46 @@ whale.storage.sync.get("option", ({ option }) => {
     document
       .querySelectorAll("img[data-src]")
       .forEach(item => item.setAttribute("src", item.getAttribute("data-src")));
-    whale.storage[option._storeLocation].get(["scrolls"], ({ scrolls = "{}" }) => {
-      const no = url.searchParams.get("no");
-      const scroll = JSON.parse(scrolls);
-      if (scroll[titleId] && scroll[titleId][no]) {
-        Utility.setScroll(null, scroll[titleId][no], true, false);
+    whale.storage[option._storeLocation].get(
+      ["scrolls", "visits", "webtoon"],
+      ({ scrolls = "{}", webtoon = "{}", visits = "{}" }) => {
+        const no = url.searchParams.get("no");
+        if (!no) return;
+        scrolls = JSON.parse(scrolls);
+        webtoon = JSON.parse(webtoon);
+        visits = JSON.parse(visits);
+        if (scrolls[titleId] && scrolls[titleId][no]) {
+          Utility.setScroll(null, scrolls[titleId][no], true, false);
+        }
+        if (option._saveScroll) {
+          Utility.checkScroll(null, true);
+        }
+        if (option._hiddenComment) {
+          Utility.hiddenComment(null, true);
+        }
+        if (option._autoNext) {
+          Utility.autoNext(null, true);
+        }
+
+        const title = document.querySelector("meta[property='og:title']").getAttribute("content");
+        const description = document
+          .querySelector("meta[property='og:description']")
+          .getAttribute("content");
+        if (!webtoon[titleId]) {
+          visits[titleId] = {};
+          webtoon[titleId] = {
+            title: title.replace(" - " + description, ""),
+            type: url.pathname.split("/detail.nhn")[0]
+          };
+        }
+        visits[titleId][no] = Math.floor(new Date().getTime() / 1000);
+
+        chrome.storage[option._storeLocation].set({
+          webtoon: JSON.stringify(webtoon),
+          visits: JSON.stringify(visits)
+        });
       }
-      if (option._saveScroll) {
-        Utility.checkScroll(null, true);
-      }
-      if (option._hiddenComment) {
-        Utility.hiddenComment(null, true);
-      }
-      if (option._autoNext) {
-        Utility.autoNext(null, true);
-      }
-    });
+    );
   } else if (url.pathname.indexOf("list.nhn") > -1) {
     if (option._showHistory) {
       whale.storage[option._storeLocation].get(["visits"], ({ visits = "{}" }) => {
