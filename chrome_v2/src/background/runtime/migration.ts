@@ -89,5 +89,19 @@ export default function(prevVersion: string, curVersion: string) {
         );
       });
     });
+  } else if (prevVersion === "2.0.0") {
+    chrome.storage.sync.get(["favorate"], ({ favorate: oldFavorate = "{}" }) => {
+      oldFavorate = JSON.parse(oldFavorate);
+      const newFavorate = [];
+      Object.keys(oldFavorate).forEach(key => {
+        if (oldFavorate[key]) {
+          newFavorate.push(key);
+        }
+      });
+
+      chrome.storage.sync.set({
+        favorate: newFavorate
+      });
+    });
   }
 }

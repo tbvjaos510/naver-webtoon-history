@@ -21,8 +21,7 @@ export default class RecentSetting extends React.Component<RecentSettingProps, n
   private readonly linkTargetSetting: LinkTargetSetting[] = [
     { text: "새 탭", target: "Tab" },
     { text: "현재 탭", target: "Current" },
-    { text: "팝업 창", target: "Popup" },
-    { text: "사이드바 (Whale 전용)", target: "Sidebar" }
+    { text: "팝업 창", target: "Popup" }
   ];
 
   private maintainOne() {
@@ -118,7 +117,7 @@ export default class RecentSetting extends React.Component<RecentSettingProps, n
           &nbsp;
           <SettingButton
             onClick={() =>
-              whale.storage[option.storeLocation].remove(["webtoon", "visits", "scrolls"])
+              chrome.storage[option.storeLocation].remove(["webtoon", "visits", "scrolls"])
             }
             tooltip="웹툰 기록을 삭제합니다. 사이트에서도 표시하지 않습니다."
             disabled={webtoon.loadingStatus !== "end"}

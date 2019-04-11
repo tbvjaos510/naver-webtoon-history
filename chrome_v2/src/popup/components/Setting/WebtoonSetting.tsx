@@ -2,6 +2,8 @@ import * as React from "react";
 import { observer, inject } from "mobx-react";
 import OptionStore, { WebtoonOrder } from "../../store/option";
 import WebtoonStore from "../../store/webtoon";
+import SettingCheckBox from "./SettingCheckBox";
+import SettingButton from "./SettingButton";
 
 export interface WebtoonSettingProps {
   option?: OptionStore;
@@ -20,19 +22,11 @@ export default class WebtoonSetting extends React.Component<WebtoonSettingProps,
         <a className="uk-accordion-title" href="#">
           웹툰 목록
         </a>
-        <p
-          className="option-title"
-          uk-tooltip="사용자가 드래그로 순서를 지정할 수 있습니다.<br>설정 시 정렬방식을 사용하지 못합니다."
-        >
-          <input
-            className="uk-checkbox"
-            type="checkbox"
-            id="saveWsort"
-            onChange={event => (option.saveWebtoonSort = event.target.checked)}
-            checked={option.saveWebtoonSort}
-          />
-          <label htmlFor="saveWsort"> 웹툰 순서 드래그로 조절</label>
-        </p>
+        <SettingCheckBox
+          storeKey="saveWebtoonSort"
+          text="웹툰 순서 드래그로 조절"
+          tooltip="사용자가 드래그로 순서를 지정할 수 있습니다. 설정 시 정렬방식을 사용하지 못합니다."
+        />
         <div className="uk-accordion-content">
           <span className="option-title">정렬방식 (드래그로 조절할 시 사용할 수 없습니다)</span>
           <br />
@@ -55,34 +49,27 @@ export default class WebtoonSetting extends React.Component<WebtoonSettingProps,
               </li>
             ))}
           </ul>
-          <p className="option-title" uk-tooltip="웹툰 목록에서 웹툰 즐겨찾기를 사용합니다.">
-            <input
-              type="checkbox"
-              id="saveFavorate"
-              className="uk-checkbox"
-              onChange={event => (option.saveFavorate = event.target.checked)}
-              checked={option.saveFavorate}
-            />
-            <label htmlFor="saveFavorate"> 웹툰 즐겨찾기 사용</label>
-          </p>
-          <button className="uk-button uk-button-small uk-button-default" id="deleteFavorate">
+          <SettingCheckBox
+            storeKey="saveFavorate"
+            text="웹툰 즐겨찾기 사용"
+            tooltip="웹툰 목록에서 웹툰 즐겨찾기를 사용합니다."
+          />
+          <SettingButton onClick={() => (webtoon.starWebtoons = [])}>
             즐겨찾기 목록 전체 삭제
-          </button>
+          </SettingButton>
           <br />
           <br />
           <span className="option-title">만약 정렬이 이상한 경우 아래 버튼을 클릭해 주세요</span>
           <br />
-          <button
-            id="resetWsort"
-            className="uk-button uk-button-small uk-button-default"
-            uk-tooltip="드래그로 설정한 웹툰의 순서를 초기화합니다."
+          <SettingButton
+            tooltip="드래그로 설정한 웹툰의 순서를 초기화합니다."
             onClick={() => {
               webtoon.sortWebtoon = {};
               webtoon.setDailyWebtoon();
             }}
           >
             웹툰 순서 초기화
-          </button>
+          </SettingButton>
         </div>
       </li>
     );

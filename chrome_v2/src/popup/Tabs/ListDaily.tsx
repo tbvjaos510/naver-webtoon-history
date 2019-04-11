@@ -4,6 +4,7 @@ import OptionStore from "../store/option";
 import { weekDay, Week } from "../request";
 import WebtoonStore from "../store/webtoon";
 import DailyList, { MovedEvent } from "../components/Daily/DailyList";
+import { toJS } from "mobx";
 
 export interface ListDailyProps {
   option?: OptionStore;
@@ -48,16 +49,24 @@ export default class ListDaily extends React.Component<ListDailyProps, ListDaily
   private onItemMoved(e: MovedEvent) {
     const { option, webtoon } = this.props;
     if (option.saveWebtoonSort) {
-      const wsort = webtoon.sortWebtoon[this.state.selectDay];
+      let wsort;
+      if (this.state.selectDay === "favo") {
+        wsort = toJS(webtoon.starWebtoons);
+      } else {
+        wsort = toJS(webtoon.sortWebtoon[this.state.selectDay]);
+      }
       const element = e.detail[1];
       const wid = parseInt(element.getAttribute("data-id"));
-      console.log(webtoon.sortWebtoon);
       const itemIdx = wsort.indexOf(wid);
       const movedIdx = Array.from(element.parentElement.children).indexOf(element);
       wsort.splice(itemIdx, 1);
       wsort.splice(movedIdx, 0, wid);
-      webtoon.sortWebtoon[this.state.selectDay] = wsort;
-      webtoon.sortWebtoon = webtoon.sortWebtoon;
+      if (this.state.selectDay === "favo") {
+        webtoon.starWebtoons = wsort;
+      } else {
+        webtoon.sortWebtoon[this.state.selectDay] = wsort;
+        webtoon.sortWebtoon = webtoon.sortWebtoon;
+      }
     }
   }
 

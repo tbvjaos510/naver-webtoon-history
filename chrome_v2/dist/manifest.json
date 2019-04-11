@@ -1,7 +1,7 @@
 {
-  "name": "Naver Webtoon Extensions",
+  "name": "네이버 웹툰 도우미",
   "description": "네이버 웹툰 Extension입니다.",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "manifest_version": 2,
   "background": {
     "persistent": false,
@@ -9,7 +9,7 @@
   },
   "browser_action": {
     "default_popup": "popup.html",
-    "default_icon": "webtoons.png"
+    "default_icon": "icons/icon.png"
   },
   "icons": {
     "300": "icons/icon.png"

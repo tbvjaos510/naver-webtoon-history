@@ -16,14 +16,14 @@ export default class PageSetting extends React.Component<PageSettingProps, null>
   private getContextMenuGrant(event: React.ChangeEvent<HTMLInputElement>) {
     const { option } = this.props;
     if (event.target.checked) {
-      whale.permissions.contains(
+      chrome.permissions.contains(
         {
           permissions: ["contextMenus"]
         },
         result => {
           if (result) option.useContextMenu = true;
           else {
-            whale.permissions.request(
+            chrome.permissions.request(
               {
                 permissions: ["contextMenus"]
               },

@@ -45,9 +45,7 @@ export interface SortWebtoonType {
   [key: string]: number[];
 }
 
-export type StaredType = {
-  [key: number]: boolean;
-};
+export type StaredType = number[];
 
 export interface RecentWebtoon {
   id: number;
@@ -298,7 +296,7 @@ export default class WebtoonStore {
    *
    */
   @observable
-  private _starWebtoons: StaredType = {};
+  private _starWebtoons: StaredType = [];
 
   @computed
   public get starWebtoons(): StaredType {
@@ -327,35 +325,63 @@ export default class WebtoonStore {
   @computed
   public get starWebtoonInfo(): WebtoonInfoType[] {
     const returnValue: WebtoonInfoType[] = [];
+    this._starWebtoons.forEach(webtoonId => {
+      (Object.keys(this._dailyWebtoons).map(
+        key => this._dailyWebtoons[key]
+      ) as WebtoonInfoType[][]).forEach(wlist => {
+        wlist.forEach(webtoon => {
+          // read-only object를 clone함.
+          const wt = Object.assign({}, webtoon);
+          if (wt.id === webtoonId) {
+            let exists = false;
+            returnValue.forEach(({ id, isUp, isRest }) => {
+              if (id === wt.id) exists = true;
 
-    Object.keys(this._starWebtoons).forEach(value => {
-      if (this._starWebtoons[value]) {
-        (Object.keys(this._dailyWebtoons).map(
-          key => this._dailyWebtoons[key]
-        ) as WebtoonInfoType[][]).forEach(wlist => {
-          wlist.forEach(webtoon => {
-            // read-only object를 clone함.
-            const wt = Object.assign({}, webtoon);
-            if (wt.id === parseInt(value)) {
-              let exists = false;
-              returnValue.forEach(({ id, isUp, isRest }) => {
-                if (id === wt.id) exists = true;
-
-                if (isRest || isUp) {
-                  returnValue.forEach(find => {
-                    if (find.id === id) {
-                      find.isUp = isUp;
-                      find.isRest = isRest;
-                    }
-                  });
-                }
-              });
-              if (!exists) returnValue.push(wt);
-            }
-          });
+              if (isRest || isUp) {
+                returnValue.forEach(find => {
+                  if (find.id === id) {
+                    find.isUp = isUp;
+                    find.isRest = isRest;
+                  }
+                });
+              }
+            });
+            if (!exists) returnValue.push(wt);
+          }
         });
-      }
+      });
     });
+
+    // Object.keys(this._starWebtoons).forEach(value => {
+    //   console.log(toJS(this._starWebtoons));
+    //   if (this._starWebtoons[value]) {
+    //     (Object.keys(this._dailyWebtoons).map(
+    //       key => this._dailyWebtoons[key]
+    //     ) as WebtoonInfoType[][]).forEach(wlist => {
+    //       wlist.forEach(webtoon => {
+    //         // read-only object를 clone함.
+    //         const wt = Object.assign({}, webtoon);
+    //         if (wt.id === parseInt(value)) {
+    //           let exists = false;
+    //           returnValue.forEach(({ id, isUp, isRest }) => {
+    //             if (id === wt.id) exists = true;
+
+    //             if (isRest || isUp) {
+    //               returnValue.forEach(find => {
+    //                 if (find.id === id) {
+    //                   find.isUp = isUp;
+    //                   find.isRest = isRest;
+    //                 }
+    //               });
+    //             }
+    //           });
+    //           if (!exists) returnValue.push(wt);
+    //         }
+    //       });
+    //     });
+    //   }
+    // });
+    console.log(returnValue);
     return returnValue;
   }
 
