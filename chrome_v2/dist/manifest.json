@@ -16,6 +16,7 @@
   },
   "permissions": [
     "history",
+    "downloads",
     "storage",
     "tabs",
     "activeTab",

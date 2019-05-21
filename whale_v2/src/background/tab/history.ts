@@ -10,12 +10,18 @@ export default function(webtoon: WebtoonStore, option: OptionStore) {
         // 회차 리스트 페이지
         if (url.pathname.indexOf("/list.nhn") > 0) {
           const webtoonId = url.searchParams.get("titleId");
-          Utility.displayHistory(tabId, webtoonId, webtoon.visits, option.showHistory);
+          Utility.displayHistory(
+            tabId,
+            webtoonId,
+            webtoon.visits,
+            option.showHistory
+          );
         }
         // 웹툰 보는 페이지
         else if (url.pathname.indexOf("/detail.nhn") > 0) {
           const webtoonId = url.searchParams.get("titleId");
           const no = url.searchParams.get("no");
+          console.log(url);
           if (!webtoonId || !no) {
             return;
           }
@@ -26,12 +32,20 @@ export default function(webtoon: WebtoonStore, option: OptionStore) {
               type: url.pathname.split("/detail.nhn")[0]
             };
           }
-          webtoon.visits[webtoonId][no] = Math.floor(new Date().getTime() / 1000);
+          console.log(webtoonId, no);
+          webtoon.visits[webtoonId][no] = Math.floor(
+            new Date().getTime() / 1000
+          );
           if (option.saveScroll) {
             Utility.checkScroll(tabId, false);
           }
           if (webtoon.scrolls[webtoonId] && webtoon.scrolls[webtoonId][no]) {
-            Utility.setScroll(tabId, webtoon.scrolls[webtoonId][no], false, option.scrollAlert);
+            Utility.setScroll(
+              tabId,
+              webtoon.scrolls[webtoonId][no],
+              false,
+              option.scrollAlert
+            );
           }
           if (option.autoNext) {
             console.log("autonext");

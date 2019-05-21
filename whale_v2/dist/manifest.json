@@ -28,6 +28,7 @@
   "externally_connectable": {
     "matches": ["https://comic.naver.com/*", "https://m.comic.naver.com/*"]
   },
+  "optional_permissions": ["contextMenus"],
   "content_scripts": [
     {
       "matches": ["https://m.comic.naver.com/*"],

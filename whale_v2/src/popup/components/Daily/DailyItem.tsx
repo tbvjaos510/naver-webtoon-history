@@ -10,6 +10,7 @@ export interface DailyItemProps {
   item: WebtoonInfoType;
   option?: OptionStore;
   webtoon?: WebtoonStore;
+  keyword?: string;
 }
 
 @inject("option", "webtoon")
@@ -17,7 +18,7 @@ export interface DailyItemProps {
 export default class DailyItem extends React.Component<DailyItemProps, any> {
   public onStarChanged() {
     console.log("starChanged");
-    const { webtoon, item } = this.props;
+    const { webtoon, item, keyword } = this.props;
     const idx = webtoon.starWebtoons.indexOf(item.id);
     if (idx != -1) {
       webtoon.starWebtoons.splice(idx, 1);
@@ -41,7 +42,11 @@ export default class DailyItem extends React.Component<DailyItemProps, any> {
           addSuffix: true
         }) + "에 봄";
       return (
-        <Wlink link={`https://comic.naver.com/webtoon/detail.nhn?titleId=${find.id}&no=${find.no}`}>
+        <Wlink
+          link={`https://comic.naver.com/webtoon/detail.nhn?titleId=${
+            find.id
+          }&no=${find.no}`}
+        >
           <a className="uk-link-muted webtoon-link" uk-tooltip={timeLocale}>
             {find.noname}
           </a>
@@ -49,9 +54,8 @@ export default class DailyItem extends React.Component<DailyItemProps, any> {
       );
     }
   }
-
   public render() {
-    const { option, item, webtoon } = this.props;
+    const { option, item, webtoon, keyword } = this.props;
     return (
       <div className="uk-card uk-card-small uk-card-default">
         <div className="uk-card-media-top">
@@ -69,7 +73,10 @@ export default class DailyItem extends React.Component<DailyItemProps, any> {
             <React.Fragment>
               <br />
               <a
-                className={"favo " + (webtoon.starWebtoons.indexOf(item.id) != -1 ? "stared" : "")}
+                className={
+                  "favo " +
+                  (webtoon.starWebtoons.indexOf(item.id) != -1 ? "stared" : "")
+                }
                 uk-icon="icon: star;"
                 onClick={() => this.onStarChanged()}
               />

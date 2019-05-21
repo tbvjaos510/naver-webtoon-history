@@ -69,7 +69,8 @@ th,
 .ico {
   display: inline-block;
   overflow: hidden;
-  background: url(https://ssl.pstatic.net/static/comic/images/sp/sp_ico_v2.png) no-repeat;
+  background: url(https://ssl.pstatic.net/static/comic/images/sp/sp_ico_v2.png)
+    no-repeat;
   font-size: 0;
   line-height: 0;
   color: transparent;
@@ -123,4 +124,8 @@ th,
 
 .webtoon-list {
   height: calc(100vh - 135px);
+}
+
+.search-box {
+  margin: 0 15px;
 }
