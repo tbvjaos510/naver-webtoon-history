@@ -1,5 +1,5 @@
-import WebtoonStore from "../../popup/store/webtoon";
-import OptionStore from "../../popup/store/option";
+import WebtoonStore from "../../store/webtoon";
+import OptionStore from "../../store/option";
 import { ChromeMessage } from "../../../@types/commend";
 
 export default function(webtoon: WebtoonStore, option: OptionStore) {

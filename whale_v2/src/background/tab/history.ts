@@ -1,5 +1,5 @@
-import WebtoonStore, { VisitType } from "../../popup/store/webtoon";
-import OptionStore from "../../popup/store/option";
+import WebtoonStore, { VisitType } from "../../store/webtoon";
+import OptionStore from "../../store/option";
 import * as Utility from "./utility";
 
 export default function(webtoon: WebtoonStore, option: OptionStore) {

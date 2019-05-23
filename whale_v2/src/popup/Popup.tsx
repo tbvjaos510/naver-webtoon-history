@@ -3,7 +3,7 @@ import { Provider } from "mobx-react";
 import "./Popup.scss";
 
 // Store Import
-import Store from "./store";
+import Store from "../store";
 
 import Wlink from "./components/wlink";
 import Switcher from "./components/switcher";

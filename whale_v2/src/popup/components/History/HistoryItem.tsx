@@ -1,6 +1,6 @@
 import * as React from "react";
 import Wlink from "../wlink";
-import WebtoonStore, { RecentWebtoon } from "../../store/webtoon";
+import WebtoonStore, { RecentWebtoon } from "../../../store/webtoon";
 import { observer, inject } from "mobx-react";
 import * as format from "date-fns/format";
 import * as distanceInWordsToNow from "date-fns/distance_in_words_to_now";

@@ -1,6 +1,7 @@
 import * as React from "react";
 import { inject, observer } from "mobx-react";
-import OptionStore from "../store/option";
+import OptionStore from "../../store/option";
+import Link from "../../tools/link";
 
 export interface wlinkProps {
   /**
@@ -26,43 +27,9 @@ export default class Wlink extends React.Component<wlinkProps, null> {
     event.preventDefault();
     const { link, option, forceTab } = this.props;
     if (forceTab) {
-      return whale.tabs.create({
-        url: link
-      });
+      return Link.openNewTab(link);
     }
-    switch (option.linkTarget) {
-      case "Current":
-        whale.tabs.update({
-          url: link
-        });
-        break;
-      case "Popup":
-        whale.windows.create(
-          {
-            url: link.replace("https://", "https://m."),
-            width: 400,
-            height: 800,
-            type: "popup"
-          },
-          window => {
-            window.alwaysOnTop = true;
-          }
-        );
-        break;
-      case "Tab":
-        whale.tabs.create({
-          url: link
-        });
-        break;
-      case "Sidebar":
-        location.href = link.replace("https://", "https://m.");
-        break;
-      default:
-        console.warn("[Warning] option.linkTarget이 잘못 설정되었습니다.");
-        whale.tabs.create({
-          url: link
-        });
-    }
+    Link.openUrl(option.linkTarget, link);
     return false;
   }
 

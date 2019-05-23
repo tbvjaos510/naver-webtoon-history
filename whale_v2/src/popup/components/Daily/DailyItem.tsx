@@ -1,9 +1,9 @@
 import * as React from "react";
-import { WebtoonInfoType } from "../../request";
+import { WebtoonInfoType } from "../../../tools/request";
 import Wlink from "../wlink";
-import OptionStore from "../../store/option";
+import OptionStore from "../../../store/option";
 import { observer, inject } from "mobx-react";
-import WebtoonStore from "../../store/webtoon";
+import WebtoonStore from "../../../store/webtoon";
 import * as distance from "date-fns/distance_in_words_to_now";
 import * as ko from "date-fns/locale/ko";
 export interface DailyItemProps {

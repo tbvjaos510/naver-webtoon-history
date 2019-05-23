@@ -1,6 +1,6 @@
 import * as React from "react";
 import { inject, observer } from "mobx-react";
-import WebtoonStore from "../store/webtoon";
+import WebtoonStore from "../../store/webtoon";
 import HistoryItem from "../components/History/HistoryItem";
 import HistoryItemContext from "../components/History/HistoryItemContext";
 

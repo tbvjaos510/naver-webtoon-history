@@ -1,9 +1,9 @@
 import * as React from "react";
 import { observer, inject } from "mobx-react";
-import WebtoonStore from "../../store/webtoon";
-import { Week } from "../../request";
+import WebtoonStore from "../../../store/webtoon";
+import { Week } from "../../../tools/request";
 import DailyItem from "./DailyItem";
-import OptionStore from "../../store/option";
+import OptionStore from "../../../store/option";
 import { toJS } from "mobx";
 
 export interface MovedEvent extends Event {

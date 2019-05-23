@@ -1,7 +1,7 @@
 import * as React from "react";
 import { observer, inject } from "mobx-react";
-import OptionStore, { WebtoonOrder } from "../../store/option";
-import WebtoonStore from "../../store/webtoon";
+import OptionStore, { WebtoonOrder } from "../../../store/option";
+import WebtoonStore from "../../../store/webtoon";
 import SettingCheckBox from "./SettingCheckBox";
 import SettingButton from "./SettingButton";
 

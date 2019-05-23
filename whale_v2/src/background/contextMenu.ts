@@ -1,17 +1,39 @@
-import WebtoonStore from "../popup/store/webtoon";
-import OptionStore from "../popup/store/option";
+import Link from "../tools/link";
 
-export default function(webtoon: WebtoonStore, option: OptionStore) {
-  let contextId: number;
-  function removeContext() {
-    whale.contextMenus.remove(contextId);
-  }
-  function addFavorateContext() {
+export const CONTEXT_MENU_ID_SIDEBAR = "OPEN_IN_SIDEBAR";
+export const CONTEXT_MENU_ID_TAB = "OPEN_IN_TAB";
+
+export function removeContext(callback: () => void) {
+  whale.contextMenus.removeAll(callback);
+}
+
+export function addLinkContext() {
+  removeContext(() => {
     whale.contextMenus.create({
-      id: "naver-webtoon-extension-favorate",
+      id: CONTEXT_MENU_ID_TAB,
       contexts: ["link"],
-      onclick() {},
-      title: "즐겨찾기에 추가"
+      title: "팝업창에서 웹툰 보기",
+      targetUrlPatterns: [
+        "https://comic.naver.com/webtoon/list.nhn?titleId*",
+        "https://comic.naver.com/webtoon/detail.nhn?titleId*"
+      ]
     });
-  }
+    whale.contextMenus.create({
+      id: CONTEXT_MENU_ID_SIDEBAR,
+      contexts: ["link"],
+      title: "사이드바에서 웹툰 보기",
+      targetUrlPatterns: [
+        "https://comic.naver.com/webtoon/list.nhn?titleId*",
+        "https://comic.naver.com/webtoon/detail.nhn?titleId*"
+      ]
+    });
+    whale.contextMenus.onClicked.addListener(info => {
+      if (info.menuItemId === CONTEXT_MENU_ID_SIDEBAR) {
+        Link.openSidebar(info.linkUrl);
+      }
+      if (info.menuItemId === CONTEXT_MENU_ID_TAB) {
+        Link.openPopup(info.linkUrl);
+      }
+    });
+  });
 }

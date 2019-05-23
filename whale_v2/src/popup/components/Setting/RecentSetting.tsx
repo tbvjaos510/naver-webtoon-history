@@ -1,6 +1,6 @@
 import * as React from "react";
-import OptionStore, { ChromeStore, LinkTarget } from "../../store/option";
-import WebtoonStore from "../../store/webtoon";
+import OptionStore, { ChromeStore, LinkTarget } from "../../../store/option";
+import WebtoonStore from "../../../store/webtoon";
 import { observer, inject } from "mobx-react";
 import SettingButton from "./SettingButton";
 import { toJS } from "mobx";

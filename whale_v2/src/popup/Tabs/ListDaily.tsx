@@ -1,8 +1,8 @@
 import * as React from "react";
 import { observer, inject } from "mobx-react";
-import OptionStore from "../store/option";
-import { weekDay, Week } from "../request";
-import WebtoonStore from "../store/webtoon";
+import OptionStore from "../../store/option";
+import { weekDay, Week } from "../../tools/request";
+import WebtoonStore from "../../store/webtoon";
 import DailyList, { MovedEvent } from "../components/Daily/DailyList";
 import { toJS } from "mobx";
 
@@ -128,8 +128,11 @@ export default class ListDaily extends React.Component<
           <div className="uk-width-expand">
             <form className="uk-search uk-width-1-1">
               <input
-                className="uk-search-input"
+                className="uk-input"
                 type="search"
+                style={{
+                  border: 0
+                }}
                 value={this.state.keyword || ""}
                 placeholder="웹툰 검색..."
                 onChange={e => this.setState({ keyword: e.target.value })}

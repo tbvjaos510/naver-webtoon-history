@@ -1,4 +1,4 @@
-import { VisitType } from "../../popup/store/webtoon";
+import { VisitType } from "../../store/webtoon";
 
 export function hiddenComment(tabId: number, isMobile: boolean) {
   const code = `document.getElementById("${
@@ -46,7 +46,12 @@ window.addEventListener('scroll',checkSc, false);`;
   });
 }
 
-export function setScroll(tabId: number, scroll: number, isMobile: boolean, scrollAlert: boolean) {
+export function setScroll(
+  tabId: number,
+  scroll: number,
+  isMobile: boolean,
+  scrollAlert: boolean
+) {
   const code = isMobile
     ? `setTimeout(()=>{document.documentElement.scrollTop = document.querySelector("#toonLayer>ul").scrollHeight * ${scroll /
         100}}, 1000)`
@@ -105,7 +110,8 @@ export function displayHistory(
       if (wlog){
         wlog=wlog.parentElement.parentElement;
         wlog.style.background="lightgray";
-        wlog.title="${new Date(visits[webtoonId][key] * 1000).toLocaleString() + "에 봄"}"
+        wlog.title="${new Date(visits[webtoonId][key] * 1000).toLocaleString() +
+          "에 봄"}"
     }`;
       if (!tabId) {
         eval(code);
