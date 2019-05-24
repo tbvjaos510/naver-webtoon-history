@@ -10,22 +10,22 @@ export interface MovedEvent extends Event {
   detail: [any, HTMLDataListElement];
 }
 
-export interface DailyListProps {
+export interface IDailyListProps {
   selectDay: Week | "favo";
   webtoon?: WebtoonStore;
   option?: OptionStore;
   onRef?: (e: HTMLUListElement) => void;
   keyword: string | null;
 }
-export interface DailyListStates {
+export interface IDailyListStates {
   viewCount: number;
 }
 
 @inject("webtoon", "option")
 @observer
 export default class DailyList extends React.Component<
-  DailyListProps,
-  DailyListStates
+  IDailyListProps,
+  IDailyListStates
 > {
   constructor(props) {
     super(props);
@@ -35,7 +35,7 @@ export default class DailyList extends React.Component<
   }
   private maxCount: number = 0;
 
-  componentWillUpdate(nextProp: DailyListProps, nextState: DailyListStates) {
+  componentWillUpdate(nextProp: IDailyListProps, nextState: IDailyListStates) {
     if (
       this.props.selectDay != nextProp.selectDay ||
       this.props.keyword != nextProp.keyword

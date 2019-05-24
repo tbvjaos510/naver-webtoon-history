@@ -4,14 +4,14 @@ import WebtoonStore from "../../../store/webtoon";
 import { observer, inject } from "mobx-react";
 import SettingCheckBox from "./SettingCheckBox";
 
-export interface SpecialSettingProps {
+export interface ISpecialSettingProps {
   webtoon?: WebtoonStore;
   option?: OptionStore;
 }
 
 @inject("option", "webtoon")
 @observer
-export default class SpecialSetting extends React.Component<SpecialSettingProps, null> {
+export default class SpecialSetting extends React.Component<ISpecialSettingProps, null> {
   public render() {
     const { webtoon, option } = this.props;
     return (

@@ -4,13 +4,13 @@ import WebtoonStore from "../../store/webtoon";
 import HistoryItem from "../components/History/HistoryItem";
 import HistoryItemContext from "../components/History/HistoryItemContext";
 
-export interface ListHistoryProps {
+export interface IListHistoryProps {
   webtoon?: WebtoonStore;
 }
 
 @inject("webtoon")
 @observer
-export default class ListHistory extends React.Component<ListHistoryProps, any> {
+export default class ListHistory extends React.Component<IListHistoryProps, any> {
   public render() {
     const { webtoon } = this.props;
     // this.props.webtoon.getRecentWebtoon();

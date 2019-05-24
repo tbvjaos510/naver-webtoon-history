@@ -8,14 +8,14 @@ import * as ko from "date-fns/locale/ko";
 import { contextMenu } from "react-contexify";
 import HistoryItemContext from "./HistoryItemContext";
 
-export interface HistoryItemProps {
+export interface IHistoryItemProps {
   webtoon?: WebtoonStore;
   item: RecentWebtoon;
 }
 
 @inject("webtoon")
 @observer
-export default class HistoryItem extends React.Component<HistoryItemProps, any> {
+export default class HistoryItem extends React.Component<IHistoryItemProps, any> {
   private deleteScroll() {
     const { item, webtoon } = this.props;
     const { scrolls } = webtoon;

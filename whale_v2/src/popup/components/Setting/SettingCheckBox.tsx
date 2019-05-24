@@ -2,7 +2,7 @@ import * as React from "react";
 import OptionStore from "../../../store/option";
 import { inject, observer } from "mobx-react";
 import { toJS } from "mobx";
-export interface SettingCheckBoxProps {
+export interface ISettingCheckBoxProps {
   tooltip?: string;
   storeKey: {
     [P in keyof OptionStore]: OptionStore[P] extends boolean ? P : never
@@ -15,7 +15,7 @@ export interface SettingCheckBoxProps {
 @inject("option")
 @observer
 export default class SettingCheckBox extends React.Component<
-  SettingCheckBoxProps,
+  ISettingCheckBoxProps,
   null
 > {
   public render() {

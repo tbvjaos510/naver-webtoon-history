@@ -1,6 +1,6 @@
 import * as React from "react";
 
-export interface SettingButtonProps {
+export interface ISettingButtonProps {
   onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   children: string;
   type?: "primary" | "secondary" | "danger" | "default";
@@ -8,7 +8,7 @@ export interface SettingButtonProps {
   disabled?: boolean;
 }
 
-export default class SettingButton extends React.Component<SettingButtonProps, any> {
+export default class SettingButton extends React.Component<ISettingButtonProps, any> {
   public render() {
     const { onClick, children, tooltip, type = "default", disabled } = this.props;
 

@@ -11,13 +11,13 @@ import StorageSetting from "../components/Setting/StorageSetting";
 import DevelopInfo from "../components/Setting/DevelopInfo";
 import SettingButton from "../components/Setting/SettingButton";
 
-export interface OptionProps {
+export interface IOptionProps {
   option?: OptionStore;
 }
 
 @inject("option")
 @observer
-export default class Option extends React.Component<OptionProps, null> {
+export default class Option extends React.Component<IOptionProps, null> {
   public render() {
     const { option } = this.props;
 

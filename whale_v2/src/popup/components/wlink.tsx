@@ -3,7 +3,7 @@ import { inject, observer } from "mobx-react";
 import OptionStore from "../../store/option";
 import Link from "../../tools/link";
 
-export interface wlinkProps {
+export interface IwlinkProps {
   /**
    * 링크 주소
    */
@@ -22,7 +22,7 @@ export interface wlinkProps {
 
 @inject("option")
 @observer
-export default class Wlink extends React.Component<wlinkProps, null> {
+export default class Wlink extends React.Component<IwlinkProps, null> {
   public clickHandler(event: React.MouseEvent) {
     event.preventDefault();
     const { link, option, forceTab } = this.props;

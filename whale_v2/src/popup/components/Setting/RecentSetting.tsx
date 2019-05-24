@@ -5,7 +5,7 @@ import { observer, inject } from "mobx-react";
 import SettingButton from "./SettingButton";
 import { toJS } from "mobx";
 
-export interface RecentSettingProps {
+export interface IRecentSettingProps {
   webtoon?: WebtoonStore;
   option?: OptionStore;
 }
@@ -18,7 +18,7 @@ interface LinkTargetSetting {
 @inject("option", "webtoon")
 @observer
 export default class RecentSetting extends React.Component<
-  RecentSettingProps,
+  IRecentSettingProps,
   null
 > {
   private readonly linkTargetSetting: LinkTargetSetting[] = [

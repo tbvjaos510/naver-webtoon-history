@@ -1,18 +1,21 @@
 import * as React from "react";
 
-export interface SwitcherProps {
+export interface ISwitcherProps {
   webtoonComponents: {
     title: string;
     component: typeof React.Component;
   }[];
 }
 
-export default class Switcher extends React.Component<SwitcherProps, any> {
+export default class Switcher extends React.Component<ISwitcherProps, any> {
   public render() {
     const { webtoonComponents } = this.props;
     return (
       <div>
-        <ul className="uk-child-width-expand uk-margin-small" uk-tab="connect: #switcher-tab">
+        <ul
+          className="uk-child-width-expand uk-margin-small"
+          uk-tab="connect: #switcher-tab"
+        >
           {webtoonComponents.map(({ title }, i) => (
             <li key={i}>
               <a href="#">{title}</a>

@@ -8,14 +8,14 @@ import WebtoonStore, { RecentWebtoon } from "../../../store/webtoon";
 import { inject, observer } from "mobx-react";
 import { MenuItemEventHandler } from "react-contexify/lib/types";
 
-export interface HistoryItemContextProps {
+export interface IHistoryItemContextProps {
   menuId: string;
   webtoon?: WebtoonStore;
 }
 
 @inject("webtoon")
 @observer
-export default class HistoryItemContext extends React.Component<HistoryItemContextProps, any> {
+export default class HistoryItemContext extends React.Component<IHistoryItemContextProps, any> {
   private removeHistory({ event, props }: MenuItemEventHandler) {
     const { webtoon } = this.props;
     const info: RecentWebtoon = props["webtoon"];

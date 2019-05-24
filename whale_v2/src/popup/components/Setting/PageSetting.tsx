@@ -6,7 +6,7 @@ import SettingCheckBox from "./SettingCheckBox";
 import SettingButton from "./SettingButton";
 import { removeContext, addLinkContext } from "../../../tools/contextMenu";
 
-export interface PageSettingProps {
+export interface IPageSettingProps {
   webtoon?: WebtoonStore;
   option?: OptionStore;
 }
@@ -14,7 +14,7 @@ export interface PageSettingProps {
 @inject("option", "webtoon")
 @observer
 export default class PageSetting extends React.Component<
-  PageSettingProps,
+  IPageSettingProps,
   null
 > {
   private getContextMenuGrant(event: React.ChangeEvent<HTMLInputElement>) {

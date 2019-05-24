@@ -1,9 +1,9 @@
 import * as React from "react";
 import Wlink from "../wlink";
 
-export interface DevelopInfoProps {}
+export interface IDevelopInfoProps {}
 
-export default class DevelopInfo extends React.Component<DevelopInfoProps, null> {
+export default class DevelopInfo extends React.Component<IDevelopInfoProps, null> {
   public render() {
     return (
       <li>

@@ -4,13 +4,13 @@ import { observer, inject } from "mobx-react";
 import SettingCheckBox from "./SettingCheckBox";
 import SettingButton from "./SettingButton";
 
-export interface StorageSettingProps {
+export interface IStorageSettingProps {
   option?: OptionStore;
 }
 
 @inject("option")
 @observer
-export default class StorageSetting extends React.Component<StorageSettingProps, null> {
+export default class StorageSetting extends React.Component<IStorageSettingProps, null> {
   public render() {
     const { option } = this.props;
     return (

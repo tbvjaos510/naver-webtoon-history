@@ -12,7 +12,9 @@ export default function(webtoon: WebtoonStore, option: OptionStore) {
       const currentVersion = whale.runtime.getManifest().version;
       if (details.previousVersion != currentVersion) {
         console.log("update ", details.previousVersion, currentVersion);
-
+        whale.sidebarAction.setBadgeText({
+          text: " "
+        });
         migration(details.previousVersion, currentVersion);
       }
     }

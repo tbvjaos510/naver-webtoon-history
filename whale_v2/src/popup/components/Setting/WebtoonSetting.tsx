@@ -5,14 +5,14 @@ import WebtoonStore from "../../../store/webtoon";
 import SettingCheckBox from "./SettingCheckBox";
 import SettingButton from "./SettingButton";
 
-export interface WebtoonSettingProps {
+export interface IWebtoonSettingProps {
   option?: OptionStore;
   webtoon?: WebtoonStore;
 }
 
 @inject("option", "webtoon")
 @observer
-export default class WebtoonSetting extends React.Component<WebtoonSettingProps, null> {
+export default class WebtoonSetting extends React.Component<IWebtoonSettingProps, null> {
   private readonly orderTypes: WebtoonOrder[] = ["ViewCount", "Update", "StarScore", "TitleName"];
   private readonly orderNames = ["조회순", "업데이트순", "별점순", "제목순"];
   public render() {

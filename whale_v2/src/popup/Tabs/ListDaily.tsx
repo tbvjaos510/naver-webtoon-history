@@ -7,12 +7,12 @@ import DailyList, { MovedEvent } from "../components/Daily/DailyList";
 import { toJS } from "mobx";
 import SearchWebtoon from "../components/Daily/SearchWebtoon";
 
-export interface ListDailyProps {
+export interface IListDailyProps {
   option?: OptionStore;
   webtoon?: WebtoonStore;
 }
 
-export interface ListDailyStates {
+export interface IListDailyStates {
   selectDay: Week | "favo";
   isSearch: boolean;
   keyword: string | null;
@@ -21,8 +21,8 @@ export interface ListDailyStates {
 @inject("option", "webtoon")
 @observer
 export default class ListDaily extends React.Component<
-  ListDailyProps,
-  ListDailyStates
+  IListDailyProps,
+  IListDailyStates
 > {
   private sortRef: HTMLUListElement = null;
 
