@@ -17,11 +17,15 @@ interface LinkTargetSetting {
 
 @inject("option", "webtoon")
 @observer
-export default class RecentSetting extends React.Component<RecentSettingProps, null> {
+export default class RecentSetting extends React.Component<
+  RecentSettingProps,
+  null
+> {
   private readonly linkTargetSetting: LinkTargetSetting[] = [
     { text: "새 탭", target: "Tab" },
     { text: "현재 탭", target: "Current" },
-    { text: "팝업 창", target: "Popup" }
+    { text: "팝업 창", target: "Popup" },
+    { text: "사이드바 (Whale 전용)", target: "Sidebar" }
   ];
 
   private maintainOne() {
@@ -92,7 +96,9 @@ export default class RecentSetting extends React.Component<RecentSettingProps, n
           <p>
             <label
               htmlFor="historyCount"
-              uk-tooltip={`최대 ${option.storeLocation === "sync" ? 200 : 1000}개까지 가능합니다`}
+              uk-tooltip={`최대 ${
+                option.storeLocation === "sync" ? 200 : 1000
+              }개까지 가능합니다`}
             >
               최대 기록 개수 (넘으면 예전 기록이 삭제됩니다.):
             </label>{" "}
@@ -104,7 +110,9 @@ export default class RecentSetting extends React.Component<RecentSettingProps, n
               max={option.storeLocation === "sync" ? 200 : 1000}
               id="historyCount"
               value={option.historyMax}
-              onChange={event => (option.historyMax = parseInt(event.target.value))}
+              onChange={event =>
+                (option.historyMax = parseInt(event.target.value))
+              }
             />
           </p>
           <SettingButton
@@ -117,7 +125,11 @@ export default class RecentSetting extends React.Component<RecentSettingProps, n
           &nbsp;
           <SettingButton
             onClick={() =>
-              chrome.storage[option.storeLocation].remove(["webtoon", "visits", "scrolls"])
+              chrome.storage[option.storeLocation].remove([
+                "webtoon",
+                "visits",
+                "scrolls"
+              ])
             }
             tooltip="웹툰 기록을 삭제합니다. 사이트에서도 표시하지 않습니다."
             disabled={webtoon.loadingStatus !== "end"}
@@ -140,7 +152,8 @@ export default class RecentSetting extends React.Component<RecentSettingProps, n
                     checked={option.linkTarget === item.target}
                     value={item.target}
                     onChange={event =>
-                      event.target.checked && (option.linkTarget = event.target.value as LinkTarget)
+                      event.target.checked &&
+                      (option.linkTarget = event.target.value as LinkTarget)
                     }
                   />
                   <label htmlFor={id}> {item.text}</label>

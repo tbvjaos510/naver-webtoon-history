@@ -89,11 +89,14 @@ export default class OptionStore {
             this[key] = item[key];
           }
         });
-        whale.storage.sync.set({ option: JSON.stringify(this.optionObject) }, () => {
-          this.getUseBytes();
-          console.log("Update Complate");
-          this.onLoad();
-        });
+        whale.storage.sync.set(
+          { option: JSON.stringify(this.optionObject) },
+          () => {
+            this.getUseBytes();
+            console.log("Update Complate");
+            this.onLoad();
+          }
+        );
       }
     });
 
@@ -363,7 +366,7 @@ export default class OptionStore {
       {
         option: JSON.stringify(this.defaultOption)
       },
-      onLoad && onLoad
+      onLoad && onLoad()
     );
   }
 }

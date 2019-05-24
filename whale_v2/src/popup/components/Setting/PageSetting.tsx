@@ -4,6 +4,7 @@ import WebtoonStore from "../../../store/webtoon";
 import { observer, inject } from "mobx-react";
 import SettingCheckBox from "./SettingCheckBox";
 import SettingButton from "./SettingButton";
+import { removeContext, addLinkContext } from "../../../tools/contextMenu";
 
 export interface PageSettingProps {
   webtoon?: WebtoonStore;
@@ -24,22 +25,28 @@ export default class PageSetting extends React.Component<
           permissions: ["contextMenus"]
         },
         result => {
-          if (result) option.useContextMenu = true;
-          else {
+          if (result) {
+            addLinkContext();
+            option.useContextMenu = true;
+          } else {
             whale.permissions.request(
               {
                 permissions: ["contextMenus"]
               },
               granted => {
-                if (granted) option.useContextMenu = true;
-                else event.target.checked = false;
+                if (granted) {
+                  addLinkContext();
+                  option.useContextMenu = true;
+                } else event.target.checked = false;
               }
             );
           }
         }
       );
     } else {
-      option.useContextMenu = false;
+      removeContext(() => {
+        option.useContextMenu = false;
+      });
     }
   }
 
@@ -56,12 +63,12 @@ export default class PageSetting extends React.Component<
             storeKey="showHistory"
             text="웹툰 리스트 페이지에 기록 표시"
             tooltip="웹툰 페이지에서 웹툰의 기록을 표시합니다."
-            onChange={e => this.getContextMenuGrant(e)}
           />
           <SettingCheckBox
             storeKey="useContextMenu"
             text="웹툰 페이지에서 우클릭 바로가기 사용"
             tooltip="웹툰 페이지에서 웹툰 링크를 우클릭할때 Extension 메뉴가 나타납니다."
+            onChange={e => this.getContextMenuGrant(e)}
           />
           <SettingCheckBox
             storeKey="saveScroll"

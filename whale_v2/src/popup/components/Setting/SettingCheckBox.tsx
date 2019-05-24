@@ -1,6 +1,7 @@
 import * as React from "react";
 import OptionStore from "../../../store/option";
 import { inject, observer } from "mobx-react";
+import { toJS } from "mobx";
 export interface SettingCheckBoxProps {
   tooltip?: string;
   storeKey: {
@@ -13,7 +14,10 @@ export interface SettingCheckBoxProps {
 
 @inject("option")
 @observer
-export default class SettingCheckBox extends React.Component<SettingCheckBoxProps, null> {
+export default class SettingCheckBox extends React.Component<
+  SettingCheckBoxProps,
+  null
+> {
   public render() {
     const { tooltip, storeKey: key, onChange, text, option } = this.props;
     return (

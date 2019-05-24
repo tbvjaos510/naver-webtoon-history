@@ -108,7 +108,7 @@ export default class DailyList extends React.Component<
                   if (idx < this.state.viewCount)
                     return (
                       <li key={value.id} data-id={value.id}>
-                        <DailyItem item={value} keyword={keyword} />
+                        <DailyItem item={value} />
                       </li>
                     );
                 })}

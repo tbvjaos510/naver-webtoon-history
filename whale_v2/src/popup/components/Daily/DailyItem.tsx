@@ -10,7 +10,6 @@ export interface DailyItemProps {
   item: WebtoonInfoType;
   option?: OptionStore;
   webtoon?: WebtoonStore;
-  keyword?: string;
 }
 
 @inject("option", "webtoon")
@@ -18,7 +17,7 @@ export interface DailyItemProps {
 export default class DailyItem extends React.Component<DailyItemProps, any> {
   public onStarChanged() {
     console.log("starChanged");
-    const { webtoon, item, keyword } = this.props;
+    const { webtoon, item } = this.props;
     const idx = webtoon.starWebtoons.indexOf(item.id);
     if (idx != -1) {
       webtoon.starWebtoons.splice(idx, 1);
@@ -55,9 +54,13 @@ export default class DailyItem extends React.Component<DailyItemProps, any> {
     }
   }
   public render() {
-    const { option, item, webtoon, keyword } = this.props;
+    const { option, item, webtoon } = this.props;
     return (
-      <div className="uk-card uk-card-small uk-card-default">
+      <div
+        className={`uk-card uk-card-small uk-card-default ${
+          option.saveWebtoonSort ? "hover-pointer" : ""
+        }`}
+      >
         <div className="uk-card-media-top">
           <img src={item.img} alt={item.title} className="webtoon-link" />
           {item.isUp ? <em className="ico updt" /> : null}

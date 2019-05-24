@@ -5,6 +5,7 @@ import { weekDay, Week } from "../../tools/request";
 import WebtoonStore from "../../store/webtoon";
 import DailyList, { MovedEvent } from "../components/Daily/DailyList";
 import { toJS } from "mobx";
+import SearchWebtoon from "../components/Daily/SearchWebtoon";
 
 export interface ListDailyProps {
   option?: OptionStore;
@@ -24,7 +25,6 @@ export default class ListDaily extends React.Component<
   ListDailyStates
 > {
   private sortRef: HTMLUListElement = null;
-  private searchRef: HTMLInputElement = null;
 
   constructor(props) {
     super(props);
@@ -34,6 +34,10 @@ export default class ListDaily extends React.Component<
       isSearch: false,
       keyword: null
     };
+
+    // 자식 클래스에서 메소드 사용
+    this.toggleSearch = this.toggleSearch.bind(this);
+    this.changeKeyword = this.changeKeyword.bind(this);
   }
   private readonly day = ["월", "화", "수", "목", "금", "토", "일"];
 
@@ -65,11 +69,6 @@ export default class ListDaily extends React.Component<
       isSearch: !this.state.isSearch,
       keyword: !this.state.isSearch ? "" : null
     });
-
-    if (this.state.isSearch) {
-      this.searchRef && this.searchRef.focus();
-    } else {
-    }
   }
   private onItemMoved(e: MovedEvent) {
     const { option, webtoon } = this.props;
@@ -97,6 +96,12 @@ export default class ListDaily extends React.Component<
     }
   }
 
+  private changeKeyword(keyword: string) {
+    this.setState({
+      keyword
+    });
+  }
+
   public render() {
     const { option } = this.props;
     return (
@@ -121,42 +126,21 @@ export default class ListDaily extends React.Component<
             );
           })}
         </ul>
-        <div
-          className="search-box uk-flex uk-flex-1 "
-          hidden={!this.state.isSearch}
-        >
-          <div className="uk-width-expand">
-            <form className="uk-search uk-width-1-1">
-              <input
-                className="uk-input"
-                type="search"
-                style={{
-                  border: 0
-                }}
-                value={this.state.keyword || ""}
-                placeholder="웹툰 검색..."
-                onChange={e => this.setState({ keyword: e.target.value })}
-                ref={ref => (this.searchRef = ref)}
-              />
-            </form>
-          </div>
 
-          <a
-            className="uk-flex"
-            uk-close=""
-            onClick={() => this.toggleSearch()}
-            href="#"
-          />
-        </div>
+        <SearchWebtoon
+          changeKeyword={this.changeKeyword}
+          hidden={!this.state.isSearch}
+          toggleSearch={this.toggleSearch}
+          keyword={this.state.keyword}
+        />
 
         <DailyList
           selectDay={this.state.selectDay}
           onRef={ref => this.orderChanged(ref)}
           keyword={this.state.keyword}
         />
-
         <a
-          className="uk-icon-button uk-position-medium uk-position-bottom-left"
+          className="uk-icon-button uk-position-medium uk-position-bottom-right"
           onClick={() => this.toggleSearch()}
           href="#"
           uk-icon="search"

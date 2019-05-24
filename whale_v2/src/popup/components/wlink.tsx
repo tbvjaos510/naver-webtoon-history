@@ -41,6 +41,6 @@ export default class Wlink extends React.Component<wlinkProps, null> {
         href: link
       })
     );
-    return <React.Fragment>{child}</React.Fragment>;
+    return child;
   }
 }

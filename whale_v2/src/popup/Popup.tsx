@@ -8,6 +8,7 @@ import Store from "../store";
 import Wlink from "./components/wlink";
 import Switcher from "./components/switcher";
 import { Tabs } from "./Tabs";
+import ErrorHandler from "./components/ErrorHandler";
 
 const store = new Store(false);
 
@@ -15,19 +16,24 @@ export default class App extends React.Component {
   render() {
     return (
       <Provider {...store}>
-        <div>
-          <div className="body-title">
-            <Wlink link="https://comic.naver.com/webtoon/weekday.nhn">
-              <span style={{ cursor: "pointer" }}>
-                네이버 웹툰 도우미{" "}
-                <span className="uk-text-small option-title" style={{ color: "lightgray" }}>
-                  {whale.runtime.getManifest().version}
+        <ErrorHandler>
+          <div>
+            <div className="body-title">
+              <Wlink link="https://comic.naver.com/webtoon/weekday.nhn">
+                <span style={{ cursor: "pointer" }}>
+                  네이버 웹툰 도우미{" "}
+                  <span
+                    className="uk-text-small option-title"
+                    style={{ color: "lightgray" }}
+                  >
+                    {whale.runtime.getManifest().version}
+                  </span>
                 </span>
-              </span>
-            </Wlink>
+              </Wlink>
+            </div>
+            <Switcher webtoonComponents={Tabs.webtoonComponents} />
           </div>
-          <Switcher webtoonComponents={Tabs.webtoonComponents} />
-        </div>
+        </ErrorHandler>
       </Provider>
     );
   }

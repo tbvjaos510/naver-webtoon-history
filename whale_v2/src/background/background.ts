@@ -8,4 +8,5 @@ const store = new RootStore(true, () => {
   onMessage(store.webtoon, store.option);
   // contextMenu(store.webtoon, store.option);
 });
+
 onInstall(store.webtoon, store.option);
