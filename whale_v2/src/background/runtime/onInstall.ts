@@ -11,7 +11,8 @@ export default function(webtoon: WebtoonStore, option: OptionStore) {
     } else if (details.reason === "update") {
       const currentVersion = whale.runtime.getManifest().version;
       if (details.previousVersion != currentVersion) {
-        console.log(details.previousVersion, currentVersion);
+        console.log("update ", details.previousVersion, currentVersion);
+
         migration(details.previousVersion, currentVersion);
       }
     }

@@ -1,6 +1,7 @@
 import WebtoonStore from "../../store/webtoon";
 import OptionStore from "../../store/option";
 import { ChromeMessage } from "../../../@types/commend";
+import Link from "../../tools/link";
 
 export default function(webtoon: WebtoonStore, option: OptionStore) {
   whale.runtime.onMessage.addListener(
@@ -11,11 +12,7 @@ export default function(webtoon: WebtoonStore, option: OptionStore) {
       const no = param.get("no");
       if (message && message.command === "openTab") {
         const link = sender.url.replace("m.comic", "comic");
-        // Force Tab
-        whale.tabs.create({
-          url: link
-        });
-        // option.openTab(link);
+        Link.openNewTab(link);
         response(null);
       } else if (wid && no && message.scroll && option.saveScroll) {
         message.scroll = Math.round(message.scroll * 100);
