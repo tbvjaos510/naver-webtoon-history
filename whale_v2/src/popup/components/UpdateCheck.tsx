@@ -62,7 +62,8 @@ export default class UpdateCheck extends React.Component<
 
   private CURRENT_VERSION = whale.runtime.getManifest().version;
 
-  private fetchUpadte() {
+  private fetchUpdate() {
+    this.setState({ hasUpdate: true });
     axios
       .get(this.API_URL)
       .then(result => {
@@ -90,10 +91,12 @@ export default class UpdateCheck extends React.Component<
     };
     whale.sidebarAction.getBadgeText(result => {
       if (result === " ") {
-        this.fetchUpadte();
+        this.fetchUpdate();
         whale.sidebarAction.setBadgeText({ text: "" });
-        this.setState({ hasUpdate: true });
       }
+    });
+    window.addEventListener("extensionUpdate", () => {
+      this.fetchUpdate();
     });
   }
   public render() {
