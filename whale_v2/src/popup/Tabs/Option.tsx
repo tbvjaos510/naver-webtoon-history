@@ -43,7 +43,7 @@ export default class Option extends React.Component<IOptionProps, null> {
               )}`}
             >
               <SettingButton
-                tooltip="클릭하면 Github 페이지로 이동합니다."
+                tooltip="클릭하면 메일을 보냅니다."
                 onClick={() => {}}
                 type="primary"
               >
