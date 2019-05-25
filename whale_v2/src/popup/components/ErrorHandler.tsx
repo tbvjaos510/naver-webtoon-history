@@ -46,7 +46,7 @@ export default class ErrorHandler extends React.Component<
       <React.Fragment>
         {this.state.hasError ? (
           <div
-            className="uk-alert-danger uk-position-absolute uk-position-z-index"
+            className="uk-alert-danger uk-position-absolute uk-position-z-index uk-width-1-1"
             uk-alert=""
           >
             <a
