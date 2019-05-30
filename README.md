@@ -23,10 +23,10 @@ whale(chrome) extension 으로 네이버 웹툰 기록을 표시하고 쉽게 �
 
 <img src="README-image/7.PNG" style="width:900px">
 
-## [Chrome](https://chrome.google.com/webstore/detail/naver-webtoon-extensions/pkingjioiemgjlbklighjcicnjgjckok?hl=ko) [2.0.1v](https://github.com/tbvjaos510/naver-webtoon-history/releases/tag/chrome-2.0.1)
+## [Chrome](https://chrome.google.com/webstore/detail/naver-webtoon-extensions/pkingjioiemgjlbklighjcicnjgjckok?hl=ko) [3.0.0v](https://github.com/tbvjaos510/naver-webtoon-history/releases/tag/chrome-3.0.0)
 
-<img src="README-image/4.jpg">
+<img src="README-image/4.png">
 
-<img src="README-image/3.jpg">
+<img src="README-image/3.png">
 
 <img src="README-image/1.PNG">
