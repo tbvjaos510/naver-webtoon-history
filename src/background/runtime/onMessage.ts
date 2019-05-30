@@ -3,7 +3,7 @@ import OptionStore from "../../store/option";
 import Link from "../../tools/link";
 
 export interface ChromeMessage {
-  command?: string;
+  command?: "openTab" | "reload" | "addContextMenu" | string;
   scroll?: number;
 }
 

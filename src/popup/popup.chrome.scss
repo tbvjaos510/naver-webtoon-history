@@ -53,8 +53,11 @@ td {
 }
 
 .daily-webtoon > li > div:hover {
-  cursor: move;
   background: rgb(230, 230, 230);
+}
+
+.hover-pointer {
+  cursor: move;
 }
 
 .webtoonTitle,
@@ -67,8 +70,7 @@ th,
 .ico {
   display: inline-block;
   overflow: hidden;
-  background: url(https://ssl.pstatic.net/static/comic/images/sp/sp_ico_v2.png)
-    no-repeat;
+  background: url(https://ssl.pstatic.net/static/comic/images/sp/sp_ico_v2.png) no-repeat;
   font-size: 0;
   line-height: 0;
   color: transparent;
@@ -120,9 +122,8 @@ th,
   overflow: auto;
 }
 
-
 .webtoon-list {
-  height: calc(100vh - 135px);
+  height: calc(100vh - 144px);
 }
 
 .search-box {

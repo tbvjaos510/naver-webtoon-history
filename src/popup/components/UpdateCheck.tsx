@@ -65,7 +65,7 @@ export default class UpdateCheck extends React.Component<IUpdateCheckProps, IUpd
       .then(result => {
         console.log(result);
         const release = (result.data as Array<IGithubRelease>).find(
-          value => value.tag_name === "whale-" + this.CURRENT_VERSION
+          value => value.tag_name === BROWSER + "-" + this.CURRENT_VERSION
         );
         if (release) {
           this.setState({ text: release.body });

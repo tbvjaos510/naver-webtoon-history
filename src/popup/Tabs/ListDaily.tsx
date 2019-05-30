@@ -134,6 +134,7 @@ export default class ListDaily extends React.Component<IListDailyProps, IListDai
           className="uk-icon-button uk-position-medium uk-position-bottom-right"
           onClick={() => this.toggleSearch()}
           href="#"
+          uk-tooltip="검색"
           uk-icon="search"
         />
       </div>

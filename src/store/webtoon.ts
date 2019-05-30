@@ -324,9 +324,13 @@ export default class WebtoonStore {
 
   @computed
   public get starWebtoonInfo(): WebtoonInfoType[] {
-    return this.allWebtoon.filter(webtoon => {
-      if (this._starWebtoons.indexOf(webtoon.id) > -1) return true;
-    });
+    return this.allWebtoon
+      .filter(webtoon => {
+        if (this._starWebtoons.indexOf(webtoon.id) > -1) return true;
+      })
+      .sort((a, b) => {
+        return a.isUp ? -1 : b.isUp ? 1 : a.isRest ? 1 : b.isRest ? -1 : 0;
+      });
   }
 
   /**
