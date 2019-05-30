@@ -128,3 +128,6 @@ $RECYCLE.BIN/
 *.zip
 *.whx
 *.pem
+
+
+dist/

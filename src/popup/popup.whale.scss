@@ -1,0 +1,134 @@
+body {
+  overflow: hidden;
+}
+.body-title {
+  width: 100%;
+  height: 40px;
+  background-color: rgb(0, 213, 100);
+  color: #f7f7f7;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.viewList {
+  width: 100%;
+  img {
+    margin-right: 10px;
+    width: 71px;
+    height: 41px;
+    overflow: hidden;
+  }
+}
+#daily-tab > * {
+  padding-left: 15px !important;
+}
+
+th,
+td {
+  padding: 4px 7px !important;
+}
+.favo {
+  display: inline-block;
+  bottom: 8px;
+  left: 8px;
+}
+.stared > svg > polygon {
+  fill: rgb(255, 216, 0);
+  color: rgb(255, 216, 0);
+  stroke: rgb(255, 216, 0);
+}
+.recent > tr:hover {
+  background: rgb(240, 240, 240);
+}
+
+.recent > tr > td:hover {
+  background: rgb(220, 220, 220);
+  cursor: pointer;
+}
+.uk-card {
+  text-align: center;
+}
+.webtoonName {
+  text-decoration: none;
+  color: black;
+}
+
+.daily-webtoon > li > div:hover {
+  background: rgb(230, 230, 230);
+}
+
+.hover-pointer {
+  cursor: move;
+}
+
+.webtoonTitle,
+th,
+.webtoonTime {
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+.ico {
+  display: inline-block;
+  overflow: hidden;
+  background: url(https://ssl.pstatic.net/static/comic/images/sp/sp_ico_v2.png)
+    no-repeat;
+  font-size: 0;
+  line-height: 0;
+  color: transparent;
+  vertical-align: top;
+
+  width: 26px;
+  height: 26px;
+  &.updt {
+    background-position: -130px -60px;
+  }
+  &.break {
+    background-position: -160px -60px;
+  }
+  position: absolute;
+  top: -12px;
+  right: 2px;
+}
+
+.uk-tab > .uk-active > a {
+  border-bottom-color: rgb(0, 213, 100);
+}
+
+.webtoonName-td {
+  display: flex;
+}
+
+.date-today {
+  background-color: #fdd600;
+}
+
+.option-title {
+  font-size: 15px;
+}
+
+.view-webtoon {
+  background: papayawhip;
+}
+
+.webtoon-link {
+  word-break: keep-all;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.scroll-fixed {
+  height: calc(100vh - 72px);
+  overflow: auto;
+}
+
+.webtoon-list {
+  height: calc(100vh - 135px);
+}
+
+.search-box {
+  margin: 0 15px;
+}

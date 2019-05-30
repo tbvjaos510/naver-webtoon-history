@@ -1,0 +1,40 @@
+{
+  "name": "__MSG_APP_NAME__",
+  "description": "__MSG_APP_DESCRIPTION__",
+  "default_locale": "ko",
+  "version": "4.1.0",
+  "manifest_version": 2,
+  "background": {
+    "persistent": false,
+    "scripts": ["js/background.js"]
+  },
+  "browser_action": {
+    "default_popup": "index.html",
+    "default_icon": "icons/icon.png",
+    "default_title": "__MSG_APP_TITLE__"
+  },
+  "icons": {
+    "300": "icons/icon.png"
+  },
+  "permissions": [
+    "history",
+    "storage",
+    "tabs",
+    "activeTab",
+    "https://comic.naver.com/*",
+    "https://m.comic.naver.com/*"
+  ],
+  "externally_connectable": {
+    "matches": ["https://comic.naver.com/*", "https://m.comic.naver.com/*"]
+  },
+  "optional_permissions": ["contextMenus"],
+  "content_scripts": [
+    {
+      "matches": ["https://m.comic.naver.com/*"],
+      "js": ["js/contentScript.js"],
+      "css": ["css/contentStyle.css"],
+      "run_at": "document_end",
+      "all_frames": true
+    }
+  ]
+}
