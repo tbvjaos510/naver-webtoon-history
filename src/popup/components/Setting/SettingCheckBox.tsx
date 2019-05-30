@@ -14,10 +14,7 @@ export interface ISettingCheckBoxProps {
 
 @inject("option")
 @observer
-export default class SettingCheckBox extends React.Component<
-  ISettingCheckBoxProps,
-  null
-> {
+export default class SettingCheckBox extends React.Component<ISettingCheckBoxProps, null> {
   public render() {
     const { tooltip, storeKey: key, onChange, text, option } = this.props;
     return (

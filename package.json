@@ -11,7 +11,7 @@
     "dev": "npm run dev:chrome && npm run dev:whale",
     "watch:chrome": "webpack -w --env.browser=chrome",
     "watch:whale": "webpack -w --env.browser=whale",
-    "lint": "tslint 'src/**/*.{ts, tsx}'"
+    "lint": "prettier --write ./src/**/*.{ts,tsx}"
   },
   "license": "MIT",
   "devDependencies": {

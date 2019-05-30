@@ -13,10 +13,7 @@ export interface IPageSettingProps {
 
 @inject("option", "webtoon")
 @observer
-export default class PageSetting extends React.Component<
-  IPageSettingProps,
-  null
-> {
+export default class PageSetting extends React.Component<IPageSettingProps, null> {
   private getContextMenuGrant(event: React.ChangeEvent<HTMLInputElement>) {
     const { option } = this.props;
     if (event.target.checked) {

@@ -7,10 +7,7 @@ export interface ISearchWebtoonProps {
   keyword: string;
 }
 
-export default class SearchWebtoon extends React.Component<
-  ISearchWebtoonProps,
-  any
-> {
+export default class SearchWebtoon extends React.Component<ISearchWebtoonProps, any> {
   public render() {
     const { hidden, changeKeyword, toggleSearch, keyword } = this.props;
     return (
@@ -30,12 +27,7 @@ export default class SearchWebtoon extends React.Component<
           </form>
         </div>
 
-        <a
-          className="uk-flex"
-          uk-close=""
-          onClick={() => toggleSearch()}
-          href="#"
-        />
+        <a className="uk-flex" uk-close="" onClick={() => toggleSearch()} href="#" />
       </div>
     );
   }

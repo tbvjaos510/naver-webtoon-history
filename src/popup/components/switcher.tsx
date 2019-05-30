@@ -12,10 +12,7 @@ export default class Switcher extends React.Component<ISwitcherProps, any> {
     const { webtoonComponents } = this.props;
     return (
       <div>
-        <ul
-          className="uk-child-width-expand uk-margin-small"
-          uk-tab="connect: #switcher-tab"
-        >
+        <ul className="uk-child-width-expand uk-margin-small" uk-tab="connect: #switcher-tab">
           {webtoonComponents.map(({ title }, i) => (
             <li key={i}>
               <a href="#">{title}</a>

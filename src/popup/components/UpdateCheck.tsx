@@ -53,12 +53,8 @@ export interface IUpdateCheckStates {
   text: string;
 }
 
-export default class UpdateCheck extends React.Component<
-  IUpdateCheckProps,
-  IUpdateCheckStates
-> {
-  private API_URL =
-    "https://api.github.com/repos/tbvjaos510/naver-webtoon-history/releases";
+export default class UpdateCheck extends React.Component<IUpdateCheckProps, IUpdateCheckStates> {
+  private API_URL = "https://api.github.com/repos/tbvjaos510/naver-webtoon-history/releases";
 
   private CURRENT_VERSION = chrome.runtime.getManifest().version;
 

@@ -41,11 +41,7 @@ export default class DailyItem extends React.Component<IDailyItemProps, any> {
           addSuffix: true
         }) + "에 봄";
       return (
-        <Wlink
-          link={`https://comic.naver.com/webtoon/detail.nhn?titleId=${
-            find.id
-          }&no=${find.no}`}
-        >
+        <Wlink link={`https://comic.naver.com/webtoon/detail.nhn?titleId=${find.id}&no=${find.no}`}>
           <a className="uk-link-muted webtoon-link" uk-tooltip={timeLocale}>
             {find.noname}
           </a>
@@ -76,10 +72,7 @@ export default class DailyItem extends React.Component<IDailyItemProps, any> {
             <React.Fragment>
               <br />
               <a
-                className={
-                  "favo " +
-                  (webtoon.starWebtoons.indexOf(item.id) != -1 ? "stared" : "")
-                }
+                className={"favo " + (webtoon.starWebtoons.indexOf(item.id) != -1 ? "stared" : "")}
                 uk-icon="icon: star;"
                 onClick={() => this.onStarChanged()}
               />

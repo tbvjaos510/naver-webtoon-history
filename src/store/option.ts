@@ -89,14 +89,11 @@ export default class OptionStore {
             this[key] = item[key];
           }
         });
-        chrome.storage.sync.set(
-          { option: JSON.stringify(this.optionObject) },
-          () => {
-            this.getUseBytes();
-            console.log("Update Complate");
-            this.onLoad();
-          }
-        );
+        chrome.storage.sync.set({ option: JSON.stringify(this.optionObject) }, () => {
+          this.getUseBytes();
+          console.log("Update Complate");
+          this.onLoad();
+        });
       }
     });
 

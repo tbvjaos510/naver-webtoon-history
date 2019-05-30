@@ -22,10 +22,7 @@ export interface IDailyListStates {
 
 @inject("webtoon", "option")
 @observer
-export default class DailyList extends React.Component<
-  IDailyListProps,
-  IDailyListStates
-> {
+export default class DailyList extends React.Component<IDailyListProps, IDailyListStates> {
   constructor(props) {
     super(props);
     this.state = {
@@ -35,14 +32,9 @@ export default class DailyList extends React.Component<
   private maxCount: number = 0;
 
   componentWillUpdate(nextProp: IDailyListProps, nextState: IDailyListStates) {
-    if (
-      this.props.selectDay != nextProp.selectDay ||
-      this.props.keyword != nextProp.keyword
-    ) {
+    if (this.props.selectDay != nextProp.selectDay || this.props.keyword != nextProp.keyword) {
       if (nextProp.selectDay != "favo")
-        this.maxCount = this.props.webtoon.dailyWebtoons[
-          nextProp.selectDay
-        ].length;
+        this.maxCount = this.props.webtoon.dailyWebtoons[nextProp.selectDay].length;
       else this.maxCount = this.props.webtoon.starWebtoonInfo.length;
 
       if (this.maxCount < 21) nextState.viewCount = this.maxCount;
@@ -65,11 +57,7 @@ export default class DailyList extends React.Component<
       >
         <ul
           className="uk-grid-small uk-child-width-1-3 uk-child-width-1-3@s uk-text-center daily-webtoon"
-          uk-sortable={
-            option.saveWebtoonSort && keyword == null
-              ? "handle: .uk-card"
-              : null
-          }
+          uk-sortable={option.saveWebtoonSort && keyword == null ? "handle: .uk-card" : null}
           uk-grid="true"
           ref={ref => this.props.onRef(ref)}
         >
@@ -95,11 +83,7 @@ export default class DailyList extends React.Component<
                 .sort((a, b) => (a.title > b.title ? 1 : -1))
                 .filter(value => {
                   // 검색
-                  if (
-                    value.title
-                      .replace(" ", "")
-                      .indexOf(keyword.replace(" ", "")) > -1
-                  ) {
+                  if (value.title.replace(" ", "").indexOf(keyword.replace(" ", "")) > -1) {
                     return true;
                   }
                 })

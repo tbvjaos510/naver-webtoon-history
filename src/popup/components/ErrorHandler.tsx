@@ -14,10 +14,7 @@ interface IErrorHandlerStates {
 
 @inject("option")
 @observer
-export default class ErrorHandler extends React.Component<
-  IErrorHandlerProps,
-  IErrorHandlerStates
-> {
+export default class ErrorHandler extends React.Component<IErrorHandlerProps, IErrorHandlerStates> {
   constructor(props) {
     super(props);
     this.state = { hasError: false };
@@ -25,9 +22,10 @@ export default class ErrorHandler extends React.Component<
       window.onerror = (e, url, line) => {
         this.componentDidCatch(e, url);
       };
-      chrome.extension.getBackgroundPage().window.onerror = (e, url, line) => {
-        this.componentDidCatch(e, url);
-      };
+      if (chrome.extension.getBackgroundPage())
+        chrome.extension.getBackgroundPage().window.onerror = (e, url, line) => {
+          this.componentDidCatch(e, url);
+        };
     } catch (e) {
       this.state = { hasError: true };
     }

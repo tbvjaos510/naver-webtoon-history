@@ -20,10 +20,7 @@ export interface IListDailyStates {
 
 @inject("option", "webtoon")
 @observer
-export default class ListDaily extends React.Component<
-  IListDailyProps,
-  IListDailyStates
-> {
+export default class ListDaily extends React.Component<IListDailyProps, IListDailyStates> {
   private sortRef: HTMLUListElement = null;
 
   constructor(props) {
@@ -54,15 +51,11 @@ export default class ListDaily extends React.Component<
 
   public componentDidMount() {
     this.changeView((new Date().getDay() + 6) % 7);
-    this.sortRef.addEventListener("moved", (e: MovedEvent) =>
-      this.onItemMoved(e)
-    );
+    this.sortRef.addEventListener("moved", (e: MovedEvent) => this.onItemMoved(e));
   }
 
   private changeView(index: number) {
-    UIkit.tab("#daily-tab").show(
-      index + (this.props.option.saveFavorate ? 1 : 0)
-    );
+    UIkit.tab("#daily-tab").show(index + (this.props.option.saveFavorate ? 1 : 0));
   }
   private toggleSearch() {
     this.setState({
@@ -82,9 +75,7 @@ export default class ListDaily extends React.Component<
       const element = e.detail[1];
       const wid = parseInt(element.getAttribute("data-id"));
       const itemIdx = wsort.indexOf(wid);
-      const movedIdx = Array.from(element.parentElement.children).indexOf(
-        element
-      );
+      const movedIdx = Array.from(element.parentElement.children).indexOf(element);
       wsort.splice(itemIdx, 1);
       wsort.splice(movedIdx, 0, wid);
       if (this.state.selectDay === "favo") {

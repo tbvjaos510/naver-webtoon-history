@@ -4,10 +4,7 @@ import SettingButton from "./SettingButton";
 
 export interface IDevelopInfoProps {}
 
-export default class DevelopInfo extends React.Component<
-  IDevelopInfoProps,
-  null
-> {
+export default class DevelopInfo extends React.Component<IDevelopInfoProps, null> {
   public render() {
     return (
       <li>
@@ -15,15 +12,8 @@ export default class DevelopInfo extends React.Component<
           개발 정보
         </a>
         <div className="uk-accordion-content">
-          <Wlink
-            link="https://github.com/tbvjaos510/naver-webtoon-history"
-            forceTab={true}
-          >
-            <a
-              id="togithub"
-              className="uk-icon-button"
-              uk-icon="icon: github"
-            />
+          <Wlink link="https://github.com/tbvjaos510/naver-webtoon-history" forceTab={true}>
+            <a id="togithub" className="uk-icon-button" uk-icon="icon: github" />
           </Wlink>
 
           <Wlink link="https://blog.naver.com/dgsw102" forceTab={true}>

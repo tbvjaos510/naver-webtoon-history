@@ -6,13 +6,14 @@ whale(chrome) extension 으로 네이버 웹툰 기록을 표시하고 쉽게 �
 
 계속 기능을 업데이트 중이니 아이디어나 오류가 있으면 알려주시면 적극 반영하겠습니다.
 
-# Stack
-* Typescript
-* React
-* MobX
-* Webpack
+## Stack
 
-# 배포
+- Typescript
+- React
+- MobX
+- Webpack
+
+## 배포
 
 ## [Whale](https://store.whale.naver.com/detail/nmambboikkfejkgloppiejnhhohbaaem) [4.1.0v](https://github.com/tbvjaos510/naver-webtoon-history/releases/tag/whale-4.1.0)
 

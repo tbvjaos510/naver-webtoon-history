@@ -1,10 +1,6 @@
 import * as React from "react";
 import { observer, inject } from "mobx-react";
-import OptionStore, {
-  ChromeStore,
-  WebtoonOrder,
-  LinkTarget
-} from "../../store/option";
+import OptionStore, { ChromeStore, WebtoonOrder, LinkTarget } from "../../store/option";
 import WebtoonStore from "../../store/webtoon";
 import Wlink from "../components/wlink";
 import RecentSetting from "../components/Setting/RecentSetting";
@@ -42,11 +38,7 @@ export default class Option extends React.Component<IOptionProps, null> {
                 "version: " + chrome.runtime.getManifest().version + "\n"
               )}`}
             >
-              <SettingButton
-                tooltip="클릭하면 메일을 보냅니다."
-                onClick={() => {}}
-                type="primary"
-              >
+              <SettingButton tooltip="클릭하면 메일을 보냅니다." onClick={() => {}} type="primary">
                 오류 제보
               </SettingButton>
             </Wlink>
