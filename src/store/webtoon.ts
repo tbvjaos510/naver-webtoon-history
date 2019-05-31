@@ -114,7 +114,10 @@ export default class WebtoonStore {
 
   private option: OptionStore;
 
-  constructor(option: OptionStore, onLoad?: () => void) {
+  constructor(option?: OptionStore, onLoad?: () => void) {
+    // for test code
+    if (arguments.length === 0) return;
+
     this.option = option;
     this.option.onLoad = () => {
       this.storage.get(["webtoon", "visits", "scrolls"], ({ webtoon, visits, scrolls }) => {

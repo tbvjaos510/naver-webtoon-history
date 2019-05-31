@@ -55,8 +55,10 @@ export default class OptionStore {
   /**
    * 생성자
    */
-  constructor(isBackground: boolean) {
+  constructor(isBackground?: boolean) {
     this.defaultOption = this.optionObject;
+    // for test code
+    if (arguments.length === 0) return;
     this.isBackground = isBackground;
     // Chrome Storage로부터 설정값을 초기화
     chrome.storage.sync.get("option", ({ option: item }) => {
