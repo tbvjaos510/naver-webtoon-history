@@ -7,19 +7,19 @@ import {
   CONTEXT_MENU_ID_FAVORATE
 } from "../../src/tools/contextMenu";
 import mockWhale from "../whale";
-import * as sinonChorme from "sinon-chrome";
+import * as sinonChrome from "sinon-chrome";
 import { getWebtoonStore } from "../store/storeTestHelper";
+import WebtoonStore from "../../src/store/webtoon";
 
-const webtoonUrl = "https://comic.naver.com/webtoon/list.nhn?titleId=12345";
-const mobileUrl = "https://m.comic.naver.com/webtoon/list.nhn?titleId=12345";
+const webtoonUrl = "https://comic.naver.com/webtoon/list.nhn?titleId=";
 
 describe("tools/contextMenu", () => {
   beforeAll(() => {
-    global.chrome = sinonChorme;
+    global.chrome = sinonChrome;
   });
 
   afterAll(() => {
-    sinonChorme.flush();
+    sinonChrome.flush();
     delete global.chrome;
   });
 
@@ -27,28 +27,28 @@ describe("tools/contextMenu", () => {
     const callback = jest.fn();
     removeContext(callback);
     expect(callback).not.toBeCalled();
-    sinonChorme.contextMenus.removeAll.yield();
+    sinonChrome.contextMenus.removeAll.yield();
     // removeAll 콜백 실행되게 함
     expect(callback).toBeCalled();
   });
 
   describe("addLinkContext() create contextMenu when", () => {
     afterEach(() => {
-      sinonChorme.contextMenus.removeAll.flush();
-      sinonChorme.contextMenus.create.flush();
+      sinonChrome.contextMenus.removeAll.flush();
+      sinonChrome.contextMenus.create.flush();
     });
 
     it("browser is whale", () => {
       global.BROWSER = "whale";
       addLinkContext();
       // removeAll 콜백 실행되게 함
-      sinonChorme.contextMenus.removeAll.yield();
+      sinonChrome.contextMenus.removeAll.yield();
 
       // context가 3개 추가돼야함.
-      expect(sinonChorme.contextMenus.create.callCount).toBe(3);
-      expect(sinonChorme.contextMenus.create.getCall(0).args[0].id).toBe(CONTEXT_MENU_ID_TAB);
-      expect(sinonChorme.contextMenus.create.getCall(1).args[0].id).toBe(CONTEXT_MENU_ID_FAVORATE);
-      expect(sinonChorme.contextMenus.create.getCall(2).args[0].id).toBe(CONTEXT_MENU_ID_SIDEBAR);
+      expect(sinonChrome.contextMenus.create.callCount).toBe(3);
+      expect(sinonChrome.contextMenus.create.getCall(0).args[0].id).toBe(CONTEXT_MENU_ID_TAB);
+      expect(sinonChrome.contextMenus.create.getCall(1).args[0].id).toBe(CONTEXT_MENU_ID_FAVORATE);
+      expect(sinonChrome.contextMenus.create.getCall(2).args[0].id).toBe(CONTEXT_MENU_ID_SIDEBAR);
       delete global.BROWSER;
     });
 
@@ -56,18 +56,21 @@ describe("tools/contextMenu", () => {
       global.BROWSER = "chrome";
       addLinkContext();
       // removeAll 콜백 실행되게 함
-      sinonChorme.contextMenus.removeAll.yield();
+      sinonChrome.contextMenus.removeAll.yield();
 
       // context가 2개 추가돼야함.
-      expect(sinonChorme.contextMenus.create.callCount).toBe(2);
-      expect(sinonChorme.contextMenus.create.getCall(0).args[0].id).toBe(CONTEXT_MENU_ID_TAB);
-      expect(sinonChorme.contextMenus.create.getCall(1).args[0].id).toBe(CONTEXT_MENU_ID_FAVORATE);
+      expect(sinonChrome.contextMenus.create.callCount).toBe(2);
+      expect(sinonChrome.contextMenus.create.getCall(0).args[0].id).toBe(CONTEXT_MENU_ID_TAB);
+      expect(sinonChrome.contextMenus.create.getCall(1).args[0].id).toBe(CONTEXT_MENU_ID_FAVORATE);
       delete global.BROWSER;
     });
   });
 
   describe("addContextClickListener() event work when", () => {
+    let webtoonStore: WebtoonStore;
     beforeAll(() => {
+      webtoonStore = getWebtoonStore();
+      addContextClickListener(webtoonStore);
       global.BROWSER = "whale";
       // whale BrowserAction
       global.whale = mockWhale;
@@ -80,8 +83,7 @@ describe("tools/contextMenu", () => {
 
     it("menuItemId is CONTEXT_MENU_ID_SIDEBAR", () => {
       // webtoon store가 필요하지 않음
-      addContextClickListener(null);
-      sinonChorme.contextMenus.onClicked.trigger({
+      sinonChrome.contextMenus.onClicked.trigger({
         menuItemId: CONTEXT_MENU_ID_SIDEBAR,
         linkUrl: webtoonUrl
       } as chrome.contextMenus.OnClickData);
@@ -90,15 +92,45 @@ describe("tools/contextMenu", () => {
     });
 
     it("menuItemId is CONTEXT_MENU_ID_TAB", () => {
-      addContextClickListener(null);
-      sinonChorme.contextMenus.onClicked.trigger({
+      sinonChrome.contextMenus.onClicked.trigger({
         menuItemId: CONTEXT_MENU_ID_TAB,
         linkUrl: webtoonUrl
       } as chrome.contextMenus.OnClickData);
-
-      expect(sinonChorme.windows.create).toBeCalled();
+      expect(sinonChrome.windows.create.called).toBe(true);
     });
 
-    it("menuItemId is CONTEXT_MENU_ID_FAVORATE", () => {});
+    describe("menuItemId is CONTEXT_MENU_ID_FAVORATE and webtoonId is ", () => {
+      beforeAll(() => {
+        webtoonStore.starWebtoons.push(12345);
+      });
+
+      afterEach(() => {
+        sinonChrome.tabs.executeScript.flush();
+      });
+
+      it("exists in favorate", () => {
+        sinonChrome.contextMenus.onClicked.trigger({
+          menuItemId: CONTEXT_MENU_ID_FAVORATE,
+          linkUrl: webtoonUrl + "12345",
+          frameId: 1
+        } as chrome.contextMenus.OnClickData);
+        expect(sinonChrome.tabs.executeScript.getCall(0).args[0].code).toBe(
+          `alert("[Naver Webtoon Extention] 이미 즐겨찾기에 존재합니다.");`
+        );
+      });
+
+      it("not exists in favorate", () => {
+        sinonChrome.contextMenus.onClicked.trigger({
+          menuItemId: CONTEXT_MENU_ID_FAVORATE,
+          linkUrl: webtoonUrl + "11111",
+          frameId: 1
+        } as chrome.contextMenus.OnClickData);
+        expect(sinonChrome.tabs.executeScript.getCall(0).args[0].code).toBe(
+          `alert("[Naver Webtoon Extention] 즐겨찾기에 추가하였습니다.");`
+        );
+        // add to store test
+        expect(webtoonStore.starWebtoons.indexOf(11111)).not.toBe(-1);
+      });
+    });
   });
 });
