@@ -13,6 +13,7 @@ whale(chrome) extension 으로 네이버 웹툰 기록을 표시하고 쉽게 �
 - React
 - MobX
 - Webpack
+- Jest (Unit Test)
 
 ## 배포
 
