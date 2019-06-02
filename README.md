@@ -1,6 +1,7 @@
 # Naver Webtoon Extension
 
 [![Build Status](https://travis-ci.org/tbvjaos510/naver-webtoon-history.svg?branch=master)](https://travis-ci.org/tbvjaos510/naver-webtoon-history)
+[![Coverage Status](https://coveralls.io/repos/github/tbvjaos510/naver-webtoon-history/badge.svg?branch=master)](https://coveralls.io/github/tbvjaos510/naver-webtoon-history?branch=master)
 
 whale(chrome) extension 으로 네이버 웹툰 기록을 표시하고 쉽게 접근할 수 있는 확장 앱니다.
 
