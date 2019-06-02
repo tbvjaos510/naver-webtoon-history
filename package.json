@@ -14,7 +14,8 @@
     "lint": "prettier --write ./src/**/*.{ts,tsx}",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "coveralls": "jest --coverage && cat ./tests/coverage/lcov.info | coveralls"
   },
   "license": "MIT",
   "devDependencies": {
@@ -25,6 +26,7 @@
     "@types/react-dom": "^16.0.4",
     "@types/sinon-chrome": "^2.2.6",
     "copy-webpack-plugin": "^5.0.3",
+    "coveralls": "^3.0.3",
     "css-loader": "^0.28.11",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.13.2",
