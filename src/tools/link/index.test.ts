@@ -1,6 +1,6 @@
-import Link from "../../src/tools/link";
+import Link from ".";
 import * as sinonChrome from "sinon-chrome";
-import mockWhale from "../whale";
+import mockWhale from "../__mocks__/whale";
 
 describe("tools/link", () => {
   const testURL = "https://comic.naver.com";
@@ -51,6 +51,29 @@ describe("tools/link", () => {
         url: testMobileURL
       });
       delete global.BROWSER;
+    });
+  });
+
+  describe("openUrl() work when", () => {
+    it("linkTarget is Current", () => {
+      const openCurrentTab = jest.spyOn(Link, "openCurrentTab").mockImplementation(link => {});
+      Link.openUrl("Current", testURL);
+      expect(openCurrentTab).toBeCalled();
+    });
+    it("linkTarget is Popup", () => {
+      const openPopup = jest.spyOn(Link, "openPopup").mockImplementation(link => {});
+      Link.openUrl("Popup", testURL);
+      expect(openPopup).toBeCalled();
+    });
+    it("linkTarget is Tab", () => {
+      const openNewTab = jest.spyOn(Link, "openNewTab").mockImplementation(link => {});
+      Link.openUrl("Tab", testURL);
+      expect(openNewTab).toBeCalled();
+    });
+    it("linkTarget is Sidebar", () => {
+      const openSidebar = jest.spyOn(Link, "openSidebar").mockImplementation(link => {});
+      Link.openUrl("Sidebar", testURL);
+      expect(openSidebar).toBeCalled();
     });
   });
 });

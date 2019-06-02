@@ -3,7 +3,7 @@
     "target": "es6",
     "module": "commonjs",
     "moduleResolution": "node",
-    "sourceMap": true,
+    "inlineSourceMap": true,
     "jsx": "react",
     "lib": ["es6", "dom", "dom.iterable"],
     "experimentalDecorators": true,

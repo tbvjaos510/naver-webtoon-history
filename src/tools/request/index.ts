@@ -23,35 +23,45 @@ export interface WebtoonInfo {
 
 export const weekDay: Week[] = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
 
-export default class WebtoonRequest {
+export default {
   /**
    * 페이지의 사진, 타이틀을 불러옵니다.
    * @param type 웹툰 타입
    * @param key1 웹툰 번호
    * @param key2 회차 번호
    */
-  static async getOpenGraph(type: string, key1: number, key2: number): Promise<ogInfo> {
+  async getOpenGraph(type: string, key1: number, key2: number): Promise<ogInfo> {
     const og: ogInfo = {};
     const url = `https://comic.naver.com${type}/detail.nhn?titleId=${key1}&no=${key2}`;
-    const { data } = await axios.get<string>(url);
-    og.title = data.match(
-      /<meta [^>]*property=[\"']og:description[\"'] [^>]*content=[\"']([^'^\"]+?)[\"'][^>]*>/
-    )[1];
-    og.img = data.match(
-      /<meta [^>]*property=[\"']og:image[\"'] [^>]*content=[\"']([^'^\"]+?)[\"'][^>]*>/
-    )[1];
+
+    try {
+      const { data } = await axios.get<string>(url);
+      if (!data) {
+        console.log(`request:${url} Error`);
+        throw "";
+      }
+      og.title = data.match(
+        /<meta [^>]*property=[\"']og:description[\"'] [^>]*content=[\"']([^'^\"]+?)[\"'][^>]*>/
+      )[1];
+      og.img = data.match(
+        /<meta [^>]*property=[\"']og:image[\"'] [^>]*content=[\"']([^'^\"]+?)[\"'][^>]*>/
+      )[1];
+    } catch (e) {
+      console.log(`OpenGraph get failed.`, url, og);
+      return null;
+    }
 
     if (og.title && og.img && og.img.match("https://shared-comic.pstatic.net/thumb/")) return og;
 
     console.log(`OpenGraph get failed.`, url, og);
     return null;
-  }
+  },
 
-  static async getAllWebtoon(sort: WebtoonOrder): Promise<WebtoonInfo> {
-    const link = `https://comic.naver.com/webtoon/weekday.nhn?order=${sort}`;
-    const { data } = await axios.get(link);
+  async getAllWebtoon(sort: WebtoonOrder): Promise<WebtoonInfo> {
+    const url = `https://comic.naver.com/webtoon/weekday.nhn?order=${sort}`;
+    const { data } = await axios.get(url);
     if (!data) {
-      console.log(`request:${link} Error`);
+      console.log(`request:${url} Error`);
       return null;
     }
     const webtoons: WebtoonInfo = {};
@@ -74,9 +84,8 @@ export default class WebtoonRequest {
       });
     });
     return webtoons;
-  }
-
-  static async getCompleteWebtoon(): Promise<WebtoonInfoType[]> {
+  },
+  async getCompleteWebtoon(): Promise<WebtoonInfoType[]> {
     const link = `https://comic.naver.com/webtoon/finish.nhn?order=TitleName`;
     const { data } = await axios.get(link);
     if (!data) {
@@ -100,4 +109,4 @@ export default class WebtoonRequest {
     });
     return webtoons;
   }
-}
+};

@@ -1,11 +1,12 @@
 /* eslint-disable */
 module.exports = {
-  roots: ["./__tests__"],
+  roots: ["./src"],
   transform: {
     "^.+\\.tsx?$": "ts-jest"
   },
-  testRegex: "(/__tests__/.*\\.(test|spec))\\.tsx?$",
-  // testMatch: ["**/__tests__/**/*.[jt]s?(x)", "**/?(*.)+(spec|test).[jt]s?(x)"],
+  testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.[jt]sx?$",
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
-  snapshotSerializers: ["enzyme-to-json/serializer"]
+  snapshotSerializers: ["enzyme-to-json/serializer"],
+  // collectCoverage: true,
+  collectCoverageFrom: ["src/**/*!(test).{ts,tsx}"]
 };

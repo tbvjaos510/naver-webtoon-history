@@ -5,11 +5,13 @@ import {
   addContextClickListener,
   CONTEXT_MENU_ID_SIDEBAR,
   CONTEXT_MENU_ID_FAVORATE
-} from "../../src/tools/contextMenu";
-import mockWhale from "../whale";
+} from ".";
+import mockWhale from "../__mocks__/whale";
 import * as sinonChrome from "sinon-chrome";
-import { getWebtoonStore } from "../store/storeTestHelper";
-import WebtoonStore from "../../src/store/webtoon";
+import WebtoonStore from "../../store/webtoon";
+import Link from "../link";
+
+jest.mock("../link");
 
 const webtoonUrl = "https://comic.naver.com/webtoon/list.nhn?titleId=";
 
@@ -69,7 +71,7 @@ describe("tools/contextMenu", () => {
   describe("addContextClickListener() event work when", () => {
     let webtoonStore: WebtoonStore;
     beforeAll(() => {
-      webtoonStore = getWebtoonStore();
+      webtoonStore = new WebtoonStore();
       addContextClickListener(webtoonStore);
       global.BROWSER = "whale";
       // whale BrowserAction
@@ -88,7 +90,7 @@ describe("tools/contextMenu", () => {
         linkUrl: webtoonUrl
       } as chrome.contextMenus.OnClickData);
 
-      expect(mockWhale.sidebarAction.show).toBeCalled();
+      expect(Link.openSidebar).toBeCalled();
     });
 
     it("menuItemId is CONTEXT_MENU_ID_TAB", () => {
@@ -96,7 +98,7 @@ describe("tools/contextMenu", () => {
         menuItemId: CONTEXT_MENU_ID_TAB,
         linkUrl: webtoonUrl
       } as chrome.contextMenus.OnClickData);
-      expect(sinonChrome.windows.create.called).toBe(true);
+      expect(Link.openPopup).toBeCalled();
     });
 
     describe("menuItemId is CONTEXT_MENU_ID_FAVORATE and webtoonId is ", () => {
