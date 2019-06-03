@@ -89,9 +89,9 @@ describe("<UpdateCheck />", () => {
       expect(component.state("hasUpdate")).toBe(false);
       window.dispatchEvent(new Event("extentionUpdate"));
 
-      expect(component.state("hasUpdate")).toBe(true);
       // wait axios.get()
       setTimeout(() => {
+        expect(component.state("hasUpdate")).toBe(true);
         expect(component.state("text")).toBe(releaseInfo[1].body);
         expect(component.find("div[uk-alert]>h3").text()).toBe(testVerion + " 업데이트 내용");
         delete global.BROWSER;
