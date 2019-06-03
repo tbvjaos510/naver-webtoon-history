@@ -1,7 +1,7 @@
 import ListDaily from "./ListDaily";
 import ListHistory from "./ListHistory";
 import Option from "./Option";
-import { ISwitcherProps } from "../components/switcher";
+import { ISwitcherProps } from "../components/Switcher";
 
 export const Tabs: ISwitcherProps = {
   webtoonComponents: [

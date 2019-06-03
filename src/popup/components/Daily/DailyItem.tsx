@@ -1,6 +1,6 @@
 import * as React from "react";
 import { WebtoonInfoType } from "../../../tools/request";
-import Wlink from "../wlink";
+import Wlink from "../Wlink";
 import OptionStore from "../../../store/option";
 import { observer, inject } from "mobx-react";
 import WebtoonStore from "../../../store/webtoon";

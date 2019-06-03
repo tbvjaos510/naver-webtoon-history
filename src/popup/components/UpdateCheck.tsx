@@ -1,7 +1,7 @@
 import * as React from "react";
 import axios from "axios";
 import * as ReactMarkdown from "react-markdown";
-import Wlink from "./wlink";
+import Wlink from "./Wlink";
 
 export interface IGithubAuthor {
   login: string;
@@ -70,7 +70,7 @@ export default class UpdateCheck extends React.Component<IUpdateCheckProps, IUpd
         if (release) {
           this.setState({ text: release.body });
         } else {
-          this.setState({ text: "업데이트 정보 찾지 못했습니다." });
+          this.setState({ text: "업데이트 정보를 찾지 못했습니다." });
         }
       })
       .catch(err => {

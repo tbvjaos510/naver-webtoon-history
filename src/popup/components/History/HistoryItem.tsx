@@ -1,5 +1,5 @@
 import * as React from "react";
-import Wlink from "../wlink";
+import Wlink from "../Wlink";
 import WebtoonStore, { RecentWebtoon } from "../../../store/webtoon";
 import { observer, inject } from "mobx-react";
 import * as format from "date-fns/format";

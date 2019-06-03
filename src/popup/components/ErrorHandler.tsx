@@ -1,5 +1,5 @@
 import * as React from "react";
-import Wlink from "./wlink";
+import Wlink from "./Wlink";
 import { observer, inject } from "mobx-react";
 import OptionStore from "../../store/option";
 

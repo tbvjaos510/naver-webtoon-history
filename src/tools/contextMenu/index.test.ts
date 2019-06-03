@@ -6,7 +6,7 @@ import {
   CONTEXT_MENU_ID_SIDEBAR,
   CONTEXT_MENU_ID_FAVORATE
 } from ".";
-import mockWhale from "../__mocks__/whale";
+import mockWhale from "../../__mocks__/whale";
 import * as sinonChrome from "sinon-chrome";
 import WebtoonStore from "../../store/webtoon";
 import Link from "../link";

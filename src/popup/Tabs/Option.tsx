@@ -2,7 +2,7 @@ import * as React from "react";
 import { observer, inject } from "mobx-react";
 import OptionStore, { ChromeStore, WebtoonOrder, LinkTarget } from "../../store/option";
 import WebtoonStore from "../../store/webtoon";
-import Wlink from "../components/wlink";
+import Wlink from "../components/Wlink";
 import RecentSetting from "../components/Setting/RecentSetting";
 import WebtoonSetting from "../components/Setting/WebtoonSetting";
 import PageSetting from "../components/Setting/PageSetting";

@@ -3,8 +3,8 @@ import { Provider } from "mobx-react";
 // Store Import
 import Store from "../store";
 
-import Wlink from "./components/wlink";
-import Switcher from "./components/switcher";
+import Wlink from "./components/Wlink";
+import Switcher from "./components/Switcher";
 import { Tabs } from "./Tabs";
 import ErrorHandler from "./components/ErrorHandler";
 import UpdateCheck from "./components/UpdateCheck";

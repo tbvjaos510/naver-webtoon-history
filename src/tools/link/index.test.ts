@@ -1,6 +1,6 @@
 import Link from ".";
 import * as sinonChrome from "sinon-chrome";
-import mockWhale from "../__mocks__/whale";
+import mockWhale from "../../__mocks__/whale";
 
 describe("tools/link", () => {
   const testURL = "https://comic.naver.com";
