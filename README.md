@@ -15,7 +15,26 @@ whale(chrome) extension 으로 네이버 웹툰 기록을 표시하고 쉽게 �
 - Webpack
 - Jest (Unit Test)
 
-## 배포
+## Run
+
+```sh
+yarn install # install
+
+yarn build # build whale and chrome
+yarn build:chrome # build chrome
+yarn build:whale # build whale
+
+yarn watch:chrome # watch chrome
+yarn watch:whale # watch whale
+
+yarn test # test
+yarn test:coverage # test coverage
+yarn test:watch # test watch
+
+yarn lint # lint all code
+```
+
+## 이미지
 
 ## [Whale](https://store.whale.naver.com/detail/nmambboikkfejkgloppiejnhhohbaaem) [4.1.0v](https://github.com/tbvjaos510/naver-webtoon-history/releases/tag/whale-4.1.0)
 
