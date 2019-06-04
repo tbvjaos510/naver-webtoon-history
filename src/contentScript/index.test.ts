@@ -1,6 +1,4 @@
 import * as sinonChrome from "sinon-chrome";
-import * as Utility from "../background/tab/utility";
-import { mocked } from "ts-jest/utils";
 
 jest.mock("../background/tab/utility");
 
@@ -21,7 +19,8 @@ describe("contentScript", () => {
 
   it("addTabButton() and openTab() work", () => {
     // not contain params titleId
-    location.href = "http://www.test.com";
+    delete window.location;
+    window.location = { href: "http://www.test.com" } as any;
     sinonChrome.storage.sync.get.withArgs("option").yields({ option: "{}" });
 
     require(".");
@@ -33,7 +32,8 @@ describe("contentScript", () => {
 
   describe("url contains detail.nhn when", () => {
     it("no is null", () => {
-      location.href = "https://www.test.com/detail.nhn?titleId=123";
+      delete window.location;
+      window.location = { href: "https://www.test.com/detail.nhn?titleId=123" } as any;
       sinonChrome.storage.sync.get
         .withArgs("option")
         .yields({ option: JSON.stringify({ _storeLocation: "local" }) });
