@@ -56,26 +56,23 @@ export interface IUpdateCheckStates {
 export default class UpdateCheck extends React.Component<IUpdateCheckProps, IUpdateCheckStates> {
   private API_URL = "https://api.github.com/repos/tbvjaos510/naver-webtoon-history/releases";
 
-  private CURRENT_VERSION = chrome.runtime.getManifest().version;
+  private CURRENT_VERSION = null;
 
-  private fetchUpdate() {
+  public async fetchUpdate() {
     this.setState({ hasUpdate: true });
-    axios
-      .get(this.API_URL)
-      .then(result => {
-        console.log(result);
-        const release = (result.data as Array<IGithubRelease>).find(
-          value => value.tag_name === BROWSER + "-" + this.CURRENT_VERSION
-        );
-        if (release) {
-          this.setState({ text: release.body });
-        } else {
-          this.setState({ text: "업데이트 정보를 찾지 못했습니다." });
-        }
-      })
-      .catch(err => {
-        this.setState({ text: "목록을 불러오는 중 오류가 발생했습니다." });
-      });
+    try {
+      const result = await axios.get(this.API_URL);
+      const release = (result.data as Array<IGithubRelease>).find(
+        value => value.tag_name === BROWSER + "-" + this.CURRENT_VERSION
+      );
+      if (release) {
+        this.setState({ text: release.body });
+      } else {
+        this.setState({ text: "업데이트 정보를 찾지 못했습니다." });
+      }
+    } catch (err) {
+      this.setState({ text: "목록을 불러오는 중 오류가 발생했습니다." });
+    }
   }
 
   constructor(props) {
@@ -106,6 +103,7 @@ export default class UpdateCheck extends React.Component<IUpdateCheckProps, IUpd
   }
   public render() {
     const { children } = this.props;
+    this.CURRENT_VERSION = chrome.runtime.getManifest().version;
     return (
       <React.Fragment>
         {this.state.hasUpdate ? (
