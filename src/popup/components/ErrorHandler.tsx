@@ -3,12 +3,12 @@ import Wlink from "./Wlink";
 import { observer, inject } from "mobx-react";
 import OptionStore from "../../store/option";
 
-interface IErrorHandlerProps {
+export interface IErrorHandlerProps {
   option?: OptionStore;
   children: React.ReactNode;
 }
 
-interface IErrorHandlerStates {
+export interface IErrorHandlerStates {
   hasError: boolean;
 }
 
@@ -18,17 +18,14 @@ export default class ErrorHandler extends React.Component<IErrorHandlerProps, IE
   constructor(props) {
     super(props);
     this.state = { hasError: false };
-    try {
-      window.onerror = (e, url, line) => {
+    window.onerror = (e, url) => {
+      this.componentDidCatch(e, url);
+    };
+
+    if (chrome.extension.getBackgroundPage())
+      chrome.extension.getBackgroundPage().window.onerror = (e, url, line) => {
         this.componentDidCatch(e, url);
       };
-      if (chrome.extension.getBackgroundPage())
-        chrome.extension.getBackgroundPage().window.onerror = (e, url, line) => {
-          this.componentDidCatch(e, url);
-        };
-    } catch (e) {
-      this.state = { hasError: true };
-    }
   }
 
   private resetStore() {

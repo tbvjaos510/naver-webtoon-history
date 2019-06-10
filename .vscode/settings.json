@@ -1,4 +1,4 @@
 {
   "jest.pathToJest": "npm run test:coverage --",
-  "jest.runAllTestsFirst": false
+  "jest.runAllTestsFirst": true
 }

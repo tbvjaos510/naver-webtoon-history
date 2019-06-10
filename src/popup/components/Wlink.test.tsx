@@ -3,7 +3,6 @@ import { mount, ReactWrapper } from "enzyme";
 import Wlink, { IWlinkProps } from "./Wlink";
 import OptionStore from "../../store/option";
 import Link from "../../tools/link";
-import { mocked } from "ts-jest/utils";
 
 jest.mock("../../tools/link");
 
