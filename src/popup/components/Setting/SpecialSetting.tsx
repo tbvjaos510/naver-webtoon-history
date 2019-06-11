@@ -1,19 +1,10 @@
 import * as React from "react";
 import OptionStore from "../../../store/option";
 import WebtoonStore from "../../../store/webtoon";
-import { observer, inject } from "mobx-react";
 import SettingCheckBox from "./Inputs/SettingCheckBox";
 
-export interface ISpecialSettingProps {
-  webtoon?: WebtoonStore;
-  option?: OptionStore;
-}
-
-@inject("option", "webtoon")
-@observer
-export default class SpecialSetting extends React.Component<ISpecialSettingProps, null> {
+export default class SpecialSetting extends React.Component<{}, null> {
   public render() {
-    const { webtoon, option } = this.props;
     return (
       <li className="uk-open">
         <a className="uk-accordion-title" href="#">

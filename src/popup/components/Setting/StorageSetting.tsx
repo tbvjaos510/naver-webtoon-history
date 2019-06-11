@@ -62,7 +62,7 @@ export default class StorageSetting extends React.Component<IStorageSettingProps
                 onClick={() => {
                   option.resetStore("local");
                   option.resetStore("sync");
-                  location.reload();
+                  window.location.reload();
                 }}
                 type="danger"
               >
