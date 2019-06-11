@@ -25,7 +25,7 @@ export type SaveType = keyof storageType;
 export type VisitType = {
   [key: number]: {
     [key: number]: number;
-  }[];
+  };
 };
 
 export type ScrollType = {

@@ -10,7 +10,9 @@ function ProblemChild() {
   throw new Error("test error");
   return <div>Test</div>;
 }
-const optionStore = new OptionStore();
+const optionStore = {
+  resetStore: jest.fn() as Function
+} as OptionStore;
 
 describe("<ErrorHandler />", () => {
   beforeAll(() => {
@@ -43,7 +45,7 @@ describe("<ErrorHandler />", () => {
 
       expect(fakeWindow.window.onerror).toBeFalsy();
       const component = shallow<ErrorHandler>(
-        <ErrorHandler option={new OptionStore()}>
+        <ErrorHandler option={optionStore}>
           <div />
         </ErrorHandler>
       ).dive<IErrorHandlerProps, IErrorHandlerStates>();
@@ -60,7 +62,7 @@ describe("<ErrorHandler />", () => {
       global.onerror = null;
       expect(global.onerror).toBeFalsy();
       const component = shallow<ErrorHandler>(
-        <ErrorHandler option={new OptionStore()}>
+        <ErrorHandler option={optionStore}>
           <div />
         </ErrorHandler>
       ).dive<IErrorHandlerProps, IErrorHandlerStates>();
@@ -77,7 +79,7 @@ describe("<ErrorHandler />", () => {
     let component: ShallowWrapper<IErrorHandlerProps, IErrorHandlerStates> = null;
     beforeAll(() => {
       component = shallow<ErrorHandler>(
-        <ErrorHandler option={new OptionStore()}>
+        <ErrorHandler option={optionStore}>
           <div />
         </ErrorHandler>
       ).dive<IErrorHandlerProps, IErrorHandlerStates>();
@@ -99,8 +101,10 @@ describe("<ErrorHandler />", () => {
         .find("a[href]")
         .at(1)
         .simulate("click");
-      expect(sinonChrome.storage.local.clear.called).toBe(true);
-      expect(sinonChrome.storage.sync.remove.called).toBe(true);
+
+      expect(optionStore.resetStore).toBeCalledTimes(2);
+      // expect(sinonChrome.storage.local.clear.called).toBe(true);
+      // expect(sinonChrome.storage.sync.remove.called).toBe(true);
     });
   });
 });

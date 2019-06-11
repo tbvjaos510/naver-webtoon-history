@@ -9,7 +9,7 @@ jest.mock("../../tools/link");
 const defaultProps: IWlinkProps = {
   forceTab: false,
   link: "http://test.com",
-  option: new OptionStore()
+  option: {} as OptionStore
 };
 
 describe("<Wlink />", () => {

@@ -71,7 +71,7 @@ describe("tools/contextMenu", () => {
   describe("addContextClickListener() event work when", () => {
     let webtoonStore: WebtoonStore;
     beforeAll(() => {
-      webtoonStore = new WebtoonStore();
+      webtoonStore = { starWebtoons: [] } as WebtoonStore;
       addContextClickListener(webtoonStore);
       global.BROWSER = "whale";
       // whale BrowserAction

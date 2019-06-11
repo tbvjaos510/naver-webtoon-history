@@ -3,7 +3,6 @@ import OptionStore, { ChromeStore, LinkTarget } from "../../../store/option";
 import WebtoonStore from "../../../store/webtoon";
 import { observer, inject } from "mobx-react";
 import SettingButton from "./Inputs/SettingButton";
-import { toJS } from "mobx";
 
 export interface IRecentSettingProps {
   webtoon?: WebtoonStore;
@@ -136,7 +135,7 @@ export default class RecentSetting extends React.Component<IRecentSettingProps, 
           <br />
           <ul className="uk-list" style={{ padding: 0 }}>
             {this.linkTargetSetting.map((item, index) => {
-              const id = `link-${item.text.toLowerCase()}`;
+              const id = `link-${item.target.toLowerCase()}`;
               return (
                 <li key={index}>
                   <input
