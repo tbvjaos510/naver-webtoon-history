@@ -2,7 +2,7 @@ import * as React from "react";
 import OptionStore from "../../../store/option";
 import WebtoonStore from "../../../store/webtoon";
 import { observer, inject } from "mobx-react";
-import SettingCheckBox from "./SettingCheckBox";
+import SettingCheckBox from "./Inputs/SettingCheckBox";
 
 export interface ISpecialSettingProps {
   webtoon?: WebtoonStore;

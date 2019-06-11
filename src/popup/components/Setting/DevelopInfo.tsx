@@ -1,6 +1,6 @@
 import * as React from "react";
 import Wlink from "../Wlink";
-import SettingButton from "./SettingButton";
+import SettingButton from "./Inputs/SettingButton";
 
 export interface IDevelopInfoProps {}
 

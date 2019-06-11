@@ -1,7 +1,7 @@
 import * as React from "react";
-import OptionStore from "../../../store/option";
+import OptionStore from "../../../../store/option";
 import { inject, observer } from "mobx-react";
-import { toJS } from "mobx";
+
 export interface ISettingCheckBoxProps {
   tooltip?: string;
   storeKey: {

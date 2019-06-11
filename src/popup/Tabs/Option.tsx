@@ -9,7 +9,7 @@ import PageSetting from "../components/Setting/PageSetting";
 import SpecialSetting from "../components/Setting/SpecialSetting";
 import StorageSetting from "../components/Setting/StorageSetting";
 import DevelopInfo from "../components/Setting/DevelopInfo";
-import SettingButton from "../components/Setting/SettingButton";
+import SettingButton from "../components/Setting/Inputs/SettingButton";
 
 export interface IOptionProps {
   option?: OptionStore;

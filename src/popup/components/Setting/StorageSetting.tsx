@@ -1,8 +1,8 @@
 import * as React from "react";
 import OptionStore, { ChromeStore } from "../../../store/option";
 import { observer, inject } from "mobx-react";
-import SettingCheckBox from "./SettingCheckBox";
-import SettingButton from "./SettingButton";
+import SettingCheckBox from "./Inputs/SettingCheckBox";
+import SettingButton from "./Inputs/SettingButton";
 
 export interface IStorageSettingProps {
   option?: OptionStore;

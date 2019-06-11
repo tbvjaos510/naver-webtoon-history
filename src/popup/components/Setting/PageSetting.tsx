@@ -2,8 +2,8 @@ import * as React from "react";
 import OptionStore from "../../../store/option";
 import WebtoonStore from "../../../store/webtoon";
 import { observer, inject } from "mobx-react";
-import SettingCheckBox from "./SettingCheckBox";
-import SettingButton from "./SettingButton";
+import SettingCheckBox from "./Inputs/SettingCheckBox";
+import SettingButton from "./Inputs/SettingButton";
 import { removeContext, addLinkContext } from "../../../tools/contextMenu";
 
 export interface IPageSettingProps {
