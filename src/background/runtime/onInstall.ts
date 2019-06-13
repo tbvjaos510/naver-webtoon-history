@@ -5,6 +5,7 @@ import migration from "./migration";
 export default function(webtoon: WebtoonStore, option: OptionStore) {
   chrome.runtime.onInstalled.addListener(details => {
     console.log(details);
+
     if (details.reason === "install") {
       console.log("Init Start");
       webtoon.setVisitsFromChrome();

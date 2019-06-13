@@ -52,7 +52,7 @@ module.exports = function(env) {
     },
     plugins: [
       new webpack.DefinePlugin({
-        BROWSER: env.browser
+        BROWSER: `"${env.browser}"`
       }),
       new CopyWebpackPlugin([
         {

@@ -3,7 +3,7 @@ import { observer, inject } from "mobx-react";
 import OptionStore from "../../store/option";
 import { weekDay, Week } from "../../tools/request";
 import WebtoonStore from "../../store/webtoon";
-import DailyList, { MovedEvent } from "../components/Daily/DailyItemList";
+import DailyItemList, { MovedEvent } from "../components/Daily/DailyItemList";
 import { toJS } from "mobx";
 import SearchWebtoon from "../components/Daily/SearchWebtoon";
 
@@ -125,7 +125,7 @@ export default class ListDaily extends React.Component<IListDailyProps, IListDai
           keyword={this.state.keyword}
         />
 
-        <DailyList
+        <DailyItemList
           selectDay={this.state.selectDay}
           onRef={ref => this.orderChanged(ref)}
           keyword={this.state.keyword}

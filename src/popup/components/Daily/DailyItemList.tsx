@@ -22,7 +22,7 @@ export interface IDailyListStates {
 
 @inject("webtoon", "option")
 @observer
-export default class DailyList extends React.Component<IDailyListProps, IDailyListStates> {
+export default class DailyItemList extends React.Component<IDailyListProps, IDailyListStates> {
   constructor(props) {
     super(props);
     this.state = {
