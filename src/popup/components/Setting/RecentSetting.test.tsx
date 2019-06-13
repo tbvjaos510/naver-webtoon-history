@@ -94,12 +94,12 @@ describe("<RecentSetting />", () => {
     });
 
     it("get Webtoon History button clicked", () => {
-      component.find("SettingButton[tooltip*='방문기록에서']").simulate("click");
+      component.find("SettingButton[tooltip^='방문기록에서']").simulate("click");
       expect(webtoonStore.setVisitsFromChrome).toBeCalled();
     });
 
     it("remove Webtoon History button clicked", () => {
-      component.find("SettingButton[tooltip*='웹툰 기록을 삭제']").simulate("click");
+      component.find("SettingButton[tooltip^='웹툰 기록을 삭제']").simulate("click");
       expect(sinonChrome.storage[optionStore.storeLocation].remove.called).toBe(true);
     });
 
@@ -109,7 +109,7 @@ describe("<RecentSetting />", () => {
         10: { 1: 30, 2: 15, 3: 50 }
       };
       expect(Object.keys(webtoonStore.visits[10]).length).toBe(3);
-      component.find("SettingButton[tooltip*='웹툰의 기록']").simulate("click");
+      component.find("SettingButton[tooltip^='웹툰의 기록']").simulate("click");
       expect(webtoonStore.setRecentWebtoon).toBeCalled();
       expect(webtoonStore.visits[10]).toEqual({ 3: 50 });
     });
