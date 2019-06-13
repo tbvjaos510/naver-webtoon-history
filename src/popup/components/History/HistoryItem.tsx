@@ -5,8 +5,6 @@ import { observer, inject } from "mobx-react";
 import * as format from "date-fns/format";
 import * as distanceInWordsToNow from "date-fns/distance_in_words_to_now";
 import * as ko from "date-fns/locale/ko";
-import { contextMenu } from "react-contexify";
-import HistoryItemContext from "./HistoryItemContext";
 
 export interface IHistoryItemProps {
   webtoon?: WebtoonStore;
