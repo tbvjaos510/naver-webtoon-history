@@ -54,7 +54,10 @@ export default class WebtoonSetting extends React.Component<IWebtoonSettingProps
             text="웹툰 즐겨찾기 사용"
             tooltip="웹툰 목록에서 웹툰 즐겨찾기를 사용합니다."
           />
-          <SettingButton onClick={() => (webtoon.starWebtoons = [])}>
+          <SettingButton
+            tooltip="즐겨찾기 목록을 전부 삭제합니다."
+            onClick={() => (webtoon.starWebtoons = [])}
+          >
             즐겨찾기 목록 전체 삭제
           </SettingButton>
           <br />
