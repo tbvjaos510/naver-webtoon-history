@@ -3,7 +3,7 @@ import { observer, inject } from "mobx-react";
 import OptionStore from "../../store/option";
 import { weekDay, Week } from "../../tools/request";
 import WebtoonStore from "../../store/webtoon";
-import DailyList, { MovedEvent } from "../components/Daily/DailyList";
+import DailyList, { MovedEvent } from "../components/Daily/DailyItemList";
 import { toJS } from "mobx";
 import SearchWebtoon from "../components/Daily/SearchWebtoon";
 
