@@ -59,6 +59,7 @@ describe("<WebtoonSetting />", () => {
 
       component.find("SettingButton[tooltip^='드래그로 설정한']").simulate("click");
       expect(webtoonStore.sortWebtoon).toEqual({});
+      expect(webtoonStore.setDailyWebtoon).toBeCalled();
     });
   });
 });
