@@ -1,5 +1,5 @@
 import * as React from "react";
-import OptionStore, { ChromeStore, LinkTarget } from "../../../store/option";
+import OptionStore, { LinkTarget } from "../../../store/option";
 import WebtoonStore from "../../../store/webtoon";
 import { observer, inject } from "mobx-react";
 import SettingButton from "./Inputs/SettingButton";
@@ -17,17 +17,27 @@ interface LinkTargetSetting {
 @inject("option", "webtoon")
 @observer
 export default class RecentSetting extends React.Component<IRecentSettingProps, null> {
-  private readonly linkTargetSetting: LinkTargetSetting[] = [
-    { text: "새 탭", target: "Tab" },
-    { text: "현재 탭", target: "Current" },
-    { text: "팝업 창", target: "Popup" },
-    BROWSER === "whale"
-      ? {
+  private readonly linkTargetSetting: LinkTargetSetting[];
+
+  constructor(props) {
+    super(props);
+    if (BROWSER === "chrome")
+      this.linkTargetSetting = [
+        { text: "새 탭", target: "Tab" },
+        { text: "현재 탭", target: "Current" },
+        { text: "팝업 창", target: "Popup" }
+      ];
+    else
+      this.linkTargetSetting = [
+        { text: "새 탭", target: "Tab" },
+        { text: "현재 탭", target: "Current" },
+        { text: "모바일 창 (Whale 전용)", target: "Mobile" },
+        {
           text: "사이드바 (Whale 전용)",
-          target: "Sidebar" as LinkTarget
+          target: "Sidebar"
         }
-      : null
-  ].filter(e => e !== null);
+      ];
+  }
 
   private maintainOne() {
     const { webtoon } = this.props;

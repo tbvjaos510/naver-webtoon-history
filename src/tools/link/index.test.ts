@@ -36,6 +36,13 @@ describe("tools/link", () => {
     sinonChrome.windows.create.flush();
   });
 
+  it("openMobile() work", () => {
+    Link.openMobile(testURL);
+    expect(sinonChrome.windows.create.args[0][0].url).toBe(testMobileURL);
+    expect(sinonChrome.windows.create.args[0][0].type).toBe("mobile");
+    sinonChrome.windows.create.flush();
+  });
+
   describe("openSidebar() work when", () => {
     it("BROWSER is chrome", () => {
       global.BROWSER = "chrome";
@@ -74,6 +81,12 @@ describe("tools/link", () => {
       const openSidebar = jest.spyOn(Link, "openSidebar").mockImplementation(link => {});
       Link.openUrl("Sidebar", testURL);
       expect(openSidebar).toBeCalled();
+    });
+
+    it("linkTarget is Sidebar", () => {
+      const openMobile = jest.spyOn(Link, "openMobile").mockImplementation(link => {});
+      Link.openUrl("Mobile", testURL);
+      expect(openMobile).toBeCalled();
     });
   });
 });

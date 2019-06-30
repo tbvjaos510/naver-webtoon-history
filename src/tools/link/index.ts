@@ -15,7 +15,18 @@ export default {
       case "Sidebar":
         this.openSidebar(link);
         break;
+      case "Mobile":
+        this.openMobile(link);
+        break;
     }
+  },
+  openMobile(link: string) {
+    chrome.windows.create({
+      url: link.replace("https://", "https://m."),
+      width: 400,
+      height: 800,
+      type: "mobile"
+    });
   },
   openCurrentTab(link: string) {
     chrome.tabs.update({

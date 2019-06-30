@@ -18,7 +18,7 @@ export const storeKeys = [
 
 export type ChromeStore = "local" | "sync" | null;
 export type WebtoonOrder = "ViewCount" | "Update" | "StarScore" | "TitleName";
-export type LinkTarget = "Tab" | "Current" | "Popup" | "Sidebar" | string;
+export type LinkTarget = "Tab" | "Current" | "Popup" | "Sidebar" | "Mobile";
 
 export default class OptionStore {
   private readonly defaultOption;
