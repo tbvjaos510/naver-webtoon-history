@@ -35,7 +35,7 @@ describe("<RecentSetting />", () => {
       global.BROWSER = "chrome";
       const component = shallow(
         <RecentSetting option={optionStore} webtoon={webtoonStore} />
-      ).dive();
+      ).dive().dive();
 
       expect(
         component
@@ -58,7 +58,7 @@ describe("<RecentSetting />", () => {
       optionStore.storeLocation = "sync";
       const component = shallow(
         <RecentSetting option={optionStore} webtoon={webtoonStore} />
-      ).dive();
+      ).dive().dive();
       expect(component.find("label[htmlFor='historyCount']").prop("uk-tooltip")).toBe(
         `최대 200개까지 가능합니다`
       );
@@ -69,7 +69,7 @@ describe("<RecentSetting />", () => {
       global.BROWSER = "chrome";
       const component = shallow(
         <RecentSetting option={optionStore} webtoon={webtoonStore} />
-      ).dive();
+      ).dive().dive();
       expect(component.find("ul>li").length).toBe(3);
       delete global.BROWSER;
     });
@@ -78,7 +78,7 @@ describe("<RecentSetting />", () => {
       global.BROWSER = "whale";
       const component = shallow(
         <RecentSetting option={optionStore} webtoon={webtoonStore} />
-      ).dive();
+      ).dive().dive();
       expect(component.find("ul>li").length).toBe(4);
       delete global.BROWSER;
     });
@@ -89,7 +89,7 @@ describe("<RecentSetting />", () => {
     beforeAll(() => {
       global.BROWSER = "chrome";
       webtoonStore.loadingStatus = "end";
-      component = shallow(<RecentSetting webtoon={webtoonStore} option={optionStore} />).dive();
+      component = shallow(<RecentSetting webtoon={webtoonStore} option={optionStore} />).dive().dive();
       delete global.BROWSER;
     });
 

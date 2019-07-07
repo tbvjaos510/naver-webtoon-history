@@ -19,14 +19,14 @@ describe("<WebtoonSetting />", () => {
   it("render test", () => {
     const component = shallow(
       <WebtoonSetting option={optionStore} webtoon={webtoonStore} />
-    ).dive();
+    ).dive().dive();
     expect(component.find("a.uk-accordion-title").text()).toBe("웹툰 목록");
   });
 
   describe("input test", () => {
     let component: ShallowWrapper = null;
     beforeAll(() => {
-      component = shallow(<WebtoonSetting option={optionStore} webtoon={webtoonStore} />).dive();
+      component = shallow(<WebtoonSetting option={optionStore} webtoon={webtoonStore} />).dive().dive();
     });
 
     it("orderBy radio changed", () => {

@@ -39,7 +39,9 @@ describe("<DailyList />", () => {
         webtoon={webtoonStore}
         keyword={null}
       />
-    ).dive();
+    )
+      .dive()
+      .dive();
 
     // limit test
     // expect(component.find("ul.daily_webtoon>li").length).toBe(21);

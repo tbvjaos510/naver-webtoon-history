@@ -24,7 +24,9 @@ const props: IHistoryItemProps = {
 };
 describe("<HistoryItem />", () => {
   it("render if scroll exists", () => {
-    const component = shallow(<HistoryItem {...props} />).dive();
+    const component = shallow(<HistoryItem {...props} />)
+      .dive()
+      .dive();
 
     expect(webtoonStore.scrolls[50]).toEqual({ 1: 40 });
     expect(component.find("td.webtoonTitle").text()).toBe(props.item.name);
@@ -38,7 +40,9 @@ describe("<HistoryItem />", () => {
 
   it("render if scroll not exists", () => {
     props.item.no = 2;
-    const component = shallow(<HistoryItem {...props} />).dive();
+    const component = shallow(<HistoryItem {...props} />)
+      .dive()
+      .dive();
 
     expect(component.find("td.webtoonName-td").prop("className")).not.toContain("view-webtoon");
     expect(component.find("td>a.webtoonName").text()).toBe(props.item.noname + " ");

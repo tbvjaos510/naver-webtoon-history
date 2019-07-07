@@ -29,19 +29,19 @@ describe("<PageSetting />", () => {
   });
 
   it("render test if saveScroll is true", () => {
-    const component = shallow(<PageSetting webtoon={webtoonStore} option={optionStore} />).dive();
+    const component = shallow(<PageSetting webtoon={webtoonStore} option={optionStore} />).dive().dive();
     expect(component.find(SettingCheckBox).length).toBe(4);
   });
 
   it("render test if saveScroll is false", () => {
     optionStore.saveScroll = false;
-    const component = shallow(<PageSetting webtoon={webtoonStore} option={optionStore} />).dive();
+    const component = shallow(<PageSetting webtoon={webtoonStore} option={optionStore} />).dive().dive();
     expect(component.find(SettingCheckBox).length).toBe(3);
   });
 
   describe("getContextMenuGrant() test", () => {
     let component = shallow(<PageSetting webtoon={webtoonStore} option={optionStore} />)
-      .dive()
+      .dive().dive()
       .find("*[storeKey='useContextMenu']");
 
     describe("useContextMenu checked and", () => {
@@ -90,7 +90,7 @@ describe("<PageSetting />", () => {
       }
     };
     expect(Object.keys(webtoonStore.scrolls).length).toBe(1);
-    const component = shallow(<PageSetting webtoon={webtoonStore} option={optionStore} />).dive();
+    const component = shallow(<PageSetting webtoon={webtoonStore} option={optionStore} />).dive().dive();
     component.find(SettingButton).simulate("click");
     expect(Object.keys(webtoonStore.scrolls).length).toBe(0);
   });

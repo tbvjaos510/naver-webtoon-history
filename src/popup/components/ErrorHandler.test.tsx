@@ -48,7 +48,9 @@ describe("<ErrorHandler />", () => {
         <ErrorHandler option={optionStore}>
           <div />
         </ErrorHandler>
-      ).dive<IErrorHandlerProps, IErrorHandlerStates>();
+      )
+        .dive()
+        .dive<IErrorHandlerProps, IErrorHandlerStates>();
 
       expect(fakeWindow.window.onerror).toBeTruthy();
       expect(component.state("hasError")).toBe(false);
@@ -65,7 +67,9 @@ describe("<ErrorHandler />", () => {
         <ErrorHandler option={optionStore}>
           <div />
         </ErrorHandler>
-      ).dive<IErrorHandlerProps, IErrorHandlerStates>();
+      )
+        .dive()
+        .dive<IErrorHandlerProps, IErrorHandlerStates>();
       expect(global.onerror).toBeTruthy();
       expect(component.state("hasError")).toBe(false);
       global.onerror.call(component.instance(), new Event("test"), "testUrl");
@@ -82,7 +86,9 @@ describe("<ErrorHandler />", () => {
         <ErrorHandler option={optionStore}>
           <div />
         </ErrorHandler>
-      ).dive<IErrorHandlerProps, IErrorHandlerStates>();
+      )
+        .dive()
+        .dive<IErrorHandlerProps, IErrorHandlerStates>();
     });
 
     beforeEach(() => {
