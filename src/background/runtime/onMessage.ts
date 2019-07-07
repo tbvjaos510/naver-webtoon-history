@@ -39,6 +39,7 @@ export default function(webtoon: WebtoonStore, option: OptionStore) {
     } else if (message && message.command === "reload") {
       location.reload();
     } else if (message && message.command === "addContextMenu") {
+      console.log("receive", message);
       addContextClickListener(webtoon);
     }
   });

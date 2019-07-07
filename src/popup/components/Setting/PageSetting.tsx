@@ -32,6 +32,7 @@ export default class PageSetting extends React.Component<IPageSettingProps, null
               },
               granted => {
                 if (granted) {
+                  chrome.runtime.sendMessage({ command: "addContextMenu" });
                   addLinkContext();
                   option.useContextMenu = true;
                 } else event.target.checked = false;
