@@ -12,14 +12,18 @@ const optionStore = {
 
 describe("<StorageSetting />", () => {
   it("render test", () => {
-    const component = shallow(<StorageSetting option={optionStore} />).dive().dive();
+    const component = shallow(<StorageSetting option={optionStore} />)
+      .dive()
+      .dive();
     expect(component.find("a.uk-accordion-title").text()).toBe("저장 공간");
   });
 
   describe("button test", () => {
     let component: ShallowWrapper = null;
     beforeAll(() => {
-      component = shallow(<StorageSetting option={optionStore} />).dive().dive();
+      component = shallow(<StorageSetting option={optionStore} />)
+        .dive()
+        .dive();
     });
 
     it("reset local data button clicked", () => {

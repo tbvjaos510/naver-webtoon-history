@@ -23,7 +23,9 @@ describe("<SettingCheckBox />", () => {
   });
 
   it("render test", () => {
-    const component = shallow<SettingCheckBox>(<SettingCheckBox {...props} />).dive().dive();
+    const component = shallow<SettingCheckBox>(<SettingCheckBox {...props} />)
+      .dive()
+      .dive();
     console.log(component.debug());
     expect(component.find("p").prop("uk-tooltip")).toBe(props.tooltip);
     expect(component.find(`input#${props.storeKey}`)).toBeTruthy();
@@ -33,7 +35,9 @@ describe("<SettingCheckBox />", () => {
   });
 
   it("onChange test", () => {
-    const component = shallow<SettingCheckBox>(<SettingCheckBox {...props} />).dive().dive();
+    const component = shallow<SettingCheckBox>(<SettingCheckBox {...props} />)
+      .dive()
+      .dive();
     expect(store.autoNext).toBe(true);
     component.find(`input#${props.storeKey}`).simulate("change", { target: { checked: false } });
     expect(store.autoNext).toBe(false);

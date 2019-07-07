@@ -33,9 +33,9 @@ describe("<RecentSetting />", () => {
   describe("render test", () => {
     it("default test", () => {
       global.BROWSER = "chrome";
-      const component = shallow(
-        <RecentSetting option={optionStore} webtoon={webtoonStore} />
-      ).dive().dive();
+      const component = shallow(<RecentSetting option={optionStore} webtoon={webtoonStore} />)
+        .dive()
+        .dive();
 
       expect(
         component
@@ -56,9 +56,9 @@ describe("<RecentSetting />", () => {
     it("storeLocation is sync", () => {
       global.BROWSER = "chrome";
       optionStore.storeLocation = "sync";
-      const component = shallow(
-        <RecentSetting option={optionStore} webtoon={webtoonStore} />
-      ).dive().dive();
+      const component = shallow(<RecentSetting option={optionStore} webtoon={webtoonStore} />)
+        .dive()
+        .dive();
       expect(component.find("label[htmlFor='historyCount']").prop("uk-tooltip")).toBe(
         `최대 200개까지 가능합니다`
       );
@@ -67,18 +67,18 @@ describe("<RecentSetting />", () => {
 
     it("BROWSER is chrome", () => {
       global.BROWSER = "chrome";
-      const component = shallow(
-        <RecentSetting option={optionStore} webtoon={webtoonStore} />
-      ).dive().dive();
+      const component = shallow(<RecentSetting option={optionStore} webtoon={webtoonStore} />)
+        .dive()
+        .dive();
       expect(component.find("ul>li").length).toBe(3);
       delete global.BROWSER;
     });
 
     it("BROWSER is whale", () => {
       global.BROWSER = "whale";
-      const component = shallow(
-        <RecentSetting option={optionStore} webtoon={webtoonStore} />
-      ).dive().dive();
+      const component = shallow(<RecentSetting option={optionStore} webtoon={webtoonStore} />)
+        .dive()
+        .dive();
       expect(component.find("ul>li").length).toBe(4);
       delete global.BROWSER;
     });
@@ -89,7 +89,9 @@ describe("<RecentSetting />", () => {
     beforeAll(() => {
       global.BROWSER = "chrome";
       webtoonStore.loadingStatus = "end";
-      component = shallow(<RecentSetting webtoon={webtoonStore} option={optionStore} />).dive().dive();
+      component = shallow(<RecentSetting webtoon={webtoonStore} option={optionStore} />)
+        .dive()
+        .dive();
       delete global.BROWSER;
     });
 

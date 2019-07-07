@@ -17,16 +17,18 @@ const webtoonStore = {
 
 describe("<WebtoonSetting />", () => {
   it("render test", () => {
-    const component = shallow(
-      <WebtoonSetting option={optionStore} webtoon={webtoonStore} />
-    ).dive().dive();
+    const component = shallow(<WebtoonSetting option={optionStore} webtoon={webtoonStore} />)
+      .dive()
+      .dive();
     expect(component.find("a.uk-accordion-title").text()).toBe("웹툰 목록");
   });
 
   describe("input test", () => {
     let component: ShallowWrapper = null;
     beforeAll(() => {
-      component = shallow(<WebtoonSetting option={optionStore} webtoon={webtoonStore} />).dive().dive();
+      component = shallow(<WebtoonSetting option={optionStore} webtoon={webtoonStore} />)
+        .dive()
+        .dive();
     });
 
     it("orderBy radio changed", () => {

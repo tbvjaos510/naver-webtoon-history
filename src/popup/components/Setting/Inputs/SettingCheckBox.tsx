@@ -5,7 +5,7 @@ import { inject, observer } from "mobx-react";
 export interface ISettingCheckBoxProps {
   tooltip?: string;
   storeKey: {
-    [P in keyof OptionStore]: OptionStore[P] extends boolean ? P : never
+    [P in keyof OptionStore]: OptionStore[P] extends boolean ? P : never;
   }[keyof OptionStore];
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   text: string;

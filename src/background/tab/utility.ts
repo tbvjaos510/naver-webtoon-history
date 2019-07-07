@@ -20,9 +20,7 @@ export function checkScroll(tabId: number, isMobile: boolean) {
   function checkSc( event ) {
     window.clearTimeout( checkPercent );
     checkPercent = setTimeout(function() {
-    chrome.runtime.sendMessage("${
-      chrome.runtime.id
-    }", {scroll : document.documentElement.scrollTop / document.querySelector("#toonLayer>ul").scrollHeight })
+    chrome.runtime.sendMessage("${chrome.runtime.id}", {scroll : document.documentElement.scrollTop / document.querySelector("#toonLayer>ul").scrollHeight })
   }, 100)
 }
 window.addEventListener('scroll',checkSc, false);`
@@ -31,9 +29,7 @@ var checkPercent;
 function checkSc( event ) {
     window.clearTimeout( checkPercent );
     checkPercent = setTimeout(function() {
-chrome.runtime.sendMessage('${
-        chrome.runtime.id
-      }', {scroll : (document.documentElement.scrollTop - document.querySelector(".wt_viewer").childNodes[1].offsetTop) / document.querySelector(".wt_viewer").scrollHeight })
+chrome.runtime.sendMessage('${chrome.runtime.id}', {scroll : (document.documentElement.scrollTop - document.querySelector(".wt_viewer").childNodes[1].offsetTop) / document.querySelector(".wt_viewer").scrollHeight })
 }, 100);}
 window.addEventListener('scroll',checkSc, false);`;
   if (!tabId) {
