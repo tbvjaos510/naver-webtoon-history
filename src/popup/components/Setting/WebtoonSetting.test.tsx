@@ -59,9 +59,15 @@ describe("<WebtoonSetting />", () => {
       };
       expect(webtoonStore.sortWebtoon.mon.length).toBe(3);
 
-      component.find("SettingButton[tooltip^='드래그로 설정한']").simulate("click");
+      component.find("SettingButton[tooltip^='웹툰 목록의']").simulate("click");
       expect(webtoonStore.sortWebtoon).toEqual({});
       expect(webtoonStore.setDailyWebtoon).toBeCalled();
+    });
+
+    it("saveWebtoonSort is false", () => {
+      optionStore.saveWebtoonSort = false;
+      component.setProps({ option: optionStore });
+      expect(component.find("SettingButton[tooltip^='웹툰 목록의']").exists()).toBe(false);
     });
   });
 });

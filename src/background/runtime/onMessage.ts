@@ -1,9 +1,10 @@
 import WebtoonStore from "../../store/webtoon";
 import OptionStore from "../../store/option";
 import Link from "../../tools/link";
+import { addContextClickListener } from "../../tools/contextMenu";
 
 export interface ChromeMessage {
-  command?: "openTab" | "reload" | "addContextMenu" | string;
+  command?: "openTab" | "reload" | "addContextMenu";
   scroll?: number;
 }
 
@@ -37,6 +38,8 @@ export default function(webtoon: WebtoonStore, option: OptionStore) {
       webtoon.scrolls = webtoon.scrolls;
     } else if (message && message.command === "reload") {
       location.reload();
+    } else if (message && message.command === "addContextMenu") {
+      addContextClickListener(webtoon);
     }
   });
 }

@@ -4,7 +4,8 @@ import {
   CONTEXT_MENU_ID_TAB,
   addContextClickListener,
   CONTEXT_MENU_ID_SIDEBAR,
-  CONTEXT_MENU_ID_FAVORATE
+  CONTEXT_MENU_ID_FAVORATE,
+  CONTEXT_MENU_ID_MOBILE
 } from ".";
 import mockWhale from "../../__mocks__/whale";
 import * as sinonChrome from "sinon-chrome";
@@ -47,10 +48,11 @@ describe("tools/contextMenu", () => {
       sinonChrome.contextMenus.removeAll.yield();
 
       // context가 3개 추가돼야함.
-      expect(sinonChrome.contextMenus.create.callCount).toBe(3);
+      expect(sinonChrome.contextMenus.create.callCount).toBe(4);
       expect(sinonChrome.contextMenus.create.getCall(0).args[0].id).toBe(CONTEXT_MENU_ID_TAB);
       expect(sinonChrome.contextMenus.create.getCall(1).args[0].id).toBe(CONTEXT_MENU_ID_FAVORATE);
       expect(sinonChrome.contextMenus.create.getCall(2).args[0].id).toBe(CONTEXT_MENU_ID_SIDEBAR);
+      expect(sinonChrome.contextMenus.create.getCall(3).args[0].id).toBe(CONTEXT_MENU_ID_MOBILE);
       delete global.BROWSER;
     });
 
@@ -99,6 +101,14 @@ describe("tools/contextMenu", () => {
         linkUrl: webtoonUrl
       } as chrome.contextMenus.OnClickData);
       expect(Link.openPopup).toBeCalled();
+    });
+
+    it("menuItemId is CONTEXT_MENU_ID_MOBILE", () => {
+      sinonChrome.contextMenus.onClicked.trigger({
+        menuItemId: CONTEXT_MENU_ID_MOBILE,
+        linkUrl: webtoonUrl
+      } as chrome.contextMenus.OnClickData);
+      expect(Link.openMobile).toBeCalled();
     });
 
     describe("menuItemId is CONTEXT_MENU_ID_FAVORATE and webtoonId is ", () => {

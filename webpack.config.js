@@ -52,7 +52,8 @@ module.exports = function(env) {
     },
     plugins: [
       new webpack.DefinePlugin({
-        BROWSER: `"${env.browser}"`
+        BROWSER: `"${env.browser}"`,
+        ENV: `"${isProduction ? "production" : "development"}"`
       }),
       new CopyWebpackPlugin([
         {

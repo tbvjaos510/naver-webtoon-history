@@ -3,6 +3,7 @@ import WebtoonStore from "../../store/webtoon";
 
 export const CONTEXT_MENU_ID_SIDEBAR = "OPEN_IN_SIDEBAR";
 export const CONTEXT_MENU_ID_TAB = "OPEN_IN_TAB";
+export const CONTEXT_MENU_ID_MOBILE = "OPEN_IN_MOBILE";
 export const CONTEXT_MENU_ID_FAVORATE = "ADD_TO_FAVORATE";
 
 export const webtoonUrls = [
@@ -35,6 +36,13 @@ export function addLinkContext() {
         title: "사이드바에서 웹툰 보기",
         targetUrlPatterns: webtoonUrls
       });
+
+      chrome.contextMenus.create({
+        id: CONTEXT_MENU_ID_MOBILE,
+        contexts: ["link"],
+        title: "모바일창에서 웹툰 보기",
+        targetUrlPatterns: webtoonUrls
+      });
     }
   });
 }
@@ -64,6 +72,9 @@ export function addContextClickListener(webtoon: WebtoonStore) {
             code: `alert("[Naver Webtoon Extention] 즐겨찾기에 추가하였습니다.");`
           });
         }
+        break;
+      case CONTEXT_MENU_ID_MOBILE:
+        Link.openMobile(info.linkUrl);
         break;
     }
   });

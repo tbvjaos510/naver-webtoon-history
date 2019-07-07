@@ -57,7 +57,7 @@ export default class DailyItemList extends React.Component<IDailyListProps, IDai
       >
         <ul
           className="uk-grid-small uk-child-width-1-3 uk-child-width-1-3@s uk-text-center daily-webtoon"
-          uk-sortable={option.saveWebtoonSort && keyword == null ? "handle: .uk-card" : null}
+          uk-sortable={option.saveWebtoonSort && keyword === null ? "handle: .uk-card" : null}
           uk-grid="true"
           ref={ref => this.props.onRef(ref)}
         >

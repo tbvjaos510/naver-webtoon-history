@@ -108,7 +108,7 @@ export default class UpdateCheck extends React.Component<IUpdateCheckProps, IUpd
       <React.Fragment>
         {this.state.hasUpdate ? (
           <div
-            className="uk-alert-success uk-position-absolute uk-position-z-index uk-width-expand"
+            className="uk-alert-primary uk-position-absolute uk-position-z-index uk-width-expand"
             uk-alert=""
           >
             <a
