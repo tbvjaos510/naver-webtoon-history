@@ -1,6 +1,6 @@
-import WebtoonStore from "../../store/webtoon";
-import OptionStore from "../../store/option";
-import migration from "./migration";
+import OptionStore from '../../store/option';
+import WebtoonStore from '../../store/webtoon';
+import migration from './migration';
 
 export default function(webtoon: WebtoonStore, option: OptionStore) {
   chrome.runtime.onInstalled.addListener(details => {
@@ -8,9 +8,15 @@ export default function(webtoon: WebtoonStore, option: OptionStore) {
 
     if (details.reason === "install") {
       console.log("Init Start");
+      ga("send", "event", "extension", "install", BROWSER);
       webtoon.setVisitsFromChrome();
     } else if (details.reason === "update") {
       const currentVersion = chrome.runtime.getManifest().version;
+      ga("send", "event", {
+        eventCategory: "extension",
+        eventAction: "update",
+        eventLabel: `${details.previousVersion}>${currentVersion} (${BROWSER})`
+      });
       if (details.previousVersion != currentVersion) {
         console.log("update ", details.previousVersion, currentVersion);
         if (BROWSER === "whale") {

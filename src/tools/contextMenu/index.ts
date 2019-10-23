@@ -1,5 +1,5 @@
-import Link from "../link";
-import WebtoonStore from "../../store/webtoon";
+import WebtoonStore from '../../store/webtoon';
+import Link from '../link';
 
 export const CONTEXT_MENU_ID_SIDEBAR = "OPEN_IN_SIDEBAR";
 export const CONTEXT_MENU_ID_TAB = "OPEN_IN_TAB";
@@ -49,6 +49,7 @@ export function addLinkContext() {
 
 export function addContextClickListener(webtoon: WebtoonStore) {
   chrome.contextMenus.onClicked.addListener(info => {
+    ga("send", "event", "ContextMenu", "menu clicked", info.menuItemId);
     switch (info.menuItemId) {
       case CONTEXT_MENU_ID_SIDEBAR:
         Link.openSidebar(info.linkUrl);

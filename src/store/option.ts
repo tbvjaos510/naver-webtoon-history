@@ -1,4 +1,4 @@
-import { observable, action, computed } from "mobx";
+import { computed, observable } from 'mobx';
 
 export const storeKeys = [
   "_storeLocation",
@@ -32,6 +32,8 @@ export default class OptionStore {
   }
 
   private saveToStore() {
+    ga("send", "event", "store", "option");
+    ga("set", "dimension2", JSON.stringify(this.optionObject));
     chrome.storage.sync.set({
       option: JSON.stringify(this.optionObject)
     });

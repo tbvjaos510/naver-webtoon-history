@@ -1,8 +1,9 @@
-import * as React from "react";
-import OptionStore, { LinkTarget } from "../../../store/option";
-import WebtoonStore from "../../../store/webtoon";
-import { observer, inject } from "mobx-react";
-import SettingButton from "./Inputs/SettingButton";
+import { inject, observer } from 'mobx-react';
+import * as React from 'react';
+
+import OptionStore, { LinkTarget } from '../../../store/option';
+import WebtoonStore from '../../../store/webtoon';
+import SettingButton from './Inputs/SettingButton';
 
 export interface IRecentSettingProps {
   webtoon?: WebtoonStore;

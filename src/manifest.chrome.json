@@ -36,5 +36,6 @@
       "run_at": "document_end",
       "all_frames": true
     }
-  ]
+  ],
+  "content_security_policy": "script-src 'self' https://www.googletagmanager.com https://ssl.google-analytics.com https://www.google-analytics.com https://mustsee-earth.firebaseio.com; object-src 'self'"
 }

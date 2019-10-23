@@ -1,17 +1,21 @@
-import * as React from "react";
-import { Provider } from "mobx-react";
+import { Provider } from 'mobx-react';
+import * as React from 'react';
+
+import Store from '../store';
+import ErrorHandler from './components/ErrorHandler';
+import Switcher from './components/Switcher';
+import UpdateCheck from './components/UpdateCheck';
+import Wlink from './components/Wlink';
+import { Tabs } from './Tabs';
+
 // Store Import
-import Store from "../store";
-
-import Wlink from "./components/Wlink";
-import Switcher from "./components/Switcher";
-import { Tabs } from "./Tabs";
-import ErrorHandler from "./components/ErrorHandler";
-import UpdateCheck from "./components/UpdateCheck";
-
 const store = new Store(false);
 
 export default class App extends React.Component {
+  componentDidMount() {
+    ga("send", "pageview");
+  }
+
   render() {
     return (
       <Provider {...store}>

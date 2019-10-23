@@ -1,7 +1,6 @@
-import * as React from "react";
-import OptionStore from "../../../store/option";
-import WebtoonStore from "../../../store/webtoon";
-import SettingCheckBox from "./Inputs/SettingCheckBox";
+import * as React from 'react';
+
+import SettingCheckBox from './Inputs/SettingCheckBox';
 
 export default class SpecialSetting extends React.Component<{}, null> {
   public render() {

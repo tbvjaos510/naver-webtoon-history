@@ -1,10 +1,11 @@
-import * as React from "react";
-import Wlink from "../Wlink";
-import WebtoonStore, { RecentWebtoon } from "../../../store/webtoon";
-import { observer, inject } from "mobx-react";
-import * as format from "date-fns/format";
-import * as distanceInWordsToNow from "date-fns/distance_in_words_to_now";
-import * as ko from "date-fns/locale/ko";
+import * as distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
+import * as format from 'date-fns/format';
+import * as ko from 'date-fns/locale/ko';
+import { inject, observer } from 'mobx-react';
+import * as React from 'react';
+
+import WebtoonStore, { RecentWebtoon } from '../../../store/webtoon';
+import Wlink from '../Wlink';
 
 export interface IHistoryItemProps {
   webtoon?: WebtoonStore;
@@ -48,11 +49,25 @@ export default class HistoryItem extends React.Component<IHistoryItemProps, any>
 
     return (
       <tr>
-        <Wlink link={`https://comic.naver.com${item.type}/list.nhn?titleId=${item.id}`}>
+        <Wlink
+          link={`https://comic.naver.com${item.type}/list.nhn?titleId=${item.id}`}
+          onClick={() => {
+            ga("send", "event", "HistoryItem", "openWebtoon", `${item.name}(${item.id})`);
+          }}
+        >
           <td className="webtoonTitle">{item.name}</td>
         </Wlink>
         <Wlink
           link={`https://comic.naver.com${item.type}/detail.nhn?titleId=${item.id}&no=${item.no}`}
+          onClick={() => {
+            ga(
+              "send",
+              "event",
+              "HistoryItem",
+              "openRecentWebtoon",
+              `${item.name}/${item.noname}(${item.id}/${item.no})`
+            );
+          }}
         >
           <td
             className={

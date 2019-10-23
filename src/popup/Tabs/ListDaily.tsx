@@ -1,11 +1,12 @@
-import * as React from "react";
-import { observer, inject } from "mobx-react";
-import OptionStore from "../../store/option";
-import { weekDay, Week } from "../../tools/request";
-import WebtoonStore from "../../store/webtoon";
-import DailyItemList, { MovedEvent } from "../components/Daily/DailyItemList";
-import { toJS } from "mobx";
-import SearchWebtoon from "../components/Daily/SearchWebtoon";
+import { toJS } from 'mobx';
+import { inject, observer } from 'mobx-react';
+import * as React from 'react';
+
+import OptionStore from '../../store/option';
+import WebtoonStore from '../../store/webtoon';
+import { Week, weekDay } from '../../tools/request';
+import DailyItemList, { MovedEvent } from '../components/Daily/DailyItemList';
+import SearchWebtoon from '../components/Daily/SearchWebtoon';
 
 export interface IListDailyProps {
   option?: OptionStore;
@@ -105,14 +106,28 @@ export default class ListDaily extends React.Component<IListDailyProps, IListDai
         >
           {option.saveFavorate ? (
             <li>
-              <a onClick={() => this.changeDay("favo")}>★</a>
+              <a
+                onClick={() => {
+                  ga("send", "event", "ListDaily", "dayChanged", "favorate");
+                  this.changeDay("favo");
+                }}
+              >
+                ★
+              </a>
             </li>
           ) : null}
 
           {weekDay.map((week, index) => {
             return (
               <li key={week}>
-                <a onClick={() => this.changeDay(week)}>{this.day[index]}</a>
+                <a
+                  onClick={() => {
+                    ga("send", "event", "ListDaily", "dayChanged", week);
+                    this.changeDay(week);
+                  }}
+                >
+                  {this.day[index]}
+                </a>
               </li>
             );
           })}

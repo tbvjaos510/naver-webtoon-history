@@ -1,8 +1,10 @@
-import RootStore from "../store";
-import history from "./tab/history";
-import onInstall from "./runtime/onInstall";
-import onMessage from "./runtime/onMessage";
-import { addContextClickListener, addLinkContext } from "../tools/contextMenu";
+import '../analytics';
+
+import RootStore from '../store';
+import { addContextClickListener, addLinkContext } from '../tools/contextMenu';
+import onInstall from './runtime/onInstall';
+import onMessage from './runtime/onMessage';
+import history from './tab/history';
 
 const store = new RootStore(true, () => {
   history(store.webtoon, store.option);
@@ -17,3 +19,10 @@ const store = new RootStore(true, () => {
 });
 
 onInstall(store.webtoon, store.option);
+
+// analytics
+if (BROWSER === "whale") {
+  whale.sidebarAction.onClicked.addListener(() => {
+    ga("send", "event", "extension", "whale-sidebar-clicked");
+  });
+}

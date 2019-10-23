@@ -1,7 +1,7 @@
-import WebtoonStore from "../../store/webtoon";
-import OptionStore from "../../store/option";
-import Link from "../../tools/link";
-import { addContextClickListener } from "../../tools/contextMenu";
+import OptionStore from '../../store/option';
+import WebtoonStore from '../../store/webtoon';
+import { addContextClickListener } from '../../tools/contextMenu';
+import Link from '../../tools/link';
 
 export interface ChromeMessage {
   command?: "openTab" | "reload" | "addContextMenu";

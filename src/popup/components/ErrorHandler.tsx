@@ -1,7 +1,8 @@
-import * as React from "react";
-import Wlink from "./Wlink";
-import { observer, inject } from "mobx-react";
-import OptionStore from "../../store/option";
+import { inject, observer } from 'mobx-react';
+import * as React from 'react';
+
+import OptionStore from '../../store/option';
+import Wlink from './Wlink';
 
 export interface IErrorHandlerProps {
   option?: OptionStore;
@@ -36,6 +37,9 @@ export default class ErrorHandler extends React.Component<IErrorHandlerProps, IE
   }
 
   componentDidCatch(error, info) {
+    ga("send", "exception", {
+      exDescription: (error && (error.message || error)) || "unknown"
+    });
     this.setState({ hasError: true });
     console.log(error, info);
   }
@@ -63,7 +67,13 @@ export default class ErrorHandler extends React.Component<IErrorHandlerProps, IE
                 <a href="#">오류신고</a>
               </Wlink>
               나{" "}
-              <a href="#" onClick={() => this.resetStore()}>
+              <a
+                href="#"
+                onClick={() => {
+                  ga("send", "event", "popup", "resetStore");
+                  this.resetStore();
+                }}
+              >
                 데이터 초기화
               </a>
               를 해주시기 바랍니다.

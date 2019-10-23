@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 
 export interface ISettingButtonProps {
   onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
@@ -15,7 +15,10 @@ export default class SettingButton extends React.Component<ISettingButtonProps, 
     return (
       <button
         className={`uk-button uk-button-small uk-button-${type}`}
-        onClick={e => onClick(e)}
+        onClick={e => {
+          ga("send", "event", "popup", `SettingButtonClick`, children || "");
+          return onClick(e);
+        }}
         uk-tooltip={tooltip}
         disabled={disabled}
       >

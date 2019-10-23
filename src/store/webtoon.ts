@@ -1,6 +1,7 @@
-import { observable, computed, action, observe, toJS } from "mobx";
-import OptionStore from "./option";
-import WebtoonRequest, { WebtoonInfoType, WebtoonInfo, Week } from "../tools/request";
+import { action, computed, observable, observe } from 'mobx';
+
+import WebtoonRequest, { WebtoonInfo, WebtoonInfoType, Week } from '../tools/request';
+import OptionStore from './option';
 
 // export type SaveType = "imglog" | "favorate" | "scrolls" | "visits" | "webtoon";
 
@@ -458,6 +459,7 @@ export default class WebtoonStore {
     if (this.option.useImgLog && !this.option.isBackground) this.imglog = this._imglog;
     this._visits = this._visits;
     console.log(webtoons);
+    ga("send", "event", "webtoon", "recentWebtoon", "updated", webtoons.length);
   }
 
   @action setVisitsFromChrome() {

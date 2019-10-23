@@ -1,7 +1,8 @@
-import * as React from "react";
-import { inject, observer } from "mobx-react";
-import OptionStore from "../../store/option";
-import Link from "../../tools/link";
+import { inject, observer } from 'mobx-react';
+import * as React from 'react';
+
+import OptionStore from '../../store/option';
+import Link from '../../tools/link';
 
 export interface IWlinkProps {
   /**
@@ -18,6 +19,8 @@ export interface IWlinkProps {
    * [Mobx] Option Store
    */
   option?: OptionStore;
+
+  onClick?: React.MouseEventHandler;
 }
 
 @inject("option")
@@ -25,7 +28,9 @@ export interface IWlinkProps {
 export default class Wlink extends React.Component<IWlinkProps, null> {
   public clickHandler(event: React.MouseEvent) {
     event.preventDefault();
-    const { link, option, forceTab } = this.props;
+    const { link, option, forceTab, onClick } = this.props;
+    ga("send", "event", "wlink", "linkOpen", link);
+    onClick && onClick(event);
     if (forceTab) {
       return Link.openNewTab(link);
     }

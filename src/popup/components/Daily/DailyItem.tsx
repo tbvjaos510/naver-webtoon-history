@@ -1,11 +1,13 @@
-import * as React from "react";
-import { WebtoonInfoType } from "../../../tools/request";
-import Wlink from "../Wlink";
-import OptionStore from "../../../store/option";
-import { observer, inject } from "mobx-react";
-import WebtoonStore from "../../../store/webtoon";
-import * as distance from "date-fns/distance_in_words_to_now";
-import * as ko from "date-fns/locale/ko";
+import * as distance from 'date-fns/distance_in_words_to_now';
+import * as ko from 'date-fns/locale/ko';
+import { inject, observer } from 'mobx-react';
+import * as React from 'react';
+
+import OptionStore from '../../../store/option';
+import WebtoonStore from '../../../store/webtoon';
+import { WebtoonInfoType } from '../../../tools/request';
+import Wlink from '../Wlink';
+
 export interface IDailyItemProps {
   item: WebtoonInfoType;
   option?: OptionStore;
@@ -20,8 +22,10 @@ export default class DailyItem extends React.Component<IDailyItemProps, any> {
     const { webtoon, item } = this.props;
     const idx = webtoon.starWebtoons.indexOf(item.id);
     if (idx != -1) {
+      ga("send", "event", "DailyItem", "unStarWebtoon", item.id);
       webtoon.starWebtoons.splice(idx, 1);
     } else {
+      ga("send", "event", "DailyItem", "starWebtoon", item.id);
       webtoon.starWebtoons.push(item.id);
     }
 
@@ -41,7 +45,18 @@ export default class DailyItem extends React.Component<IDailyItemProps, any> {
           addSuffix: true
         }) + "에 봄";
       return (
-        <Wlink link={`https://comic.naver.com/webtoon/detail.nhn?titleId=${find.id}&no=${find.no}`}>
+        <Wlink
+          link={`https://comic.naver.com/webtoon/detail.nhn?titleId=${find.id}&no=${find.no}`}
+          onClick={() => {
+            ga(
+              "send",
+              "event",
+              "DailyItem",
+              "openRecentWebtoon",
+              `${item.title}(${find.id}/${find.no})`
+            );
+          }}
+        >
           <a className="uk-link-muted webtoon-link" uk-tooltip={timeLocale}>
             {find.noname}
           </a>
@@ -63,7 +78,12 @@ export default class DailyItem extends React.Component<IDailyItemProps, any> {
           {item.isRest ? <em className="ico break" /> : null}
         </div>
         <div className="uk-card-body uk-padding-small uk-padding-remove-right uk-padding-remove-left">
-          <Wlink link={item.link}>
+          <Wlink
+            link={item.link}
+            onClick={() => {
+              ga("send", "event", "DailyItem", "openWebtoon", `${item.title}(${item.id})`);
+            }}
+          >
             <a className="uk-link-muted webtoon-link">{item.title}</a>
           </Wlink>
           <br />

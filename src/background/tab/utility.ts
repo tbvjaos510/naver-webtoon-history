@@ -1,4 +1,4 @@
-import { VisitType } from "../../store/webtoon";
+import { VisitType } from '../../store/webtoon';
 
 export function hiddenComment(tabId: number, isMobile: boolean) {
   const code = `document.getElementById("${
@@ -105,10 +105,11 @@ export function displayHistory(
     }`;
       if (!tabId) {
         eval(code);
-      } else
+      } else {
         chrome.tabs.executeScript(tabId, {
           code: code
         });
+      }
     });
   }
 }

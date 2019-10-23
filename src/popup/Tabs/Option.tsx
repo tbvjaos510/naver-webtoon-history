@@ -1,15 +1,15 @@
-import * as React from "react";
-import { observer, inject } from "mobx-react";
-import OptionStore, { ChromeStore, WebtoonOrder, LinkTarget } from "../../store/option";
-import WebtoonStore from "../../store/webtoon";
-import Wlink from "../components/Wlink";
-import RecentSetting from "../components/Setting/RecentSetting";
-import WebtoonSetting from "../components/Setting/WebtoonSetting";
-import PageSetting from "../components/Setting/PageSetting";
-import SpecialSetting from "../components/Setting/SpecialSetting";
-import StorageSetting from "../components/Setting/StorageSetting";
-import DevelopInfo from "../components/Setting/DevelopInfo";
-import SettingButton from "../components/Setting/Inputs/SettingButton";
+import { inject, observer } from 'mobx-react';
+import * as React from 'react';
+
+import OptionStore from '../../store/option';
+import DevelopInfo from '../components/Setting/DevelopInfo';
+import SettingButton from '../components/Setting/Inputs/SettingButton';
+import PageSetting from '../components/Setting/PageSetting';
+import RecentSetting from '../components/Setting/RecentSetting';
+import SpecialSetting from '../components/Setting/SpecialSetting';
+import StorageSetting from '../components/Setting/StorageSetting';
+import WebtoonSetting from '../components/Setting/WebtoonSetting';
+import Wlink from '../components/Wlink';
 
 export interface IOptionProps {
   option?: OptionStore;

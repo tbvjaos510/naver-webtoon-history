@@ -8,3 +8,7 @@ declare module NodeJS {
     ENV: typeof ENV;
   }
 }
+
+interface Window {
+  dataLayer: GoogleAnalyticsCode;
+}
