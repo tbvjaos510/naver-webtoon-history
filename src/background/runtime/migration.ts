@@ -1,4 +1,4 @@
-export default function(prevVersion: string, curVersion: string) {
+export default function migration(prevVersion: string, curVersion: string) {
   if (prevVersion === "3.0.0") {
     chrome.storage.sync.get(syncValue => {
       chrome.storage.local.get(localValue => {
@@ -46,7 +46,7 @@ export default function(prevVersion: string, curVersion: string) {
             _saveWebtoonSort: true,
             _saveScroll: true,
             _hiddenComment: false,
-            _autoNext: true,
+            _autoNext: false,
             _useImgLog: true,
             _saveFavorate: true,
             _linkTarget: "Sidebar",
@@ -96,4 +96,10 @@ export default function(prevVersion: string, curVersion: string) {
       });
     });
   }
+  chrome.storage.sync.get(syncValue => {
+    console.log(syncValue);
+    const json = JSON.parse(syncValue.option);
+    json._autoNext = false;
+    chrome.storage.sync.set({ option: JSON.stringify(json) });
+  });
 }

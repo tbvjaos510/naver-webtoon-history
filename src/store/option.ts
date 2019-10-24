@@ -264,7 +264,7 @@ export default class OptionStore {
    * 자동으로 자동화로 넘어가는 여부
    */
   @observable
-  private _autoNext: boolean = true;
+  private _autoNext: boolean = false;
 
   @computed
   public get autoNext(): boolean {

@@ -10,6 +10,7 @@ export interface ChromeMessage {
 
 export default function(webtoon: WebtoonStore, option: OptionStore) {
   chrome.runtime.onMessage.addListener((message: ChromeMessage, sender, response) => {
+    ga("send", "event", "extension", "onMessage", message);
     const param = new URL(sender.url).searchParams;
     console.log(param);
     const wid = param.get("titleId");
