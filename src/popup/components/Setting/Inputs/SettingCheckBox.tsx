@@ -1,6 +1,7 @@
-import * as React from "react";
-import OptionStore from "../../../../store/option";
-import { inject, observer } from "mobx-react";
+import { inject, observer } from 'mobx-react';
+import * as React from 'react';
+
+import OptionStore from '../../../../store/option';
 
 export interface ISettingCheckBoxProps {
   tooltip?: string;
@@ -26,6 +27,7 @@ export default class SettingCheckBox extends React.Component<ISettingCheckBoxPro
           checked={option[key]}
           onChange={event => {
             option[key] = event.target.checked;
+            ga("send", "event", "popup", "SettingCheckBoxClick", `${text}/${event.target.checked}`);
             onChange && onChange(event);
           }}
         />
