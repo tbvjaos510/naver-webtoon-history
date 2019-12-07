@@ -5,7 +5,7 @@
 
 | whale user                                                                                 | chrome user                                                                                                                        |
 | ------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
-| ![Whale Web Store](https://img.shields.io/badge/whale-16185-brightgreen?style=flat-square) | ![Chrome Web Store](https://img.shields.io/chrome-web-store/users/pkingjioiemgjlbklighjcicnjgjckok?label=chrome&style=flat-square) |
+| ![Whale Web Store](https://img.shields.io/badge/whale-20274-brightgreen?style=flat-square) | ![Chrome Web Store](https://img.shields.io/chrome-web-store/users/pkingjioiemgjlbklighjcicnjgjckok?label=chrome&style=flat-square) |
 
 whale(chrome) extension 으로 네이버 웹툰 기록을 표시하고 쉽게 접근할 수 있는 확장 앱니다.
 
