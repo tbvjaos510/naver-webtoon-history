@@ -1,9 +1,10 @@
-import '../analytics';
+import "uikit";
+import "uikit/dist/css/uikit.min.css";
+import "uikit/dist/js/uikit-icons.js";
 
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
 
-import Popup from './Popup';
+import App from "./App";
 
-
-ReactDOM.render(<Popup />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById("root"));
