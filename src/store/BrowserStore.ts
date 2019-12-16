@@ -32,9 +32,12 @@ export class BrowserStorage<T extends {}> {
 
   public async init(storage: StoreLocation, defaultValue: T) {
     this.storage = storage;
-    this.rawData = await getStorage<T>(this.key, storage);
-    if (this.rawData === null) {
+    const rawData = await getStorage<T>(this.key, storage);
+    if (rawData === null) {
       this.data = defaultValue;
+    } else {
+      this.rawData = rawData;
+      this.observers.forEach(observe => observe(rawData, rawData));
     }
     this.isLoaded = true;
     return this.data;

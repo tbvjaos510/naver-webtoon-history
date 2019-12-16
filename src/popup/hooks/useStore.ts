@@ -14,12 +14,13 @@ export default function useStore<T extends keyof BrowserStorageData>(
   }, [forceUpdate]);
 
   useEffect(() => {
+    forceUpdate();
     store.subscribe(handleChangeData);
-
     return () => {
       store.unsubscribe(handleChangeData);
     };
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (store.isLoaded === false) {
     return null;
