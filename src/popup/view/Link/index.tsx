@@ -9,7 +9,7 @@ interface Props {
   forceTab?: boolean;
 }
 
-const Link: React.FC<Props> = props => {
+const UrlLink: React.FC<Props> = props => {
   const { url, forceTab, children } = props;
   const setting = useStore("setting");
 
@@ -27,4 +27,4 @@ const Link: React.FC<Props> = props => {
   return clonedLink;
 };
 
-export default Link;
+export default UrlLink;
