@@ -1,5 +1,23 @@
 {
-  "jest.pathToJest": "npm run test:coverage --",
-  "jest.runAllTestsFirst": true,
-  "editor.formatOnSave": true
+  "eslint.autoFixOnSave": true,
+  "eslint.enable": true,
+  "editor.formatOnSave": true,
+  "[typescript]": {
+    "editor.formatOnSave": false
+  },
+  "[typescriptreact]": {
+    "editor.formatOnSave": false
+  },
+  "eslint.validate": [
+    { "language": "typescript", "autoFix": true },
+    { "language": "typescriptreact", "autoFix": true }
+  ],
+  "files.eol": "\n",
+  "typescript.tsdk": "./node_modules/typescript/lib",
+  "typescriptHero.imports.stringQuoteStyle": "\"",
+  "typescriptHero.imports.multiLineTrailingComma": false,
+  "typescriptHero.imports.multiLineWrapThreshold": 80,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
 }

@@ -1,0 +1,143 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "plugin:prettier/recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier/@typescript-eslint",
+    "prettier/react"
+  ],
+  "globals": {
+    "browser": true,
+    "webextensions": true
+  },
+  "plugins": ["@typescript-eslint", "react-hooks", "prettier"],
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "project": "tsconfig.json",
+    "createDefaultProgram": true
+  },
+  "rules": {
+    "react/prefer-stateless-function": [2],
+    "react/prop-types": "off",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "off",
+    // @typescript-eslint
+    "@typescript-eslint/array-type": [
+      "error",
+      {
+        "default": "generic"
+      }
+    ],
+    "@typescript-eslint/strict-boolean-expressions": [
+      "error",
+      { "allowNullable": true, "ignoreRhs": true }
+    ],
+    "@typescript-eslint/explicit-member-accessibility": [
+      "error",
+      {
+        "accessibility": "explicit"
+      }
+    ],
+    "func-call-spacing": "off",
+    "@typescript-eslint/func-call-spacing": ["error"],
+    "@typescript-eslint/adjacent-overload-signatures": "error",
+    "@typescript-eslint/triple-slash-reference": "error",
+    "@typescript-eslint/type-annotation-spacing": "error",
+    "@typescript-eslint/unified-signatures": "error",
+    "@typescript-eslint/class-name-casing": "error",
+    "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
+    "@typescript-eslint/interface-name-prefix": "error",
+    "@typescript-eslint/no-inferrable-types": "error",
+    "@typescript-eslint/no-misused-new": "error",
+    "@typescript-eslint/no-this-alias": "error",
+    "@typescript-eslint/prefer-for-of": "error",
+    "@typescript-eslint/prefer-function-type": "error",
+    "@typescript-eslint/prefer-namespace-keyword": "error",
+    "@typescript-eslint/prefer-optional-chain": "error",
+    "@typescript-eslint/prefer-nullish-coalescing": "error",
+    "@typescript-eslint/prefer-readonly": "error",
+
+    // typescript-eslint에서 사용되는 룰
+    "quotes": "off",
+    "@typescript-eslint/quotes": [
+      "error",
+      "double",
+      { "avoidEscape": true, "allowTemplateLiterals": true }
+    ],
+
+    "semi": "off",
+    "@typescript-eslint/semi": "error",
+
+    "indent": "off",
+    "@typescript-eslint/indent": "off",
+
+    "brace-style": "off",
+    "@typescript-eslint/brace-style": ["error"],
+
+    "camelcase": "off",
+    "@typescript-eslint/camelcase": [
+      "error",
+      { "properties": "never", "allow": ["^[A-Za-z][a-zA-Za-z]+_[A-Za-z]+$"] }
+    ],
+
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/no-use-before-define": "off",
+    "@typescript-eslint/member-delimiter-style": "off",
+
+    // eslint
+
+    "max-len": ["error", 80],
+    "constructor-super": "error",
+    "curly": ["error", "multi-line"],
+    "dot-notation": "error",
+    "eqeqeq": "error",
+    "new-parens": "error",
+    "no-caller": "error",
+    "no-duplicate-case": "error",
+    "no-duplicate-imports": "error",
+    "no-empty": "error",
+    "no-eval": "error",
+    "no-extra-bind": "error",
+    "no-fallthrough": "error",
+    "no-new-func": "error",
+    "no-new-wrappers": "error",
+    "no-return-await": "error",
+    "no-restricted-globals": [
+      "error",
+      { "name": "setTimeout" },
+      { "name": "clearTimeout" },
+      { "name": "setInterval" },
+      { "name": "clearInterval" },
+      { "name": "setImmediate" },
+      { "name": "clearImmediate" }
+    ],
+    "no-sparse-arrays": "error",
+    "no-template-curly-in-string": "error",
+    "no-throw-literal": "error",
+    "no-trailing-spaces": "error",
+    "no-undef-init": "error",
+    "no-unsafe-finally": "error",
+    "no-unused-expressions": ["error", { "allowTernary": true }],
+    "no-unused-labels": "error",
+    "no-var": "error",
+    "object-shorthand": "error",
+    "prefer-const": "error",
+    "prefer-object-spread": "error",
+    "quote-props": ["error", "consistent-as-needed"],
+    "space-in-parens": "error",
+    "unicode-bom": ["error", "never"],
+    "use-isnan": "error",
+    "prettier/prettier": "error"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
+}

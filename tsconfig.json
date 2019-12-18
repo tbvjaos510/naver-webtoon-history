@@ -1,13 +1,25 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "es5",
+    "lib": ["ES6", "DOM", "ES2016.Array.Include", "ES2019.Object"],
+    "jsx": "react",
     "module": "commonjs",
     "moduleResolution": "node",
-    "inlineSourceMap": true,
-    "jsx": "react",
-    "lib": ["es6", "dom", "dom.iterable"],
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true
+    "sourceMap": true,
+    "noEmitOnError": true,
+    "baseUrl": "src",
+    "outDir": "dist",
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictPropertyInitialization": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "alwaysStrict": true,
+    "preserveConstEnums": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */
   }
 }
