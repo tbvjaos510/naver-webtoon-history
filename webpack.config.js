@@ -4,10 +4,6 @@ const webpack = require("webpack");
 const path = require("path");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
-const createStyledComponentsTransformer = require("typescript-plugin-styled-components")
-  .default;
-
-const styledComponentsTransformer = createStyledComponentsTransformer();
 
 module.exports = function(env) {
   const isProduction = env.production;
@@ -28,16 +24,7 @@ module.exports = function(env) {
         {
           exclude: /node_modules/,
           test: /\.tsx?$/,
-          loader: "ts-loader",
-          options: {
-            getCustomTransformers: () => ({
-              before: [styledComponentsTransformer]
-            })
-          }
-        },
-        {
-          test: /\.css$/,
-          loader: "style-loader!css-loader?modules&importLoaders=true"
+          loader: "ts-loader"
         }
       ]
     },

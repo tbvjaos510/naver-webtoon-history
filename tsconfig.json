@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["es6", "DOM"],
+    "lib": ["ES6", "DOM", "ES2016.Array.Include", "ES2019.Object"],
     "jsx": "react",
     "module": "commonjs",
     "moduleResolution": "node",

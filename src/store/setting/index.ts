@@ -13,6 +13,7 @@ export const SettingStorageDefault: SettingStorage = {
   saveFavorate: true,
   saveScroll: true,
   saveWebtoonSort: true,
+  showFavorate: true,
   scrollAlert: true,
   showHistory: true,
   storeLocation: StoreLocation.LOCAL,

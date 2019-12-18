@@ -70,6 +70,8 @@ export interface SettingStorage {
 
   saveFavorate: boolean;
 
+  showFavorate: boolean;
+
   saveScroll: boolean;
 
   saveWebtoonSort: boolean;

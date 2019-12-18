@@ -11,7 +11,9 @@ import {
   WebtoonStorage
 } from "./webtoon/interface";
 
-export const SettingStore = new BrowserStorage<SettingStorage>("setting");
+export const SettingStore = new BrowserStorage<SettingStorage>("setting", {
+  mergeDefault: true
+});
 export const WebtoonStore = new BrowserStorage<WebtoonStorage>("webtoon");
 export const ScrollStore = new BrowserStorage<ScrollStorage>("scroll");
 export const OrderStore = new BrowserStorage<OrderStorage>("order");

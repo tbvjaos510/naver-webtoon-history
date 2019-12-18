@@ -25,8 +25,7 @@
     "react/prefer-stateless-function": [2],
     "react/prop-types": "off",
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn",
-    "prettier/prettier": "error",
+    "react-hooks/exhaustive-deps": "off",
     // @typescript-eslint
     "@typescript-eslint/array-type": [
       "error",
@@ -34,7 +33,10 @@
         "default": "generic"
       }
     ],
-    "@typescript-eslint/strict-boolean-expressions": "error",
+    "@typescript-eslint/strict-boolean-expressions": [
+      "error",
+      { "allowNullable": true, "ignoreRhs": true }
+    ],
     "@typescript-eslint/explicit-member-accessibility": [
       "error",
       {
@@ -72,7 +74,7 @@
     "@typescript-eslint/semi": "error",
 
     "indent": "off",
-    "@typescript-eslint/indent": ["error", 2],
+    "@typescript-eslint/indent": "off",
 
     "brace-style": "off",
     "@typescript-eslint/brace-style": ["error"],
@@ -130,7 +132,8 @@
     "quote-props": ["error", "consistent-as-needed"],
     "space-in-parens": "error",
     "unicode-bom": ["error", "never"],
-    "use-isnan": "error"
+    "use-isnan": "error",
+    "prettier/prettier": "error"
   },
   "settings": {
     "react": {

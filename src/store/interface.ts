@@ -18,4 +18,8 @@ export interface BrowserStorageData {
   visit: VisitStorage;
 }
 
-export type StorageObserverCallback<T> = (newValue: T, oldValue: T) => void;
+export type StorageObserverCallback<T> = (
+  newValue: T,
+  oldValue: T | null
+) => void;
+export type StorageInitialObserverCallback<T> = (value: T) => void;

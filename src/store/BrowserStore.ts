@@ -2,11 +2,16 @@ import { StorageObserverCallback } from "./interface";
 import { StoreLocation } from "./setting/interface";
 import { getStorage, setStorage } from "./Storage";
 
+interface BrowserStorageOption {
+  observeObject?: boolean;
+  mergeDefault?: boolean;
+}
+
 export class BrowserStorage<T extends {}> {
   public isLoaded = false;
   private storage: StoreLocation = StoreLocation.LOCAL;
   private rawData: T | null = null;
-  private observers: Array<StorageObserverCallback<T>> = [];
+  private readonly observers: Array<StorageObserverCallback<T>> = [];
 
   private onChangeStorage(
     change: {
@@ -26,7 +31,10 @@ export class BrowserStorage<T extends {}> {
     }
   }
 
-  public constructor(public readonly key: string) {
+  public constructor(
+    public readonly key: string,
+    private readonly option?: BrowserStorageOption
+  ) {
     chrome.storage.onChanged.addListener(this.onChangeStorage);
   }
 
@@ -36,10 +44,26 @@ export class BrowserStorage<T extends {}> {
     if (rawData === null) {
       this.data = defaultValue;
     } else {
-      this.rawData = rawData;
-      this.observers.forEach(observe => observe(rawData, rawData));
+      if (this.option?.mergeDefault) {
+        const mergedData = { ...rawData };
+        const defaultKeys = Object.keys(defaultValue);
+        const storedKeys = Object.keys(rawData);
+        this.data = defaultKeys
+          .filter(key => storedKeys.includes(key) === false)
+          .reduce(
+            (prev, curr) => ({
+              ...prev,
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              [curr]: (defaultValue as Record<string, any>)[curr]
+            }),
+            mergedData
+          );
+      } else {
+        this.rawData = rawData;
+      }
     }
     this.isLoaded = true;
+    this.observers.forEach(observe => observe(this.data, null));
     return this.data;
   }
 
@@ -60,6 +84,9 @@ export class BrowserStorage<T extends {}> {
   }
 
   public unsubscribe(callback: StorageObserverCallback<T>) {
-    this.observers = this.observers.filter(c => c !== callback);
+    this.observers.splice(
+      this.observers.findIndex(observer => observer === callback),
+      1
+    );
   }
 }
