@@ -6,6 +6,7 @@ import Link from '../../tools/link';
 export interface ChromeMessage {
   command?: "openTab" | "reload" | "addContextMenu";
   scroll?: number;
+  needCloseTab?: boolean;
 }
 
 export default function(webtoon: WebtoonStore, option: OptionStore) {
@@ -17,8 +18,12 @@ export default function(webtoon: WebtoonStore, option: OptionStore) {
     const no = param.get("no");
     if (message && message.command === "openTab") {
       const link = sender.url.replace("m.comic", "comic");
-      Link.openNewTab(link);
-      response(null);
+      if (message.needCloseTab) {
+        chrome.tabs.remove(sender.tab.id, () => Link.openNewTab(link));
+      } else {
+        Link.openNewTab(link);
+        response(null);
+      }
     } else if (wid && no && message.scroll && option.saveScroll) {
       message.scroll = Math.round(message.scroll * 100);
       if (message.scroll <= 2 || message.scroll >= 98) {

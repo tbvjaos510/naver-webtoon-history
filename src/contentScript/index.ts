@@ -1,25 +1,23 @@
-import * as Utility from "../background/tab/utility";
+import * as Utility from '../background/tab/utility';
 
 function openTab() {
-  chrome.runtime.sendMessage(
-    chrome.runtime.id,
-    {
-      command: "openTab"
-    },
-    end => {
-      window.close();
-    }
-  );
+  chrome.runtime.sendMessage(chrome.runtime.id, {
+    command: "openTab"
+  });
+  window.close();
 }
 function addTabButton() {
-  document.body.innerHTML += `
-        <div id="fixed_Layer">
-            <span id="layer-link" title="보고 있는 웹툰을 탭에서 엽니다."><svg id="arrow" width="40" height="40" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <polyline fill="none" stroke="#000"
-                        stroke-width="1.03" points="13 16 7 10 13 4" /></svg> </span></div>`;
-  document.getElementById("layer-link").addEventListener("click", function(event) {
+  const divElement = document.createElement("div");
+  divElement.id = "fixed_Layer";
+  divElement.innerHTML = `
+  <span id="layer-link" title="보고 있는 웹툰을 탭에서 엽니다."><svg id="arrow" width="40" height="40" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+          <polyline fill="none" stroke="#000"
+              stroke-width="1.03" points="13 16 7 10 13 4" /></svg> </span>
+  `;
+  divElement.addEventListener("click", function(event) {
     openTab();
   });
+  document.documentElement.appendChild(divElement);
 }
 
 chrome.storage.sync.get("option", ({ option }) => {
@@ -35,22 +33,27 @@ chrome.storage.sync.get("option", ({ option }) => {
     chrome.storage[option._storeLocation].get(
       ["scrolls", "visits", "webtoon"],
       ({ scrolls = "{}", webtoon = "{}", visits = "{}" }) => {
+        console.log("contentscript executed");
         const no = url.searchParams.get("no");
         if (!no) return;
         scrolls = JSON.parse(scrolls);
         webtoon = JSON.parse(webtoon);
         visits = JSON.parse(visits);
-        if (scrolls[titleId] && scrolls[titleId][no]) {
-          Utility.setScroll(null, scrolls[titleId][no], true, false);
-        }
-        if (option._saveScroll) {
-          Utility.checkScroll(null, true);
-        }
-        if (option._hiddenComment) {
-          Utility.hiddenComment(null, true);
-        }
-        if (option._autoNext) {
-          Utility.autoNext(null, true);
+        try {
+          if (scrolls[titleId] && scrolls[titleId][no]) {
+            Utility.setScroll(null, scrolls[titleId][no], true, false);
+          }
+          if (option._saveScroll) {
+            Utility.checkScroll(null, true);
+          }
+          if (option._hiddenComment) {
+            Utility.hiddenComment(null, true);
+          }
+          if (option._autoNext) {
+            Utility.autoNext(null, true);
+          }
+        } catch (e) {
+          // NOTE: 컷툰일 경우에는 스크롤 저장이 불가능함.
         }
 
         const title = document.querySelector("meta[property='og:title']").getAttribute("content");

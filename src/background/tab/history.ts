@@ -1,6 +1,6 @@
-import WebtoonStore, { VisitType } from "../../store/webtoon";
-import OptionStore from "../../store/option";
-import * as Utility from "./utility";
+import OptionStore from '../../store/option';
+import WebtoonStore from '../../store/webtoon';
+import * as Utility from './utility';
 
 export default function(webtoon: WebtoonStore, option: OptionStore) {
   chrome.tabs.onUpdated.addListener((tabId, info, tab) => {
@@ -29,17 +29,21 @@ export default function(webtoon: WebtoonStore, option: OptionStore) {
           }
           console.log(webtoonId, no);
           webtoon.visits[webtoonId][no] = Math.floor(new Date().getTime() / 1000);
-          if (option.saveScroll) {
-            Utility.checkScroll(tabId, false);
+          try {
+            if (option.saveScroll) {
+              Utility.checkScroll(tabId, false);
+            }
+            if (webtoon.scrolls[webtoonId] && webtoon.scrolls[webtoonId][no]) {
+              Utility.setScroll(tabId, webtoon.scrolls[webtoonId][no], false, option.scrollAlert);
+            }
+            if (option.autoNext) {
+              console.log("autonext");
+              Utility.autoNext(tabId, option.autoNext);
+            }
+            if (option.hiddenComment) Utility.hiddenComment(tabId, false);
+          } catch (e) {
+            // 컷툰 방지
           }
-          if (webtoon.scrolls[webtoonId] && webtoon.scrolls[webtoonId][no]) {
-            Utility.setScroll(tabId, webtoon.scrolls[webtoonId][no], false, option.scrollAlert);
-          }
-          if (option.autoNext) {
-            console.log("autonext");
-            Utility.autoNext(tabId, option.autoNext);
-          }
-          if (option.hiddenComment) Utility.hiddenComment(tabId, false);
 
           // Save to Store
           webtoon.webtoonType = webtoon.webtoonType;

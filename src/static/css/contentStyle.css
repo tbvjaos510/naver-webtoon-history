@@ -13,9 +13,9 @@
   border-radius: 20px;
 }
 #arrow:hover {
-  background-color: #1111;
+  background-color: #99999966;
   cursor: pointer;
 }
 #arrow * {
-  stroke: black;
+  stroke: #666666;
 }
