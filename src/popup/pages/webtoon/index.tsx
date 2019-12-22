@@ -27,7 +27,7 @@ const WebtoonList: React.FC = () => {
     }
   }, [setting]);
   return (
-    <Container color="black" disableGutters>
+    <Container disableGutters>
       <Tabs
         value={currentDay}
         variant="fullWidth"
