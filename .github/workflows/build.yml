@@ -1,0 +1,31 @@
+name: 빌드
+on: [push]
+jobs:
+  run:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node: ["8"]
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@master
+      - name: Node ${{ matrix.node }} 사용, OS ${{ matrix.os }} 사용
+        uses: actions/setup-node@master
+        with:
+          node-version: ${{ matrix.node }}
+      - name: npm 모듈 설치
+        run: |
+          yarn install
+      - name: 빌드
+        run: |
+          yarn build
+      - name: chrome artifact 저장
+        uses: actions/upload-artifact@v1
+        with:
+          name: chrome-build
+          path: dist/chrome
+      - name: whale artifact 저장
+        uses: actions/upload-artifact@v1
+        with:
+          name: whale-build
+          path: dist/whale
