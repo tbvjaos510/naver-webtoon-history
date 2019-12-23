@@ -8,7 +8,8 @@ const theme = createMuiTheme({
       contrastText: "#fafafa"
     },
     text: {
-      primary: "#fafafa"
+      primary: "#fafafa",
+      secondary: grey[800]
     }
   },
   typography: {

@@ -1,28 +1,21 @@
-import { useCallback, useEffect, useMemo } from "react";
-import Storage from "store";
-import { BrowserStorageData } from "store/interface";
+import { useCallback, useEffect } from "react";
+import { BrowserStorage } from "store/BrowserStore";
 
 import useForceUpdate from "./useForceUpdate";
 
-export default function useStore<T extends keyof BrowserStorageData>(
-  key: T
-): BrowserStorageData[T] | null {
-  const store = useMemo(() => Storage[key], [key]);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default function useStore<T extends BrowserStorage<any>>(store: T): T {
   const forceUpdate = useForceUpdate();
   const handleChangeData = useCallback(() => {
     forceUpdate();
-  }, [forceUpdate]);
+  }, []);
 
   useEffect(() => {
     store.subscribe(handleChangeData);
     return () => {
       store.unsubscribe(handleChangeData);
     };
-  }, []);
+  }, [handleChangeData]);
 
-  if (store.isLoaded === false) {
-    return null;
-  }
-
-  return store.data as BrowserStorageData[T];
+  return store;
 }

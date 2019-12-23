@@ -1,5 +1,6 @@
 import useStore from "popup/hooks/useStore";
 import React, { cloneElement, useCallback, useMemo } from "react";
+import { SettingStore } from "store";
 import openLink from "store/setting/action/OpenLink";
 import { LinkTarget } from "store/setting/interface";
 
@@ -11,7 +12,7 @@ interface Props {
 
 const UrlLink: React.FC<Props> = props => {
   const { url, forceTab, children } = props;
-  const setting = useStore("setting");
+  const { data: setting } = useStore(SettingStore);
 
   const handleLinkClick = useCallback(() => {
     if (setting !== null) {

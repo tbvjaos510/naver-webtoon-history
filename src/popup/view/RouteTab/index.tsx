@@ -1,5 +1,5 @@
 import { makeStyles, Tab, Tabs } from "@material-ui/core";
-import React, { memo, useCallback } from "react";
+import React, { useCallback } from "react";
 import { useHistory, useLocation } from "react-router";
 
 export interface RouteInfo {
@@ -45,4 +45,4 @@ const RouteTab: React.FC<Props> = props => {
   );
 };
 
-export default memo(RouteTab);
+export default RouteTab;

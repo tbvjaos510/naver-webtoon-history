@@ -18,16 +18,10 @@ export async function getStorage<T>(
   });
 }
 
-export async function setStorage<T>(
+export function setStorage<T>(
   key: string,
   data: T,
   storage: StoreLocation = StoreLocation.LOCAL
 ) {
-  return new Promise<T>((resolve, reject) => {
-    try {
-      chrome.storage[storage].set({ [key]: JSON.stringify(data) }, resolve);
-    } catch (e) {
-      reject(e);
-    }
-  });
+  return chrome.storage[storage].set({ [key]: JSON.stringify(data) });
 }
