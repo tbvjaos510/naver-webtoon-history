@@ -1,13 +1,9 @@
 {
   "eslint.enable": true,
+  "eslint.alwaysShowStatus": true,
   "editor.formatOnSave": true,
-  "[typescript]": {
-    "editor.formatOnSave": false
-  },
-  "[typescriptreact]": {
-    "editor.formatOnSave": false
-  },
   "eslint.validate": ["typescript", "typescriptreact"],
+  "eslint.packageManager": "yarn",
   "files.eol": "\n",
   "typescript.tsdk": "./node_modules/typescript/lib",
   "typescriptHero.imports.stringQuoteStyle": "\"",

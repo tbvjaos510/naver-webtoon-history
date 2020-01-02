@@ -1,6 +1,7 @@
-import { makeStyles, Tab, Tabs } from "@material-ui/core";
-import React, { useCallback } from "react";
-import { useHistory, useLocation } from "react-router";
+import Tabs from "popup/components/Tabs";
+import Tab from "popup/components/Tabs/Tab";
+import React from "react";
+import { useLocation } from "react-router";
 
 export interface RouteInfo {
   readonly name: string;
@@ -11,33 +12,12 @@ interface Props {
   routes: Array<RouteInfo>;
 }
 
-const useStyles = makeStyles({
-  tabs: {
-    width: "100%"
-  }
-});
-
 const RouteTab: React.FC<Props> = props => {
   const { routes } = props;
-
-  const { push } = useHistory();
   const { pathname } = useLocation();
-  const classes = useStyles();
 
-  const redirect = useCallback(
-    (_, value) => {
-      push(value);
-    },
-    [push]
-  );
   return (
-    <Tabs
-      className={classes.tabs}
-      value={pathname}
-      variant="fullWidth"
-      onChange={redirect}
-      indicatorColor="primary"
-    >
+    <Tabs value={pathname}>
       {routes.map(route => (
         <Tab key={route.path} label={route.name} value={route.path} />
       ))}

@@ -1,0 +1,7 @@
+$global-primary-background: #00c853;
+// 2. Import default variables and available mixins.
+@import "uikit/src/scss/variables-theme.scss";
+@import "uikit/src/scss/mixins-theme.scss";
+
+// 4. Import UIkit.
+@import "uikit/src/scss/uikit-theme.scss";

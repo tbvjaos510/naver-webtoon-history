@@ -1,10 +1,8 @@
-import { CssBaseline, ThemeProvider } from "@material-ui/core";
 import React from "react";
 import { HashRouter, Route, Switch } from "react-router-dom";
 
 import Setting from "./pages/setting";
 import WebtoonList from "./pages/webtoon";
-import theme from "./theme";
 import Header from "./view/Header";
 import RouteTab, { RouteInfo } from "./view/RouteTab";
 
@@ -28,18 +26,15 @@ const routes: Array<RouteInfo> = [
 const App: React.FC = () => {
   return (
     <Container>
-      <CssBaseline />
-      <ThemeProvider theme={theme}>
-        <HashRouter>
-          <Header />
-          <RouteTab routes={routes} />
-          <Switch>
-            <Route path="/" exact component={WebtoonList} />
-            <Route path="/recent" />
-            <Route path="/setting" component={Setting} />
-          </Switch>
-        </HashRouter>
-      </ThemeProvider>
+      <HashRouter>
+        <Header />
+        <RouteTab routes={routes} />
+        <Switch>
+          <Route path="/" exact component={WebtoonList} />
+          <Route path="/recent" />
+          <Route path="/setting" component={Setting} />
+        </Switch>
+      </HashRouter>
     </Container>
   );
 };

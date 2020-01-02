@@ -25,6 +25,10 @@ module.exports = function(env) {
           exclude: /node_modules/,
           test: /\.tsx?$/,
           loader: "ts-loader"
+        },
+        {
+          test: /\.s[ac]ss$/i,
+          use: ["style-loader", "css-loader", "sass-loader"]
         }
       ]
     },

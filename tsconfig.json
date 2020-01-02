@@ -19,7 +19,8 @@
     "strict": true,
     "alwaysStrict": true,
     "preserveConstEnums": true,
+    "resolveJsonModule": true,
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */
+    "forceConsistentCasingInFileNames": true
   }
 }
