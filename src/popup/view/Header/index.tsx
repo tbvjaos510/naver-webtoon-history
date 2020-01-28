@@ -3,8 +3,8 @@ import { NAVER_WEBTOON_URL } from "constraint";
 import React, { memo, useMemo } from "react";
 import styled from "styled-components";
 
+import Message from "../../components/Message";
 import UrlLink from "../Link";
-import Message from "../Message";
 
 const Header: React.FC = () => {
   const version = useMemo(() => chrome.runtime.getManifest().version, []);

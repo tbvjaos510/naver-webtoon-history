@@ -6,4 +6,5 @@ declare module "uikit" {
   export default UIkit;
 }
 
-declare const i18n: typeof import("static/_locales/ko/messages.json");
+type I18N = typeof import("static/_locales/ko/messages.json");
+declare type I18N_KEY = keyof I18N;

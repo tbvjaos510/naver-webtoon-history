@@ -7,5 +7,26 @@
   },
   "APP_TITLE": {
     "message": "Naver Webtoon Helper"
+  },
+  "DAY_MON": {
+    "message": "MON"
+  },
+  "DAY_TUE": {
+    "message": "TUE"
+  },
+  "DAY_WED": {
+    "message": "WED"
+  },
+  "DAY_THU": {
+    "message": "TUR"
+  },
+  "DAY_FRI": {
+    "message": "FRI"
+  },
+  "DAY_SAT": {
+    "message": "SAT"
+  },
+  "DAY_SUN": {
+    "message": "SUN"
   }
 }

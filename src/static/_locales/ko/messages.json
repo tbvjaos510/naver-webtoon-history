@@ -7,5 +7,26 @@
   },
   "APP_TITLE": {
     "message": "네이버 웹툰 도우미"
+  },
+  "DAY_MON": {
+    "message": "월"
+  },
+  "DAY_TUE": {
+    "message": "화"
+  },
+  "DAY_WED": {
+    "message": "수"
+  },
+  "DAY_THU": {
+    "message": "목"
+  },
+  "DAY_FRI": {
+    "message": "금"
+  },
+  "DAY_SAT": {
+    "message": "토"
+  },
+  "DAY_SUN": {
+    "message": "일"
   }
 }

@@ -7,13 +7,13 @@ export enum WebtoonType {
 }
 
 export enum Day {
-  SUN,
-  MON,
-  TUE,
-  WED,
-  THU,
-  FRI,
-  SAT
+  SUN = "sun",
+  MON = "mon",
+  TUE = "tue",
+  WED = "wed",
+  THU = "thu",
+  FRI = "fri",
+  SAT = "sat"
 }
 
 export interface WebtoonInfo {
@@ -43,7 +43,7 @@ export interface ScrollStorage {
 }
 
 export interface OrderStorage {
-  [key: number]: Array<WebtoonID>;
+  [key: string]: Array<WebtoonID>;
 }
 
 export type FavoriteStorage = Array<WebtoonID>;

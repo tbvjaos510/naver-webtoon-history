@@ -1,7 +1,8 @@
 import React, { memo, useMemo } from "react";
+import Logger from "utils/Logger";
 
 interface Props {
-  id: keyof typeof i18n;
+  id: I18N_KEY;
   children: string;
 }
 
@@ -15,6 +16,9 @@ const Message: React.FC<Props> = props => {
       (message !== undefined && message.length > 0)
     ) {
       return message;
+    }
+    if (message === undefined) {
+      Logger.error("<Message /> key가 잘못됨", { key: id });
     }
     return children;
   }, [id]);

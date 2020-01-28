@@ -1,5 +1,4 @@
 /* eslint-disable */
-const TerserPlugin = require("terser-webpack-plugin");
 const webpack = require("webpack");
 const path = require("path");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
@@ -34,7 +33,7 @@ module.exports = function(env) {
     },
     resolve: {
       plugins: [new TsconfigPathsPlugin()],
-      extensions: [".ts", ".tsx", ".js"]
+      extensions: [".ts", ".tsx", ".js", ".json"]
     },
     plugins: [
       new webpack.DefinePlugin({
@@ -53,18 +52,5 @@ module.exports = function(env) {
       ])
     ]
   };
-  if (isProduction) {
-    webpackConfig.optimization = {
-      minimizer: [
-        new TerserPlugin({
-          terserOptions: {
-            compress: {
-              drop_console: true
-            }
-          }
-        })
-      ]
-    };
-  }
   return webpackConfig;
 };
