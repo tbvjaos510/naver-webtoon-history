@@ -33,10 +33,6 @@
         "default": "generic"
       }
     ],
-    "@typescript-eslint/strict-boolean-expressions": [
-      "error",
-      { "allowNullable": true, "ignoreRhs": true }
-    ],
     "@typescript-eslint/explicit-member-accessibility": [
       "error",
       {

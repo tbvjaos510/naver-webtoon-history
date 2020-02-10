@@ -35,10 +35,10 @@ export enum LinkTarget {
 }
 
 export enum OrderBy {
-  VIEW_COUNT = "view_count",
-  UPDATE = "update",
-  STAR_SCORE = "star_score",
-  TITLE = "title"
+  VIEW_COUNT = "ViewCount",
+  UPDATE = "Update",
+  STAR_SCORE = "StarScore",
+  TITLE = "TitleName"
 }
 
 export interface SettingStorage {

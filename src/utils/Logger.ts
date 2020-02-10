@@ -9,6 +9,16 @@ export default class Logger {
     }
   }
 
+  public static warn(message: string, params?: {}) {
+    if (ENV === "development") {
+      if (params !== undefined) {
+        console.warn(message, params);
+      } else {
+        console.warn(message);
+      }
+    }
+  }
+
   public static error(message: string, params?: {}) {
     if (ENV === "development") {
       if (params !== undefined) {
