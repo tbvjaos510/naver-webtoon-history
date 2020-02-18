@@ -1,6 +1,6 @@
 import { Day } from "store/webtoon/interface";
 
-export const NAVER_WEBTOON_URL = "https://comic.naver.com/";
+export const NAVER_WEBTOON_URL = "https://comic.naver.com";
 export const DAY_LIST: ReadonlyArray<I18N_KEY> = [
   "DAY_SUN",
   "DAY_MON",

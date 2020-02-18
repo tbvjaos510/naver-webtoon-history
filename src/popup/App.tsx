@@ -3,6 +3,7 @@ import React from "react";
 import { HashRouter, Route, Switch } from "react-router-dom";
 import styled from "styled-components";
 
+import ContextProvider from "./context";
 import RecentWebtoon from "./pages/recent";
 import Setting from "./pages/setting";
 import WebtoonList from "./pages/webtoon";
@@ -32,22 +33,24 @@ const routes: Array<RouteInfo> = [
 const App: React.FC = () => {
   return (
     <Container>
-      <HashRouter>
-        <FlexBox>
-          <Header />
-          <RouteTab routes={routes} />
-          <Switch>
-            <Route path="/" component={routes[0].component} exact />
-            {routes.map(route => (
-              <Route
-                path={route.path}
-                key={route.path}
-                component={route.component}
-              />
-            ))}
-          </Switch>
-        </FlexBox>
-      </HashRouter>
+      <ContextProvider>
+        <HashRouter>
+          <FlexBox>
+            <Header />
+            <RouteTab routes={routes} />
+            <Switch>
+              <Route path="/" component={routes[0].component} exact />
+              {routes.map(route => (
+                <Route
+                  path={route.path}
+                  key={route.path}
+                  component={route.component}
+                />
+              ))}
+            </Switch>
+          </FlexBox>
+        </HashRouter>
+      </ContextProvider>
     </Container>
   );
 };

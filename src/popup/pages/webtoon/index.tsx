@@ -47,7 +47,7 @@ const WebtoonList: React.FC = () => {
           />
         ))}
       </Tabs>
-      <DailyWebtoonList />
+      <DailyWebtoonList day={currentDay} />
     </Container>
   );
 };

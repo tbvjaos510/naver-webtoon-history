@@ -19,11 +19,11 @@ export interface DailyWebtoonType {
   id: number;
 }
 
-type Result = {
+export type DailyWebtoonResult = {
   [key in Day]: ReadonlyArray<DailyWebtoonType>;
 };
 
-function parseDailyWebtoon(html: string): Result {
+function parseDailyWebtoon(html: string): DailyWebtoonResult {
   try {
     const page = new DOMParser()
       .parseFromString(html, "text/html")
@@ -64,13 +64,16 @@ function parseDailyWebtoon(html: string): Result {
               .filter(_ => _)
           : []
       };
-    }, {} as Result);
+    }, {} as DailyWebtoonResult);
   } catch (error) {
     throw new WebtoonServiceError("DailyWebtoon Parsing 실패", error);
   }
 }
 
-const dailyWebtoon: WebtoonService<Argument, Result> = async arg => {
+const FetchDailyWebtoon: WebtoonService<
+  Argument,
+  DailyWebtoonResult
+> = async arg => {
   const { order } = arg;
   const url = `${NAVER_WEBTOON_URL}/webtoon/weekday.nhn?order=${order}`;
   const { text, status } = await fetch(url);
@@ -86,4 +89,4 @@ const dailyWebtoon: WebtoonService<Argument, Result> = async arg => {
   return parseDailyWebtoon(html);
 };
 
-export default dailyWebtoon;
+export default FetchDailyWebtoon;

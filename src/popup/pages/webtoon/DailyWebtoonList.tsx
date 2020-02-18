@@ -1,19 +1,30 @@
-import { WEBTOON_ROUTE } from "constraint";
-import React from "react";
-import { useRouteMatch } from "react-router";
+import { useDailyWebtoonContext } from "popup/context/DailyWebtoon.context";
+import useStore from "popup/hooks/useStore";
+import React, { useEffect, useMemo, useState } from "react";
+import { OrderStore, SettingStore } from "store";
 import { Day } from "store/webtoon/interface";
-import Logger from "utils/Logger";
 
-interface RouteProps {
-  day: Day;
+interface Props {
+  day: Day | "favo";
 }
 
-const DailyWebtoonList: React.FC = () => {
-  const matchedRoute = useRouteMatch<RouteProps>(`${WEBTOON_ROUTE}/:day`);
+const DailyWebtoonList: React.FC<Props> = props => {
+  const { day } = props;
+  const settingStore = useStore(SettingStore);
+  const orderStore = useStore(OrderStore);
+  const { dailyWebtoon } = useDailyWebtoonContext();
 
-  if (matchedRoute !== null) {
-    Logger.log("matchedRoute", matchedRoute);
-  }
+  const webtoonList = useMemo(() => {
+    if (day === "favo") {
+      return [];
+    }
+    const webtoonSorts = orderStore.data[day];
+    return dailyWebtoon[day]
+      .slice()
+      .sort((a, b) =>
+        webtoonSorts.indexOf(a.id) > webtoonSorts.indexOf(b.id) ? 1 : -1
+      );
+  }, []);
   return <></>;
 };
 
